@@ -10,5 +10,10 @@ urlpatterns = [
     path('checkout/', views.checkout, name = 'checkout'),
     path('search/', views.search, name = 'search'),
     path('timepass/', views.search, name = 'checkemailavailability'),
-    path('cart/', views.showCart, name = 'cart')
+    path('cart/', views.showCart, name = 'cart'),
+    path('config/', views.stripe_config),
+    path('create-checkout-session/', views.create_checkout_session),
+    path('success/', views.successPay, name = "success"),
+    path('cancel/', views.cancelPay, name = 'cancel'),
+    path('getPrice/', views.getPrice, name = 'getPrice'),
 ]

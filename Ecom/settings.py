@@ -14,6 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51IfJO8SIiqpVayTvpqQ8WX9mGdCodSGiEqqoTF0jkwIdquvP2BWj1RVoPfEx6jZ4gbgZFTBw1znmNnv0ai82JrEE00HaQkmJNL'
+STRIPE_SECRET_KEY = 'sk_test_51IfJO8SIiqpVayTvFC1fzK9ObnIF9LEyt83FiOjszB1e4LAAvGtWEBWdvzL5RHVLYMe5GA5zKmBjQD5coL5lbKiG00QBwlekZ3'
 
 
 # Quick-start development settings - unsuitable for production

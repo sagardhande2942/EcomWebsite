@@ -13,6 +13,49 @@
     <script src="https://js.stripe.com/v3/"></script>
   <title>{%block title%} {%endblock%}</title>
   {%block style%} {% endblock %}
+  <style>
+    /* Dropdown Button */
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px white;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+  </style>
 </head>
 
 <body>
@@ -45,6 +88,14 @@
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
+        <div class="dropdown mx-3">
+          <button class="dropbtn" style="border-radius: 20px;"><b style="color: black;">{{username}}</b></button>
+          <div class="dropdown-content" style="border-radius: 20px;" >
+            <a href="#" style="border-radius: 20px;">Link 1</a>
+            <a href="#" style="border-radius: 20px;">Link 2</a>
+            <a href="/auth/logout/" style="border-radius: 20px;" class="bg-danger">Log Out</a>
+          </div>
+        </div>
         <button onclick="window.location.href = '/shop/cart';" href="/shop/cart" type="button" class="btn btn-secondary mx-2 " data-container="body" data-toggle="popover" data-placement="bottom" data-content="Right popover" id = "cartpop">
           Cart(<span id = "cart1">0</span>)
         </button>

@@ -6,6 +6,7 @@ from django.conf import settings
 from django.http.response import JsonResponse 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
+from django.contrib.auth.decorators import login_required
 import stripe
 
 YOUR_DOMAIN = 'http://localhost:8000'
@@ -13,7 +14,9 @@ YOUR_DOMAIN = 'http://localhost:8000'
 price = 0
 
 import simplejson
+@login_required(login_url='/auth/')
 def index(request):
+    username = request.user.username
     # products = Product.objects.all()
     # print(products)
     # n = len(products)
@@ -34,17 +37,20 @@ def index(request):
 
     param = {
         'allprods': allprods,
-        'items' : len(Product.objects.all())
+        'items' : len(Product.objects.all()),
+        'username': username,
     }
     
     return render(request, 'shop/index.html', param)
 
 @csrf_exempt
+@login_required(login_url='/auth/')
 def stripe_config(request):
     if request.method == 'GET':
         stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
         return JsonResponse(stripe_config, safe=False)
 
+@login_required
 def getPrice(request):
     global price
     if request.method == 'POST':
@@ -53,6 +59,7 @@ def getPrice(request):
         return JsonResponse({'hii' : 'bye'})
 
 @csrf_exempt
+@login_required(login_url='/auth/')
 def create_checkout_session(request):
     if request.method == 'GET':
         print('Here bois ', request.GET.get('data1', '1'))
@@ -86,12 +93,15 @@ def create_checkout_session(request):
         except Exception as e:
             return JsonResponse({'error': str(e)})
 
+@login_required(login_url='/auth/')
 def successPay(request):
     return render(request, 'shop/success.html')
 
+@login_required(login_url='/auth/')
 def cancelPay(request):
     return render(request, 'shop/cancelled.html')
 
+@login_required(login_url='/auth/')
 def showCart(request):
     allprods = Product.objects.values("product_id", "product_desc", "price", "image", "product_pubs_date", "product_name")
     p = []
@@ -107,10 +117,11 @@ def showCart(request):
     }
     return render(request, 'shop/cart.html', param)
 
-
+@login_required(login_url='/auth/')
 def about(request):
     return render(request, 'shop/about.html')
 
+@login_required(login_url='/auth/')
 def checkemailavailability(request, val):
     message = {'result':''}
     if request.is_ajax():
@@ -118,6 +129,7 @@ def checkemailavailability(request, val):
         json = simplejson.dumps(vars)
     return HttpResponse(json, mimetype='application/json')
 
+@login_required(login_url='/auth/')
 def contact(request):
     if request.method == "POST":
         name = request.POST.get('name')
@@ -128,19 +140,22 @@ def contact(request):
         contact.save()
     return render(request, 'shop/contact.html')
 
+@login_required(login_url='/auth/')
 def tracker(request):
     return render(request, 'shop/tracker.html')
 
+@login_required(login_url='/auth/')
 def productView(request, myid):
     product = Product.objects.filter(product_id = myid)
     param = {}
     param['prod'] =  product
     return render(request, 'shop/products.html', param)
 
-
+@login_required(login_url='/auth/')
 def checkout(request):
     return HttpResponse("Hii you are in checkout")
 
 
+@login_required(login_url='/auth/')
 def search(request):
     return HttpResponse("Hii you are in search")

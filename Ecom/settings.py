@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+from django.forms.formsets import BaseFormSet
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51IfJO8SIiqpVayTvpqQ8WX9mGdCodSGiEqqoTF0jkwIdquvP2BWj1RVoPfEx6jZ4gbgZFTBw1znmNnv0ai82JrEE00HaQkmJNL'
@@ -32,6 +34,14 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+)
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shop.apps.ShopConfig',
+    'accounts'
 ]
 
 MIDDLEWARE = [

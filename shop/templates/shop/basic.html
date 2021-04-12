@@ -71,9 +71,9 @@ if(localStorage.getItem('cart') == null){
   // console.log(localStorage.getItem('cart'));
   cart = JSON.parse(localStorage.getItem('cart'));
   for(var x in cart){
-    z += cart[x];
+    z += parseInt(cart[x]);
   }
-  document.getElementById('cart1').innerHTML = z; 
+  document.getElementById('cart1').innerHTML = parseInt(z); 
 }
   </script>
   {%block js%} {% endblock %}

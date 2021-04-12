@@ -91,30 +91,36 @@
 
   </div>
   {% endfor %}
-
+  <button type = 'button' onclick="mail_check();">Hiii</button>
   {% endblock %}
 
 
   {%block js%}
 
   <script>
+  function mail_check() {
+  // var val = $("#val").val();
+  console.log("hiii");
+  $.getJSON('timepass/',
 
+  function(data) {
+  console.log(data)  
+  });
+}
     var str = ""
 
     //Add pop over to cart
-    $(document).ready(function () {
-      $('#cartpop').popover();
-      $('#cartpop').attr('data-bs-content', 'Hiii');
-    });
+    // $(document).ready(function () {
+    //   $('#cartpop').popover();
+    //   $('#cartpop').attr('data-bs-content', 'Hiii');
+    // });
 
 
     //Find Out the cart from local storage
     if (localStorage.getItem('cart') == null) {
       var cart = {};
     } else {
-      cart = JSON.parse(localStorage.getItem('cart'));
-      document.getElementById('cart1').innerHTML = Object.keys(cart).length;
-      updateCart(cart);
+       updateCart(cart);
     }
 
     // If the add to cart is clicked then we get update
@@ -123,7 +129,8 @@
       idstr = this.id.toString();
       console.log(idstr)
       if (cart[idstr] != undefined) {
-        cart[idstr] = cart[idstr] + 1;
+        cart[idstr] = 1;
+        console.log("here");
       } else {
         cart[idstr] = 1;
       }
@@ -136,25 +143,57 @@
 
     //Update cart function
     function updateCart(cart) {
+      // console.log('hihsdfihdsf');
       for (var item in cart) {
+        console.log(item);
         document.getElementById('div' + item).innerHTML = "<button id = 'minus" + item + "' class = 'btn btn-primary minus'> - </button> <span id = 'val" + item + "'>" + cart[item] + "</span> <button id = 'plus" + item + "' class = 'btn btn-primary plus'> + </button>"
       }
+      cart = JSON.parse(localStorage.getItem('cart'));
+      var tocart = localStorage.getItem('cart');
+      var finalcart = []
+      console.log("Hey this is the cart : " + cart["pr1"]);
+      for(let i = 1; i <= 15; i++){
+        // console.log("The item no. " + i + " has units : " + cart["pr" + i]);
+        if(cart["pr" + i])
+        finalcart.push([i, cart["pr" + i]])
+      }
+      console.log("Final cart here : ")
+      console.log(finalcart)
+      var sumis = 0;
+      for(let x in finalcart){
+        console.log(finalcart[x])
+        sumis += finalcart[x][1];
+      }
+      document.getElementById('cart1').innerHTML = sumis;
+      var sum = 0;
+      // for (var i in cart){
+      //   console.log("here is ; " + i);
+      //   console.log(document.getElementById(i).textContent);
+      // }
     }
     
     // Plus minus buttons
     $('.divpr').on("click", "button.minus", function(){
       console.log("Minus clicked");
-      a = this.id.slice(6, );
-      cart['pr' + a]  = cart['pr' + a] - 1;
+      a = this.id.slice(7, );
+      console.log(a)
+      // cart['pr' + a]  = cart['pr' + a] - 1;
+      cart['pr' + a] = Math.max(0, cart['pr' + a] - 1);
       document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart(cart);
     });
 
     $('.divpr').on("click", "button.plus", function(){
       console.log("Plus clicked");
-      b = this.id.slicke(5, );
+      b = this.id.slice(6, );
+      console.log(b)
       cart['pr' + b]  = cart['pr' + b] + 1;
-
+      document.getElementById('valpr' + b).innerHTML = cart['pr' + b]
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart(cart);
     });
+
   </script>
 
   {%endblock%}

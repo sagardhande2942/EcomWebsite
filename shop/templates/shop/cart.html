@@ -1,0 +1,120 @@
+{% extends 'shop/basic.html'%}
+
+{%block title %} CART {% endblock %}
+
+{%block style%}
+<style>
+    img {
+        width: 200px;
+        height: 200px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+{% for j, i in p %}
+
+<div class="container nonediv" style="display: none;">
+</div>
+<div class="container prods{{j}} my-3" style="display: none;">
+    <div class="row">
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <img src="../../../media/{{i.image}}">
+        </div>
+        <div class="col-sm-5 col-md-5 col-lg-5">
+            <div class="row">
+                <h2>{{i.product_name}}</h2>
+                {{i.product_desc}}
+            </div>
+            <div class="row" style="display: inline-block;">
+                <p  style="width: 50%; border: 1px solid black; background-color: #edf5ff;">
+                    <label>Qty:</label>
+                    <input id="inputprod{{j}}" type="number" style="width: 65%; background-color: #fdffe8;" min="0" value=0>
+                </p>
+                <button class="btn btn-danger mx-3" style="width: 70px; height: 35px;" value="Delete"
+                    type="button">Delete</button>
+            </div>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            
+            <b><label>Price </label><br>₹ <span class="price{{j}}">{{i.price}}</span></b>
+        </div>
+    </div>
+
+</div>
+<!-- <img src='../../../media/{{products.0.image}}' class="card-img-top" style="width: 200px; height: 200px"> -->
+{% endfor %}
+<hr>
+<div class="container">
+<div class="row">
+    <div class="col-sm-4 col-md-4 col-lg-4">
+    </div>
+    <div class="col-sm-5 col-md-5 col-lg-5">
+        <b>SubTotal(<span id="totalprod"></span> items)</b>
+    </div>
+    <div class="col-sm-3 col-md-3 col-lg-3" style="display: inline-block;">
+        <b>₹ <span id="totprice"></span></b>
+    </div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+    var totprice = 0;
+    var totprod = 0;
+
+    if (localStorage.getItem('cart') == null) {
+        let reqdiv = document.getElementsByClassName("nonediv");
+        reqdiv.style.display = "block";
+        reqdiv.innerHTML = `<h1> The cart is empty </h1>`;
+
+    } else {
+        viewCart();
+    }
+
+    function viewCart() {
+        var cart = localStorage.getItem('cart');
+        cart = JSON.parse(cart);
+        for (let x = 1; x <= 17; x++) {
+            var prodDiv = document.querySelector(".prods" + x);
+            if (cart["pr" + x]) {
+                prodDiv.style.display = "block";
+                // prodDiv.innerHTML += 'Pieces : ' + cart["pr" + x];
+                document.getElementById("inputprod" + x).value = cart["pr" + x];
+                console.log(cart["pr" + x]);
+            }
+        }
+        console.log(cart["pr1"]);
+    }
+
+    setTimeout(() => {
+        // document.getElementById("totalprice").innerHTML = totprice;
+        for (let x = 1; x <= 17; x++) {
+            var tt = document.querySelector(".price" + x);
+            var zz = document.querySelector(".prods" + x);
+            var yy = document.querySelector("#inputprod" + x);
+            if (zz.style.display == "block") {
+                totprod++;
+                if (parseInt(tt.textContent)) {
+                    let z = parseInt(yy.value);
+                    totprice += parseInt(tt.textContent) * z;
+                }
+            }
+        }
+        // console.log(tt.style.display);
+
+        console.log(totprice);
+        document.querySelector("#totprice").textContent = totprice;
+        document.querySelector("#totalprod").textContent = totprod;
+
+    }, 1000);
+
+
+</script>
+
+{% endblock %}

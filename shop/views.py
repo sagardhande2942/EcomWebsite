@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product, Contact
 from math import ceil
-
+import simplejson
 def index(request):
     # products = Product.objects.all()
     # print(products)
@@ -20,17 +20,39 @@ def index(request):
     # allProds = [
     #     [products, range(1, nslides), nslides],
     #     [products, range(1, nslides), nslides]
-        
     # ]
+
     param = {
         'allprods': allprods
     }
     
     return render(request, 'shop/index.html', param)
 
+
+def showCart(request):
+    allprods = Product.objects.values("product_id", "product_desc", "price", "image", "product_pubs_date", "product_name")
+    p = []
+    cnt = 0
+    for i in allprods:
+        cnt += 1
+        p.append([cnt, i])
+    print(p)
+    param = {
+        'p' : p,
+        'range': range(1, len(Product.objects.all()) + 1)
+    }
+    return render(request, 'shop/cart.html', param)
+
+
 def about(request):
     return render(request, 'shop/about.html')
 
+def checkemailavailability(request, val):
+    message = {'result':''}
+    if request.is_ajax():
+        vars = {'Hii': 'Sagar', 'Byee' : 'Dhande'}
+        json = simplejson.dumps(vars)
+    return HttpResponse(json, mimetype='application/json')
 
 def contact(request):
     if request.method == "POST":

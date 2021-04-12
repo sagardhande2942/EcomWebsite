@@ -100,15 +100,15 @@
   <script>
   function mail_check() {
   // var val = $("#val").val();
-  console.log("hiii");
+  // console.log("hiii");
   $.getJSON('timepass/',
 
   function(data) {
-  console.log(data)  
+  // console.log(data)  
   });
 }
     var str = ""
-
+    var itemsTotal = {{items}};
     //Add pop over to cart
     // $(document).ready(function () {
     //   $('#cartpop').popover();
@@ -120,23 +120,19 @@
     if (localStorage.getItem('cart') == null) {
       var cart = {};
     } else {
+      // console.log(localStorage.getItem('cart'))
        updateCart(cart);
     }
 
     // If the add to cart is clicked then we get update
     $('.cart').click(function () {
-      console.log('clicked');
       idstr = this.id.toString();
-      console.log(idstr)
-      if (cart[idstr] != undefined) {
-        cart[idstr] = 1;
-        console.log("here");
-      } else {
-        cart[idstr] = 1;
-      }
-      updateCart(cart);
-      console.log(cart);
+      // console.log('clicked ' + idstr);
+      // console.log(idstr)
+      cart[idstr] = 1;
+      // console.log(cart);
       localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart(cart); 
       // document.getElementById('cart1').innerHTML = Object.keys(cart).length;
 
     });
@@ -145,23 +141,25 @@
     function updateCart(cart) {
       // console.log('hihsdfihdsf');
       for (var item in cart) {
-        console.log(item);
-        document.getElementById('div' + item).innerHTML = "<button id = 'minus" + item + "' class = 'btn btn-primary minus'> - </button> <span id = 'val" + item + "'>" + cart[item] + "</span> <button id = 'plus" + item + "' class = 'btn btn-primary plus'> + </button>"
+        if(cart[item])
+          document.getElementById('div' + item).innerHTML = "<button id = 'minus" + item + "' class = 'btn btn-primary minus'> - </button> <span id = 'val" + item + "'>" + cart[item] + "</span> <button id = 'plus" + item + "' class = 'btn btn-primary plus'> + </button>"
       }
       cart = JSON.parse(localStorage.getItem('cart'));
       var tocart = localStorage.getItem('cart');
       var finalcart = []
-      console.log("Hey this is the cart : " + cart["pr1"]);
-      for(let i = 1; i <= 15; i++){
+      // console.log("Hey this is the cart : " + cart["pr1"]);
+      for(let i = 1; i <= itemsTotal; i++){
         // console.log("The item no. " + i + " has units : " + cart["pr" + i]);
-        if(cart["pr" + i])
-        finalcart.push([i, cart["pr" + i]])
+        if(cart["pr" + i]){
+          // console.log("i is : " + i);
+          finalcart.push([i, cart["pr" + i]])
+        }
       }
-      console.log("Final cart here : ")
-      console.log(finalcart)
+      // console.log("Final cart here : ")
+      // console.log(finalcart)
       var sumis = 0;
       for(let x in finalcart){
-        console.log(finalcart[x])
+        // console.log(finalcart[x])
         sumis += finalcart[x][1];
       }
       document.getElementById('cart1').innerHTML = sumis;
@@ -174,9 +172,9 @@
     
     // Plus minus buttons
     $('.divpr').on("click", "button.minus", function(){
-      console.log("Minus clicked");
+      // console.log("Minus clicked");
       a = this.id.slice(7, );
-      console.log(a)
+      // console.log(a)
       // cart['pr' + a]  = cart['pr' + a] - 1;
       cart['pr' + a] = Math.max(0, cart['pr' + a] - 1);
       document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
@@ -185,9 +183,9 @@
     });
 
     $('.divpr').on("click", "button.plus", function(){
-      console.log("Plus clicked");
+      // console.log("Plus clicked");
       b = this.id.slice(6, );
-      console.log(b)
+      // console.log(b)
       cart['pr' + b]  = cart['pr' + b] + 1;
       document.getElementById('valpr' + b).innerHTML = cart['pr' + b]
       localStorage.setItem('cart', JSON.stringify(cart));

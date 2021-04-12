@@ -67,23 +67,14 @@
 if(localStorage.getItem('cart') == null){
   var cart = {};
 }else{
+  let z = 0;
+  // console.log(localStorage.getItem('cart'));
   cart = JSON.parse(localStorage.getItem('cart'));
-  document.getElementById('cart1').innerHTML = Object.keys(cart).length; 
-}
-
-$('.cart').click(function(){
-  console.log('clicked');
-  idstr = this.id.toString();
-  console.log(idstr)
-  if(cart[idstr] != undefined){
-    cart[idstr] = cart[idstr] + 1;
-  }else{
-    cart[idstr] = 1;
+  for(var x in cart){
+    z += cart[x];
   }
-    console.log(cart);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    document.getElementById('cart1').innerHTML = Object.keys(cart).length;
-});
+  document.getElementById('cart1').innerHTML = z; 
+}
   </script>
   {%block js%} {% endblock %}
 </body>

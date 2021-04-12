@@ -32,7 +32,9 @@
                     <label>Qty:</label>
                     <input id="inputprod{{j}}" type="number" style="width: 65%; background-color: #fdffe8;" min="0" value=0>
                 </p>
-                <button class="btn btn-danger mx-3" style="width: 70px; height: 35px;" value="Delete"
+                <button class="btn btn-warning mx-3" style="width: 70px; height: 35px;" value="Update"
+                    type="button">Update</button>
+                <button class="btn btn-danger mx-3" onclick="deleteItem(this);" id="delete{{j}}" style="width: 70px; height: 35px;" value="Delete"
                     type="button">Delete</button>
             </div>
         </div>
@@ -67,6 +69,7 @@
 <script>
     var totprice = 0;
     var totprod = 0;
+    var itemsTotal = {{items}}
 
     if (localStorage.getItem('cart') == null) {
         let reqdiv = document.getElementsByClassName("nonediv");
@@ -80,21 +83,42 @@
     function viewCart() {
         var cart = localStorage.getItem('cart');
         cart = JSON.parse(cart);
-        for (let x = 1; x <= 17; x++) {
+        for (let x = 1; x <= itemsTotal; x++) {
             var prodDiv = document.querySelector(".prods" + x);
             if (cart["pr" + x]) {
                 prodDiv.style.display = "block";
                 // prodDiv.innerHTML += 'Pieces : ' + cart["pr" + x];
                 document.getElementById("inputprod" + x).value = cart["pr" + x];
-                console.log(cart["pr" + x]);
+                // console.log(cart["pr" + x]);
             }
         }
-        console.log(cart["pr1"]);
+        // console.log(cart["pr1"]);
+    }
+
+    function deleteItem(e){
+        let z = e.id;
+        let st = "";
+        for(let x in z){
+            if(parseInt(z[x])){
+                st += z[x];
+            }
+        }
+        var cart1 = {}
+        for(let x in cart){
+            // console.log("X IS : " + x);
+            // console.log("id is : " + st);
+            if(x == "pr" + st) continue;
+            cart1[x] = cart[x];
+        }
+        // console.log(cart["pr" + st]);
+        localStorage.setItem('cart', JSON.stringify(cart1));
+        // console.log(localStorage.getItem('cart'));
+        window.location.href = "/shop/cart/"
     }
 
     setTimeout(() => {
         // document.getElementById("totalprice").innerHTML = totprice;
-        for (let x = 1; x <= 17; x++) {
+        for (let x = 1; x <= itemsTotal; x++) {
             var tt = document.querySelector(".price" + x);
             var zz = document.querySelector(".prods" + x);
             var yy = document.querySelector("#inputprod" + x);
@@ -108,7 +132,7 @@
         }
         // console.log(tt.style.display);
 
-        console.log(totprice);
+        // console.log(totprice);
         document.querySelector("#totprice").textContent = totprice;
         document.querySelector("#totalprod").textContent = totprod;
 

@@ -23,7 +23,8 @@ def index(request):
     # ]
 
     param = {
-        'allprods': allprods
+        'allprods': allprods,
+        'items' : len(Product.objects.all())
     }
     
     return render(request, 'shop/index.html', param)
@@ -39,7 +40,8 @@ def showCart(request):
     print(p)
     param = {
         'p' : p,
-        'range': range(1, len(Product.objects.all()) + 1)
+        'range': range(1, len(Product.objects.all()) + 1),
+        'items': len(Product.objects.all())
     }
     return render(request, 'shop/cart.html', param)
 

@@ -9,3 +9,4 @@ whitenoise==5.2.0
 stripe
 simplejson
 pillow
+django-heroku

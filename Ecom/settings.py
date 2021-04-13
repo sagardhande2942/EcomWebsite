@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 from django.forms.formsets import BaseFormSet
-
+import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51IfJO8SIiqpVayTvpqQ8WX9mGdCodSGiEqqoTF0jkwIdquvP2BWj1RVoPfEx6jZ4gbgZFTBw1znmNnv0ai82JrEE00HaQkmJNL'
@@ -147,3 +147,4 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 ALLOWED_HOSTS = ['herokudjangoapp.herokuapp.com']
+django_heroku.settings(locals())

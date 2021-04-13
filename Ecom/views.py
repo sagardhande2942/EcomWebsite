@@ -1,6 +1,6 @@
 from django.contrib.auth import login
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
 def index(request):
@@ -9,3 +9,6 @@ def index(request):
 @login_required
 def Home(request):
     return render(request, "home.html", {})
+
+def redi(request):
+    redirect('/auth/')

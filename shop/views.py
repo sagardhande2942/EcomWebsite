@@ -62,7 +62,7 @@ def getPrice(request):
 def create_checkout_session(request):
     if request.method == 'GET':
         print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://localhost:8000/'
+        domain_url = 'http://herokudjanogapp.herokuapp.com/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order

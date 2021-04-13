@@ -1,0 +1,107 @@
+{% extends 'shop/basic.html'%}
+
+{%block title %} Tracker {% endblock %}
+{% block style %}
+<style>
+    #menu {
+    position: absolute;
+    background: #efefef;
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
+    }
+</style>
+{% endblock %}
+{%block body%}
+<div class="container my-3">
+    <div id='map' style='width: 400px; height: 300px;'></div>
+
+
+     
+<div id="menu">
+    <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" checked="checked">
+    <!-- See a list of Mapbox-hosted public styles at -->
+    <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+    <label for="satellite-v9">satellite</label>
+    <input id="light-v10" type="radio" name="rtoggle" value="light">
+    <label for="light-v10">light</label>
+    <input id="dark-v10" type="radio" name="rtoggle" value="dark">
+    <label for="dark-v10">dark</label>
+    <input id="streets-v11" type="radio" name="rtoggle" value="streets">
+    <label for="streets-v11">streets</label>
+    <input id="outdoors-v11" type="radio" name="rtoggle" value="outdoors">
+    <label for="outdoors-v11">outdoors</label>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2FnYXIxMSIsImEiOiJja25nZWxqdXYzNDB2MnFwOWd5Y3gyNjdoIn0.gPdqfO1KFWb7XMGGd6IoKQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [72.912073985522, 19.193125020058034],
+        zoom: 9,
+    });
+    // Add zoom and rotation controls to the map.
+    map.addControl(new mapboxgl.NavigationControl());
+
+    
+    var layerList = document.getElementById('menu');
+    var inputs = layerList.getElementsByTagName('input');
+    function switchLayer(layer) {
+        var layerId = layer.target.id;
+        map.setStyle('mapbox://styles/mapbox/' + layerId);
+        }
+        
+        for (var i = 0; i < inputs.length; i++) {
+        inputs[i].onclick = switchLayer;
+    }
+
+    map.on('load', function () {
+        map.addSource('route', {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': [
+                        [72.96048249304532, 19.213875035409654]
+                    ]
+                }
+            }
+        });
+        map.addLayer({
+            'id': 'route',
+            'type': 'line',
+            'source': 'route',
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': '#888',
+                'line-width': 8
+            }
+        });
+    });
+    // Set options
+    var marker = new mapboxgl.Marker({
+        color: "#888",
+        draggable: true
+     }).setLngLat([30.5, 50.5])
+        .addTo(map);
+    
+    map.addControl(new mapboxgl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+            trackUserLocation: true
+    }));
+</script>
+{% endblock %}

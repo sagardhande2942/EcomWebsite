@@ -69,7 +69,7 @@ def getPrice(request):
 def create_checkout_session(request):
     if request.method == 'GET':
         print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://herokudjanogapp.herokuapp.com/'
+        domain_url = 'http://127.0.0.1:8000/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -102,6 +102,8 @@ def create_checkout_session(request):
 @login_required(login_url='/auth/')
 def successPay(request):
     username = request.user.username
+    a = ExtendedUser.objects.filter(usr = request.user)
+    a.update(cart = "{}")
     context = {
         'username' : username
     }
@@ -164,13 +166,6 @@ def contact(request):
     }
     return render(request, 'shop/contact.html', context)
 
-@login_required(login_url='/auth/')
-def tracker(request):
-    username = request.user.username
-    context = {
-        'username' : username
-    }
-    return render(request, 'shop/tracker.html', context)
 
 @login_required(login_url='/auth/')
 def productView(request, myid):
@@ -199,6 +194,8 @@ def search(request):
         b = Product.objects.filter(product_name = a)
         c = {}
         c['username'] = username
+        if not b:
+            return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
         print(a)
         for i in b:
             c['prod_name'] = i.product_name
@@ -220,3 +217,12 @@ def getLogoutData(request):
             vars = {'Hii': 'Sagar', 'Byee' : 'Dhande'}
             json = simplejson.dumps(vars)
         return JsonResponse({"hii":"bye"})
+
+
+@login_required(login_url='/auth/')
+def tracker(request):
+    username  = request.user.username
+    param = {
+        'username' : username
+    }
+    return render(request, 'shop/maps.html')

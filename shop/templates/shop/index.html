@@ -29,7 +29,7 @@
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-md-4 p-2">
             <div class="card" style="width: 18rem;">
-              <img src='../../../media/{{products.0.image}}' class="card-img-top" style="width: 100%; height: 150px;"
+              <img src='../../../media/{{products.0.image}}' class="card-img-top" style="width: 100%; height: 200px;"
                 alt="...">
               <div class="card-body" style="height: 200px;">
 
@@ -50,7 +50,7 @@
           {% for i in products|slice:"1:" %}
           <div class="col-lg-3 col-sm-6 col-md-4 p-2">
             <div class="card" style="width: 18rem;">
-              <img src="../../../media/{{i.image}}" style="width: 100%; height: 150px;" class="card-img-top" alt="...">
+              <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top" alt="...">
               <div class="card-body" style="height: 200px;">
                 <h5 class="card-title">{{i.product_name}}</h5>
                 <p class="card-text">{{ i.product_desc|slice:"0:50" }}...</p>

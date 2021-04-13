@@ -8,14 +8,29 @@
         width: 200px;
         height: 200px;
     }
+    .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="container nonediv" style="display: none;"></div>
+<div class="container nonediv" style="display: none;">
+    <div class="loader" style="position: absolute; top: 50%; left: 50%;"></div>
+</div>
 
 {% for j, i in p %}
-
+<div id = "outerdiv">
 <div class="container prods{{j}} my-3" style="display: none;">
     <div class="row">
         <div class="col-sm-4 col-md-4 col-lg-4">
@@ -61,7 +76,7 @@
         </div>
     </div>
 </div>
-
+</div>
 
 {% endblock %}
 
@@ -73,7 +88,10 @@
 
     // Get Stripe publishable key
     function checkout(){
-
+        document.documentElement.scrollTop = 0;
+        document.getElementById("outerdiv").style.opacity = 0.3;
+        // document.querySelector(".nonediv").innerHTML = "<h1> Loading...</h1>"
+        document.querySelector(".nonediv").style.display  = "block";
         var text = document.getElementById("totprice1").value;
         $.ajax({
             type: "POST",

@@ -27,7 +27,7 @@
               <div class="card-body" style="height: 200px;">
 
                 <h5 class="card-title">{{ products.0.product_name }}</h5>
-                <p class="card-text">{{ products.0.product_desc }}</p>
+                <p class="card-text">{{ products.0.product_desc|slice:"0:50" }}...</p>
                 <div style="position: absolute; bottom: 2%;">
                   <span id='divpr{{products.0.product_id}}' class = 'divpr'>
                     <button style="display: inline-block; " href="#" id="pr{{products.0.product_id}}"
@@ -91,22 +91,12 @@
 
   </div>
   {% endfor %}
-  <button type = 'button' onclick="mail_check();">Hiii</button>
   {% endblock %}
 
 
   {%block js%}
 
   <script>
-  function mail_check() {
-  // var val = $("#val").val();
-  // console.log("hiii");
-  $.getJSON('timepass/',
-
-  function(data) {
-  // console.log(data)  
-  });
-}
     var str = ""
     var itemsTotal = {{items}};
     //Add pop over to cart

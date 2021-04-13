@@ -9,8 +9,12 @@
         <div class = "col-sm-6 col-md-4 col-lg-4">
             <img src = "../../../media/{{prod.0.image}}" width="200px" height="350px">
             <div class = "my-3">
-            <button class = "btn btn-primary mx-2">Buy Now</button>
-            <button class = "btn btn-primary">Add to cart</button>
+            <button class = "btn btn-primary mx-2" onclick="addItem();">Buy Now</button>
+            <!-- <button class = "btn btn-primary">Add to cart</button> -->
+            <span id="divpr{{prod.0.product_id}}" class = "divpr">
+                <button style="display: inline-block; " href="#" id="pr{{prod.0.product_id}}"
+                  class="btn btn-primary cart">Add To Cart</button>
+              </span>
             </div>
 
         </div>
@@ -22,4 +26,106 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block js %}
+<script>
+     var str = ""
+    var itemsTotal = {{items}};
+    //Add pop over to cart
+    // $(document).ready(function () {
+    //   $('#cartpop').popover();
+    //   $('#cartpop').attr('data-bs-content', 'Hiii');
+    // });
+
+
+    //Find Out the cart from local storage
+    if (localStorage.getItem('cart') == null) {
+      var cart = {};
+    } else {
+      // console.log(localStorage.getItem('cart'))
+       updateCart(cart);
+    }
+
+    // If the add to cart is clicked then we get update
+
+    function addItem(){
+      var idstr = "pr{{prod.0.product_id}}";
+      // console.log('clicked ' + idstr);
+      // console.log(idstr)
+      cart[idstr] = 1;
+      // console.log(cart);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart(cart); 
+      // document.getElementById('cart1').innerHTML = Object.keys(cart).length;
+
+        window.location.href = '/shop/cart/'
+    }
+
+    $('.cart').click(function () {
+      var idstr = "pr{{prod.0.product_id}}";
+      // console.log('clicked ' + idstr);
+      // console.log(idstr)
+      cart[idstr] = 1;
+      // console.log(cart);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart(cart); 
+      // document.getElementById('cart1').innerHTML = Object.keys(cart).length;
+
+    });
+
+    //Update cart function
+    function updateCart(cart) {
+      // console.log('hihsdfihdsf');
+      var idstr = "pr{{prod.0.product_id}}";
+      if(cart[idstr])
+        document.getElementById('div' + idstr).innerHTML = "<button id = 'minus" + idstr + "' class = 'btn btn-primary minus'> - </button> <span id = 'val" + idstr + "'>" + cart[idstr] + "</span> <button id = 'plus" + idstr + "' class = 'btn btn-primary plus'> + </button>"
+      cart = JSON.parse(localStorage.getItem('cart'));
+      var finalcart = []
+      // console.log("Hey this is the cart : " + cart["pr1"]);
+      for(let i = 1; i <= itemsTotal; i++){
+        // console.log("The item no. " + i + " has units : " + cart["pr" + i]);
+        if(cart["pr" + i]){
+          // console.log("i is : " + i);
+          finalcart.push([i, cart["pr" + i]])
+        }
+      }
+      // console.log("Final cart here : ")
+      // console.log(finalcart)
+      var sumis = 0;
+      for(let x in finalcart){
+        // console.log(finalcart[x])
+        sumis += finalcart[x][1];
+      }
+      document.getElementById('cart1').innerHTML = sumis;
+      var sum = 0;
+      // for (var i in cart){
+      //   console.log("here is ; " + i);
+      //   console.log(document.getElementById(i).textContent);
+      // }
+    }
+    
+    // Plus minus buttons
+    $('.divpr').on("click", "button.minus", function(){
+      // console.log("Minus clicked");
+      a = this.id.slice(7, );
+      // console.log(a)
+      // cart['pr' + a]  = cart['pr' + a] - 1;
+      cart['pr' + a] = Math.max(0, cart['pr' + a] - 1);
+      document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart(cart);
+    });
+
+    $('.divpr').on("click", "button.plus", function(){
+      // console.log("Plus clicked");
+      b = this.id.slice(6, );
+      // console.log(b)
+      cart['pr' + b]  = cart['pr' + b] + 1;
+      document.getElementById('valpr' + b).innerHTML = cart['pr' + b]
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart(cart);
+    });
+
+</script>
 {% endblock %}

@@ -13,9 +13,11 @@ YOUR_DOMAIN = 'http://localhost:8000'
 
 price = 0
 
+
 import simplejson
 @login_required(login_url='/auth/')
 def index(request):
+    global username
     username = request.user.username
     # products = Product.objects.all()
     # print(products)
@@ -94,15 +96,24 @@ def create_checkout_session(request):
 
 @login_required(login_url='/auth/')
 def successPay(request):
-    return render(request, 'shop/success.html')
+    username = request.user.username
+    context = {
+        'username' : username
+    }
+    return render(request, 'shop/success.html', context)
 
 @login_required(login_url='/auth/')
 def cancelPay(request):
-    return render(request, 'shop/cancelled.html')
+    username = request.user.username
+    context = {
+        'username' : username
+    }
+    return render(request, 'shop/cancelled.html', context)
 
 @login_required(login_url='/auth/')
 def showCart(request):
     allprods = Product.objects.values("product_id", "product_desc", "price", "image", "product_pubs_date", "product_name")
+    username = request.user.username
     p = []
     cnt = 0
     for i in allprods:
@@ -112,13 +123,18 @@ def showCart(request):
     param = {
         'p' : p,
         'range': range(1, len(Product.objects.all()) + 1),
-        'items': len(Product.objects.all())
+        'items': len(Product.objects.all()),
+        'username':  username
     }
     return render(request, 'shop/cart.html', param)
 
 @login_required(login_url='/auth/')
 def about(request):
-    return render(request, 'shop/about.html')
+    username = request.user.username
+    context = {
+        'username' : username
+    }
+    return render(request, 'shop/about.html', context)
 
 @login_required(login_url='/auth/')
 def checkemailavailability(request, val):
@@ -130,6 +146,7 @@ def checkemailavailability(request, val):
 
 @login_required(login_url='/auth/')
 def contact(request):
+    username = request.user.username
     if request.method == "POST":
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -137,17 +154,28 @@ def contact(request):
         desc = request.POST.get('desc')
         contact = Contact(name = name, email = email, phone = phone, desc = desc)
         contact.save()
-    return render(request, 'shop/contact.html')
+    context = {
+        'username' : username
+    }
+    return render(request, 'shop/contact.html', context)
 
 @login_required(login_url='/auth/')
 def tracker(request):
-    return render(request, 'shop/tracker.html')
+    username = request.user.username
+    context = {
+        'username' : username
+    }
+    return render(request, 'shop/tracker.html', context)
 
 @login_required(login_url='/auth/')
 def productView(request, myid):
+    username = request.user.username
     product = Product.objects.filter(product_id = myid)
-    param = {}
-    param['prod'] =  product
+    param = {
+        'prod': product,
+        'username': username,
+        'items': len(Product.objects.all()),
+    }
     return render(request, 'shop/products.html', param)
 
 @login_required(login_url='/auth/')

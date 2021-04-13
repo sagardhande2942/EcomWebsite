@@ -193,7 +193,22 @@ def checkout(request):
 
 @login_required(login_url='/auth/')
 def search(request):
-    return HttpResponse("Hii you are in search")
+    username = request.user.username
+    if request.method == "POST":
+        a = request.POST.get('search','no')
+        b = Product.objects.filter(product_name = a)
+        c = {}
+        c['username'] = username
+        print(a)
+        for i in b:
+            c['prod_name'] = i.product_name
+            c['image'] = i.image
+            c['prod_desc'] = i.product_desc
+            c['prod_price'] = i.price
+            c['subcategory'] = i.subcategory
+            c['id'] = i.product_id
+        return render(request, 'shop/search.html', c)
+    return render(request, 'shop/search.html', {'value':'Nothing Found'})
 
 def getLogoutData(request):
     if request.method == "POST":

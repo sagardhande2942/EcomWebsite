@@ -59,7 +59,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top justify-content-between">
     <div class="container-fluid">
       <a class="navbar-brand" href="/shop/">My Awesome Cart</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -84,10 +84,6 @@
             <a class="nav-link" href="/shop/contact"  >Contact Us</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
         <div class="dropdown mx-3">
           <button class="dropbtn" style="border-radius: 20px;"><b style="color: black;">{{username}}</b></button>
           <div class="dropdown-content" style="border-radius: 20px;" >
@@ -99,6 +95,11 @@
         <button onclick="window.location.href = '/shop/cart';" href="/shop/cart" type="button" class="btn btn-secondary mx-2 " data-container="body" data-toggle="popover" data-placement="bottom" data-content="Right popover" id = "cartpop">
           Cart(<span id = "cart1">0</span>)
         </button>
+        <form class="form-inline" action="/shop/search/" method="POST" >{% csrf_token %}
+          <input class="form-control mr-sm-2" name="search" id="searchValue"  type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0"  type="submit">Search</button>
+          {% csrf_token %}
+        </form>
       </div>
     </div>
   </nav>
@@ -140,6 +141,18 @@ if(localStorage.getItem('cart') == null){
     });
 
     window.location.href = "/auth/logout/";
+  }
+
+  function searchSite(){
+    var text = document.getElementById("searchValue").value;
+        $.ajax({
+            type: "POST",
+            url: '{{ "/shop/search/" }}',
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text },
+            success: function callback(response){
+               window.location.href = "/shop/search/";
+        }
+      });
   }
   </script>
   {%block js%} {% endblock %}

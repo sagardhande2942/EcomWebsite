@@ -1,0 +1,18 @@
+{% extends 'shop/basic.html'%}
+
+{%block title %} SearchResult {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="card mx-auto" style="width: 18rem;">
+        <img class="card-img-top" src="/media/{{image}}" alt="Card image cap">
+        <div class="card-body" style="text-align: center;">
+          <h5 class="card-title">{{prod_name}}</h5>
+          <p class="card-text">{{prod_desc|slice:"0:50"}}</p>
+          <a href="/shop/products/{{id}}"  class="btn btn-primary">View</a>
+        </div>
+      </div>
+</div>
+
+{% endblock %}

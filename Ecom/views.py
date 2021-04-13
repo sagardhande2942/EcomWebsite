@@ -12,4 +12,6 @@ def Home(request):
 
 def redi(request):
     redirect('/auth/')
-    return HttpResponse("<h1>Redirecting</h1>")
+    return HttpResponse(
+        "<h1>Redirecting</h1><script>window.location.href = '/auth/'</script>"
+        )

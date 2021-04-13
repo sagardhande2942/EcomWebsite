@@ -58,7 +58,6 @@ def getPrice(request):
         # print("the data is ", request.POST.get('text', '1'))
         return JsonResponse({'hii' : 'bye'})
 
-@csrf_exempt
 @login_required(login_url='/auth/')
 def create_checkout_session(request):
     if request.method == 'GET':

@@ -108,7 +108,7 @@ def successPay(request):
         'username' : username
     }
     return render(request, 'shop/success.html', context)
-
+#
 @login_required(login_url='/auth/')
 def cancelPay(request):
     username = request.user.username

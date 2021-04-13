@@ -1,3 +1,4 @@
+from accounts.models import ExtendedUser
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -47,6 +48,7 @@ def register_view(request):
         user.set_password(password)
         user.save()
         new_user = authenticate(username=user.username, password=password)
+        ExtendedUser(usr=new_user).save()
         login(request, new_user)
         if next:
             return redirect(next)

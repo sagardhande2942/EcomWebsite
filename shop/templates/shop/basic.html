@@ -93,7 +93,7 @@
           <div class="dropdown-content" style="border-radius: 20px;" >
             <a href="#" style="border-radius: 20px;">Link 1</a>
             <a href="#" style="border-radius: 20px;">Link 2</a>
-            <a href="/auth/logout/" style="border-radius: 20px;" class="bg-danger">Log Out</a>
+            <button onclick="loggingout();"style="border-radius: 20px;" class="bg-danger">Log Out</button>
           </div>
         </div>
         <button onclick="window.location.href = '/shop/cart';" href="/shop/cart" type="button" class="btn btn-secondary mx-2 " data-container="body" data-toggle="popover" data-placement="bottom" data-content="Right popover" id = "cartpop">
@@ -127,6 +127,20 @@ if(localStorage.getItem('cart') == null){
   }
   document.getElementById('cart1').innerHTML = parseInt(z); 
 }
+
+  function loggingout(){
+    var text = localStorage.getItem('cart');
+    $.ajax({
+          type: "POST",
+          url: '{{ "/shop/getLogoutData/" }}',
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text },
+          success: function callback(response){
+                      console.log(response);
+            }
+    });
+
+    window.location.href = "/auth/logout/";
+  }
   </script>
   {%block js%} {% endblock %}
 </body>

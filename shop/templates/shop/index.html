@@ -107,12 +107,16 @@
 
 
     //Find Out the cart from local storage
-    if (localStorage.getItem('cart') == null) {
-      var cart = {};
-    } else {
-      // console.log(localStorage.getItem('cart'))
-       updateCart(cart);
-    }
+    // if (localStorage.getItem('cart') == null) {
+    //   var cart = {};
+    // } else {
+    //   // console.log(localStorage.getItem('cart'))
+    //    updateCart(cart);
+    // }
+    console.log('{{cart}}'.replaceAll("&quot;", '"'));
+    var cart = JSON.parse('{{cart}}'.replaceAll("&quot;", '"'));
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart(cart);
 
     // If the add to cart is clicked then we get update
     $('.cart').click(function () {
@@ -122,6 +126,7 @@
       cart[idstr] = 1;
       // console.log(cart);
       localStorage.setItem('cart', JSON.stringify(cart));
+      console.log()
       updateCart(cart); 
       // document.getElementById('cart1').innerHTML = Object.keys(cart).length;
 

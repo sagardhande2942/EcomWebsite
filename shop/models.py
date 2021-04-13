@@ -10,7 +10,6 @@ class Product(models.Model):
     subcategory = models.CharField(max_length=50, default="")
     price = models.IntegerField(default=0)
     image = models.ImageField(upload_to="shop/images", default="")
-
     def __str__(self):
         return self.product_name
 

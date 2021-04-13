@@ -16,4 +16,5 @@ urlpatterns = [
     path('success/', views.successPay, name = "success"),
     path('cancel/', views.cancelPay, name = 'cancel'),
     path('getPrice/', views.getPrice, name = 'getPrice'),
+    path('getLogoutData/', views.getLogoutData, name='getLogoutData'),
 ]

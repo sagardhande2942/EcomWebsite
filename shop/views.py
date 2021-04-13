@@ -1,3 +1,4 @@
+from accounts.models import ExtendedUser
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product, Contact
@@ -17,8 +18,11 @@ price = 0
 import simplejson
 @login_required(login_url='/auth/')
 def index(request):
-    global username
     username = request.user.username
+    a = ExtendedUser.objects.filter(usr=request.user)
+    cart = ""
+    for i in a:
+        cart = i.cart
     # products = Product.objects.all()
     # print(products)
     # n = len(products)
@@ -41,6 +45,7 @@ def index(request):
         'allprods': allprods,
         'items' : len(Product.objects.all()),
         'username': username,
+        'cart':cart,
     }
     
     return render(request, 'shop/index.html', param)
@@ -170,6 +175,9 @@ def tracker(request):
 @login_required(login_url='/auth/')
 def productView(request, myid):
     username = request.user.username
+    cart = ExtendedUser.objects.filter(usr=request.user)
+    for i in cart:
+        print(i.cart)
     product = Product.objects.filter(product_id = myid)
     param = {
         'prod': product,
@@ -186,3 +194,14 @@ def checkout(request):
 @login_required(login_url='/auth/')
 def search(request):
     return HttpResponse("Hii you are in search")
+
+def getLogoutData(request):
+    if request.method == "POST":
+        print(request.POST.get('text', 'hii'))
+        a = request.POST.get('text', '{}')
+        b = ExtendedUser.objects.filter(usr=request.user)
+        b.update(cart=a)
+        if request.is_ajax():
+            vars = {'Hii': 'Sagar', 'Byee' : 'Dhande'}
+            json = simplejson.dumps(vars)
+        return JsonResponse({"hii":"bye"})

@@ -1,1 +1,1 @@
-web:gunicorn D:\ProgProject\django_project1\TEST2\Ecom\Ecom\wsgi --log-file -
+web: gunicorn D:\ProgProject\django_project1\TEST2\Ecom\Ecom\wsgi --log-file

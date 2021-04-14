@@ -8,16 +8,18 @@
 {% for i in final %}
 <h2>Cart {{forloop.counter}}</h2>
 <div class="row">
-{% for j in i %}
-<div class="col-sm-6 col-md-4 col-lg-3" style="min-width: 300px;">
+  {% for j in i %}
+  <div class="col-sm-6 col-md-4 col-lg-3">
+    <a href = "/shop/products/{{j.0.0.product_id}}" style="text-decoration:none;">
     <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="../../../media/{{j.0.0.image}}" alt="Card image cap">
+        <img class="card-img-top" src="../../../media/{{j.0.0.image}}" style="height: 200px;" alt="Card image cap">
         <div class="card-body">
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <p class="card-text" style="text-decoration:none; color: black;">{{j.0.0.product_desc|slice:"0:70"}}...</p>
         </div>
       </div>
-</div>
-{% endfor %}
+    </a>
+    </div>
+      {% endfor %}
 </div>
 {% endfor %}
 </div>

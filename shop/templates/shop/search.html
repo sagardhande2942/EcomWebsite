@@ -4,15 +4,21 @@
 
 {% block body %}
 
-<div class="container">
+<div class="container my-3">
+<div class="row">
+{% for i in c %}
+  <div class="col-sm-12 col-md-4 col-lg-3" style="min-width: 300px;">
     <div class="card mx-auto" style="width: 18rem;">
-        <img class="card-img-top" src="/media/{{image}}" alt="Card image cap">
+        <img class="card-img-top" src="/media/{{i.0.image}}" style = "height: 300px;" alt="Card image cap">
         <div class="card-body" style="text-align: center;">
-          <h5 class="card-title">{{prod_name}}</h5>
-          <p class="card-text">{{prod_desc|slice:"0:50"}}</p>
-          <a href="/shop/products/{{id}}"  class="btn btn-primary">View</a>
+          <h5 class="card-title">{{i.0.product_name}}</h5>
+          <p class="card-text">{{i.0.product_desc|slice:"0:50"}}</p>
+          <a href="/shop/products/{{i.0.id}}"  class="btn btn-primary">View</a>
         </div>
       </div>
+    </div>
+{% endfor %}
 </div>
+    </div>
 
 {% endblock %}

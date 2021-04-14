@@ -3,7 +3,7 @@ from accounts.models import ExtendedUser, PurchaseDate
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product, Contact
-from math import ceil
+from math import ceil, prod
 from django.conf import settings 
 from django.http.response import JsonResponse 
 from django.views.decorators.csrf import csrf_exempt
@@ -135,6 +135,7 @@ def successPay(request):
         if(c[i] == '}'):
             if(i + 1 < len(c) and c[i + 1] == '}'):
                 continue
+        if i == len(c) - 1: continue
         b += c[i]
     print(b)
     a.update(totcarts = b, cart = "{}")
@@ -225,20 +226,24 @@ def search(request):
     username = request.user.username
     if request.method == "POST":
         a = request.POST.get('search','no')
-        b = Product.objects.filter(product_name = a)
-        c = {}
-        c['username'] = username
+        a = a.lower()
+        d = Product.objects.all()
+        dd = []
+        for i in d:
+            dd.append(i)
+
+        b = []
+        for i in dd:
+            if a in i.product_name.lower():
+                b.append(Product.objects.filter(product_name = i))
+                       
+        c = []
         if not b:
             return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
         print(a)
         for i in b:
-            c['prod_name'] = i.product_name
-            c['image'] = i.image
-            c['prod_desc'] = i.product_desc
-            c['prod_price'] = i.price
-            c['subcategory'] = i.subcategory
-            c['id'] = i.product_id
-        return render(request, 'shop/search.html', c)
+            c.append(i)
+        return render(request, 'shop/search.html', {'c':c, 'username' : username})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
 
 def getLogoutData(request):
@@ -301,7 +306,7 @@ def tracker(request):
         
         #   print(res[i])
     
-    res.remove([''])   
+    # res.remove([''])   
     for i in range(len(res)):
         diffDict[i] = []
         vb = []
@@ -373,7 +378,7 @@ def trackCart(request):
         
         #   print(res[i])
     
-    res.remove([''])   
+    # res.remove([''])   
     for i in range(len(res)):
         diffDict[i] = []
         vb = []

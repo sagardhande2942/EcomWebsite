@@ -96,11 +96,25 @@
         $.ajax({
             type: "POST",
             url: '{{ "/shop/getPrice/" }}',
-            data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text },
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
             success: function callback(response){
                console.log(response);
         }
+        
     });
+    var text1 = localStorage.getItem('cart');
+
+    $.ajax({
+            type: "POST",
+            url: '{{ "/shop/getCart/" }}',
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text1},
+            success: function callback(response){
+               console.log(response);
+        }
+        
+    });
+    
+    
 
 
     fetch("/shop/config/")

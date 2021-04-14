@@ -1,3 +1,4 @@
+import random
 from accounts.models import ExtendedUser
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -9,11 +10,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 import stripe
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 YOUR_DOMAIN = 'http://localhost:8000'
 
 price = 0
-
+cart12 = ""
 
 import simplejson
 @login_required(login_url='/auth/')
@@ -65,6 +70,14 @@ def getPrice(request):
         # print("the data is ", request.POST.get('text', '1'))
         return JsonResponse({'hii' : 'bye'})
 
+@login_required
+def getCart(request):
+    global cart12
+    if request.method == "POST":
+        cart12 = request.POST.get('text', '{}')
+        print(cart12)
+        return JsonResponse({'hii' : 'bye'})
+
 @login_required(login_url='/auth/')
 def create_checkout_session(request):
     if request.method == 'GET':
@@ -101,14 +114,32 @@ def create_checkout_session(request):
 
 @login_required(login_url='/auth/')
 def successPay(request):
+    global cart12
     username = request.user.username
     a = ExtendedUser.objects.filter(usr = request.user)
-    a.update(cart = "{}")
+    c = cart12
+    for i in a:
+        c += i.totcarts
+    b = ""
+    for i in range(len(c)):
+        if c[i] == '{':
+            if i + 1 < len(c) and  c[i + 1] == '}':
+                i += 2
+                continue
+        if(c[i] == '{'):
+            if i + 1 < len(c) and  c[i + 1] == '{':
+                continue
+        if(c[i] == '}'):
+            if(i + 1 < len(c) and c[i + 1] == '}'):
+                continue
+        b += c[i]
+    print(b)
+    a.update(totcarts = b, cart = "{}")
     context = {
         'username' : username
     }
     return render(request, 'shop/success.html', context)
-#
+
 @login_required(login_url='/auth/')
 def cancelPay(request):
     username = request.user.username
@@ -221,8 +252,134 @@ def getLogoutData(request):
 
 @login_required(login_url='/auth/')
 def tracker(request):
+    print('hiids')  
     username  = request.user.username
+    states = [
+        ['Nagpur', 78.893078, 21.1015184],
+        ['Nashik', 73.90984434482529, 19.890527214221166],
+        ['Pune', 73.7191995481777, 18.575145787488346],
+        ['Surat', 72.95662036158728, 21.113012603007366],
+        ['Ahemdabad', 73.02994528337483, 22.55593501134834]
+    ]
+
+    z = ExtendedUser.objects.filter(usr = request.user)
+    a = []
+    b = []
+    str1 = z[0].totcarts
+    print(str1)
+    str1 = str1.split('}')
+    res = []
+    for i in str1:
+        i += '}'
+        i = i.replace('{', '[')
+        i = i.replace('}', ']')
+        res.append(i.strip('][').split(', '))
+    # print(res)
+    zerolen = []
+    diffDict = {}
+    for i in range(len(res)):
+        if len(res[i][0]) == 0:
+            zerolen.append(i)
+            continue
+        res[i] = res[i][0].split(',')
+        
+        #   print(res[i])
+    
+    res.remove([''])   
+    for i in range(len(res)):
+        diffDict[i] = []
+        vb = []
+        for j in res[i]:
+            j = j.split(',')
+            vb.append(j[0].split(':'))
+        diffDict[i] = vb
+    print(diffDict)
+    finallist = []
+    for i in diffDict:
+        m = diffDict[i]
+        z2 = []
+        for j in m:#
+            print(j[0])
+            num = ""
+            for word in j[0]:
+                if word.isdigit():
+                    num += word
+            print(num)
+            mb = Product.objects.filter(product_id = int(num))
+            z2.append([mb, j[1], random.randint(3, 7)])
+        finallist.append(z2)
+    print(finallist)#dfaa
     param = {
-        'username' : username
+        'username' : username,
+        'final': finallist,
+        'res': res,
+        'city': states,
     }
-    return render(request, 'shop/maps.html')
+    return render(request, 'shop/maps.html', param)
+
+
+@login_required(login_url='/auth/')
+def trackCart(request):
+    print('hiids')  
+    username  = request.user.username
+    states = [
+        ['Nagpur', 78.893078, 21.1015184],
+        ['Nashik', 73.90984434482529, 19.890527214221166],
+        ['Pune', 73.7191995481777, 18.575145787488346],
+        ['Surat', 72.95662036158728, 21.113012603007366],
+        ['Ahemdabad', 73.02994528337483, 22.55593501134834]
+    ]
+
+    z = ExtendedUser.objects.filter(usr = request.user)
+    a = []
+    b = []
+    str1 = z[0].totcarts
+    print(str1)
+    str1 = str1.split('}')
+    res = []
+    for i in str1:
+        i += '}'
+        i = i.replace('{', '[')
+        i = i.replace('}', ']')
+        res.append(i.strip('][').split(', '))
+    # print(res)
+    zerolen = []
+    diffDict = {}
+    for i in range(len(res)):
+        if len(res[i][0]) == 0:
+            zerolen.append(i)
+            continue
+        res[i] = res[i][0].split(',')
+        
+        #   print(res[i])
+    
+    res.remove([''])   
+    for i in range(len(res)):
+        diffDict[i] = []
+        vb = []
+        for j in res[i]:
+            j = j.split(',')
+            vb.append(j[0].split(':'))
+        diffDict[i] = vb
+    print(diffDict)
+    finallist = []
+    for i in diffDict:
+        m = diffDict[i]
+        z2 = []
+        for j in m:#
+            print(j[0])
+            num = ""
+            for word in j[0]:
+                if word.isdigit():
+                    num += word
+            print(num)
+            mb = Product.objects.filter(product_id = int(num))
+            z2.append([])
+        finallist.append(z2)
+    print(finallist)
+    param = {
+        'username' : username,
+        'final': finallist,
+        'res': res,
+    }
+    return render(request, 'shop/trackCart.html', param)

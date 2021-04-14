@@ -6,3 +6,4 @@ from django.db.models.deletion import CASCADE
 class ExtendedUser(models.Model):
     cart = models.CharField(default="{}", max_length=1000)
     usr = models.OneToOneField(User, on_delete=CASCADE)
+    totcarts = models.CharField(default="{}", max_length=1000, null=True)

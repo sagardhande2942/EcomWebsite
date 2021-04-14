@@ -2,4 +2,8 @@
 
 {%block title%} Tracker {% endblock %}
 
-{%block body%} Hii you are in shop.tracker {% endblock %}
+{%block body%} 
+    {% for i in res %}
+        {{i}}
+    {% endfor %}
+{% endblock %}

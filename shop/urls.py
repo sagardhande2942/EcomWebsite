@@ -17,4 +17,6 @@ urlpatterns = [
     path('cancel/', views.cancelPay, name = 'cancel'),
     path('getPrice/', views.getPrice, name = 'getPrice'),
     path('getLogoutData/', views.getLogoutData, name='getLogoutData'),
+    path('getCart/', views.getCart, name='getCart'),
+    path('trackCart/', views.trackCart)
 ]

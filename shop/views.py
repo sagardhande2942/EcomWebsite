@@ -344,6 +344,13 @@ def tracker(request):
 def trackCart(request):
     print('hiids')  
     username  = request.user.username
+    a11 = ExtendedUser.objects.filter(usr=request.user)
+    b11 = PurchaseDate.objects.filter(purdate = a11[0])
+    avtime = []
+    n10 = 0
+    for i in b11:
+        avtime.append(i.purd)
+        n10 += 1
     states = [
         ['Nagpur', 78.893078, 21.1015184],
         ['Nashik', 73.90984434482529, 19.890527214221166],
@@ -359,6 +366,9 @@ def trackCart(request):
     a = []
     b = []
     str1 = z[0].totcarts
+    print('printing this', str1)
+    if(len(str1) == 2):
+        return render(request, 'shop/NoItem.html')
     print(str1)
     str1 = str1.split('}')
     res = []
@@ -399,12 +409,14 @@ def trackCart(request):
                     num += word
             print(num)
             mb = Product.objects.filter(product_id = int(num))
-            z2.append([])
+            zxcv = random.randint(0, 7)
+            z2.append([mb, j[1], random.randint(3, 7),  states[zxcv][0], states[zxcv][2], states[zxcv][1], avtime[n10 - i - 1]])
         finallist.append(z2)
     print(finallist)
     param = {
         'username' : username,
         'final': finallist,
         'res': res,
+        'city': states,
     }
     return render(request, 'shop/trackCart.html', param)

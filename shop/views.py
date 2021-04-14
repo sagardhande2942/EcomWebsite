@@ -269,6 +269,9 @@ def tracker(request):
     a = []
     b = []
     str1 = z[0].totcarts
+    print('printing this', str1)
+    if(len(str1) == 2):
+        return render(request, 'shop/NoItem.html')
     print(str1)
     str1 = str1.split('}')
     res = []

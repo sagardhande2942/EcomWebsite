@@ -1,0 +1,16 @@
+{% extends 'shop/basic.html' %}
+
+{%block title%} Track {%endblock%}
+
+{% block body %}
+
+<h1 style="position: absolute; top: 40%; left: 40%;">
+    You never bought anything.
+    Redirecting.
+</h1>
+<script>
+    setTimeout(() => {
+        window.location.href=  "/shop/"
+    }, 2000);
+</script>
+{% endblock }

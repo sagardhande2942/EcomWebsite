@@ -1,3 +1,4 @@
+from accounts.models import ExtendedUser
 from django.contrib.auth import login
 from django.http import HttpResponse
 from django.shortcuts import redirect, render

@@ -1,5 +1,5 @@
 import random
-from accounts.models import ExtendedUser
+from accounts.models import ExtendedUser, PurchaseDate
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product, Contact
@@ -11,7 +11,7 @@ from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 import stripe
 import logging
-
+from datetime import datetime
 logger = logging.getLogger(__name__)
 
 
@@ -117,6 +117,9 @@ def successPay(request):
     global cart12
     username = request.user.username
     a = ExtendedUser.objects.filter(usr = request.user)
+    d = datetime.now()
+    e = PurchaseDate(purdate = a[0], purd = d)
+    e.save()
     c = cart12
     for i in a:
         c += i.totcarts
@@ -254,6 +257,13 @@ def getLogoutData(request):
 def tracker(request):
     print('hiids')  
     username  = request.user.username
+    a11 = ExtendedUser.objects.filter(usr=request.user)
+    b11 = PurchaseDate.objects.filter(purdate = a11[0])
+    avtime = []
+    n10 = 0
+    for i in b11:
+        avtime.append(i.purd)
+        n10 += 1
     states = [
         ['Nagpur', 78.893078, 21.1015184],
         ['Nashik', 73.90984434482529, 19.890527214221166],
@@ -313,7 +323,7 @@ def tracker(request):
             print(num)
             mb = Product.objects.filter(product_id = int(num))
             zxcv = random.randint(0, 7)
-            z2.append([mb, j[1], random.randint(3, 7),  states[zxcv][0], states[zxcv][2], states[zxcv][1]])
+            z2.append([mb, j[1], random.randint(3, 7),  states[zxcv][0], states[zxcv][2], states[zxcv][1], avtime[n10 - i - 1]])
         finallist.append(z2)
     print(finallist)
     param = {

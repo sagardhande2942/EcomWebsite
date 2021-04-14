@@ -259,7 +259,10 @@ def tracker(request):
         ['Nashik', 73.90984434482529, 19.890527214221166],
         ['Pune', 73.7191995481777, 18.575145787488346],
         ['Surat', 72.95662036158728, 21.113012603007366],
-        ['Ahemdabad', 73.02994528337483, 22.55593501134834]
+        ['Ahemdabad', 73.02994528337483, 22.55593501134834],
+        ['Kolhapur',  73.85723039994883, 16.98177500464568,],
+        ['Nanded', 76.88549827649183, 19.12996201223232],
+        ['Navi Mumbai', 73.14423088426301, 18.68300231807807]
     ]
 
     z = ExtendedUser.objects.filter(usr = request.user)
@@ -306,9 +309,10 @@ def tracker(request):
                     num += word
             print(num)
             mb = Product.objects.filter(product_id = int(num))
-            z2.append([mb, j[1], random.randint(3, 7)])
+            zxcv = random.randint(0, 7)
+            z2.append([mb, j[1], random.randint(3, 7),  states[zxcv][0], states[zxcv][2], states[zxcv][1]])
         finallist.append(z2)
-    print(finallist)#dfaa
+    print(finallist)
     param = {
         'username' : username,
         'final': finallist,
@@ -327,7 +331,10 @@ def trackCart(request):
         ['Nashik', 73.90984434482529, 19.890527214221166],
         ['Pune', 73.7191995481777, 18.575145787488346],
         ['Surat', 72.95662036158728, 21.113012603007366],
-        ['Ahemdabad', 73.02994528337483, 22.55593501134834]
+        ['Ahemdabad', 73.02994528337483, 22.55593501134834],
+        ['Kolhapur',  73.85723039994883, 16.98177500464568,],
+        ['Nanded', 76.88549827649183, 19.12996201223232],
+        ['Navi Mumbai', 73.14423088426301, 18.68300231807807]
     ]
 
     z = ExtendedUser.objects.filter(usr = request.user)

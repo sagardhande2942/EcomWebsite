@@ -4,7 +4,7 @@
 
 {%block body%}
 
-<div class="container">
+<div class="container-fluid">
 {% for i in final %}
 <h2>Cart {{forloop.counter}}</h2>
 <div class="row" > 
@@ -22,11 +22,11 @@
 </div>
 <div class="col-sm-12 col-md-4 col-lg-4">
     <p>Number of days for delivery : {{i.0.2}}</p>
-    <p id = "getMyState{{forloop.counter}}"></p>
+    <p id = "getMyState{{forloop.counter}}">Getting shipped from : {{i.0.3}}</p>
 </div>
 <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="container my-3">
-        <div id='map{{forloop.counter}}' style='width: 400px; height: 300px;'></div>
+        <div id='map{{forloop.counter}}' style='width: 300px; height: 300px;'></div>
     </div>
 </div>
 {% endfor %}
@@ -42,14 +42,33 @@
 <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
 
 <script>
+    
+    
+        // var lat = 21.02766042122859;
+        // var lng = 75.76676289142033;
+        var lat = 0;
+        var lng = 0;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(geoSuccess);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
         
-        mapboxgl.accessToken = 'pk.eyJ1Ijoic2FnYXIxMSIsImEiOiJja25nZWxqdXYzNDB2MnFwOWd5Y3gyNjdoIn0.gPdqfO1KFWb7XMGGd6IoKQ';
+        function geoSuccess(position) {
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+            // alert(lat + " " + lng)
+        }
+        setTimeout(() => {
+            
+    
+          mapboxgl.accessToken = 'pk.eyJ1Ijoic2FnYXIxMSIsImEiOiJja25nZWxqdXYzNDB2MnFwOWd5Y3gyNjdoIn0.gPdqfO1KFWb7XMGGd6IoKQ';
         {% for i in final %}
         var map{{forloop.counter}} = new mapboxgl.Map({
             container: 'map{{forloop.counter}}',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [72.912073985522, 19.193125020058034],
-            zoom: 9,
+            center: [75.76676289142033, 21.02766042122859],
+            zoom: 5,
         });
         
         // Add zoom and rotation controls to the map.
@@ -68,7 +87,8 @@
                     'geometry': {
                         'type': 'LineString',
                         'coordinates': [
-                            [72.96048249304532, 19.213875035409654]
+                            [lng, lat],
+                            [{{i.0.5}}, {{i.0.4}}]
                         ]
                     }
                 }
@@ -88,10 +108,11 @@
             });
         });
         // Set options
+        var coors = [{{i.0.5}}, {{i.0.4}}];
         var marker = new mapboxgl.Marker({
             color: "#888",
-            draggable: true
-        }).setLngLat([30.5, 50.5])
+            draggable: false
+        }).setLngLat(coors)
             .addTo(map{{forloop.counter}});
 
         map{{forloop.counter}}.addControl(new mapboxgl.GeolocateControl({
@@ -100,9 +121,10 @@
             },
             trackUserLocation: true
         }));
+        console.log('{{i.0.4}} {{i.0.5}}');
         var marker1 = new mapboxgl.Marker()
-            .setLngLat([0, 0])
-            .setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>"))
+            .setLngLat([lng, lat])
+            .setPopup(new mapboxgl.Popup().setHTML("<h1>Your Location</h1>"))
             .addTo(map{{forloop.counter}});
 
         console.log(marker1.getPopup()); // return the popup instance
@@ -115,6 +137,6 @@
         {% endfor %}
             document.querySelector('.totalPrice{{forloop.counter}}').innerHTML = 'Total Price : ₹ '+ z;
         {% endfor %}
-
+    }, 2000);
 </script>
 {% endblock %}

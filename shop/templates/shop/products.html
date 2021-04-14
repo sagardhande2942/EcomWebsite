@@ -9,12 +9,12 @@
         <div class = "col-sm-6 col-md-4 col-lg-4">
             <img src = "../../../media/{{prod.0.image}}" width="200px" height="350px">
             <div class = "my-3">
-            <button class = "btn btn-primary mx-2" onclick="addItem();">Buy Now</button>
-            <!-- <button class = "btn btn-primary">Add to cart</button> -->
-            <span id="divpr{{prod.0.product_id}}" class = "divpr">
+              <!-- <button class = "btn btn-primary">Add to cart</button> -->
+              <span id="divpr{{prod.0.product_id}}" class = "divpr">
                 <button style="display: inline-block; " href="#" id="pr{{prod.0.product_id}}"
-                  class="btn btn-primary cart">Add To Cart</button>
+                class="btn btn-primary cart">Add To Cart</button>
               </span>
+              <button class = "btn btn-primary mx-2" onclick="addItem();">Buy Now</button>
             </div>
 
         </div>
@@ -53,7 +53,6 @@
       var idstr = "pr{{prod.0.product_id}}";
       // console.log('clicked ' + idstr);
       // console.log(idstr)
-      cart[idstr] = 1;
       // console.log(cart);
       localStorage.setItem('cart', JSON.stringify(cart));
       updateCart(cart); 

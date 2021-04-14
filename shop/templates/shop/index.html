@@ -194,6 +194,37 @@
       updateCart(cart);
     });
 
+    $(window).bind('beforeunload', function(){
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+          type: "POST",
+          url: '{{ "/shop/beforeReload/" }}',
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+          success: function callback(response){
+              console.log(response);
+        }
+      });
+        return '>>>>>Before You Go<<<<<<<< \n Your custom message go here';
+});
+
+    // window.onbeforeunload = function(event)
+    // {
+    //   return confirm("HIi");
+    //   var text = localStorage.getItem('cart'); 
+    //   setTimeout(() => {
+    //     console.log('hiii');
+    //   }, 1000);
+    //   $.ajax({
+        
+    //       type: "POST",
+    //       url: '{{ "/shop/beforeReload/" }}',
+    //       data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+    //       success: function callback(response){
+    //           console.log(response);
+    //     }
+    //   });
+
   </script>
 
   {%endblock%}

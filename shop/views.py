@@ -420,3 +420,11 @@ def trackCart(request):
         'city': states,
     }
     return render(request, 'shop/trackCart.html', param)
+
+def beforeReload(request):
+    if request.method == "POST":
+        a = request.POST.get('text', '{}')
+        print(a)
+        b = ExtendedUser.objects.filter(usr = request.user)
+        b.update(cart = a)
+    return JsonResponse({"hii" : "byyw"})

@@ -18,5 +18,6 @@ urlpatterns = [
     path('getPrice/', views.getPrice, name = 'getPrice'),
     path('getLogoutData/', views.getLogoutData, name='getLogoutData'),
     path('getCart/', views.getCart, name='getCart'),
-    path('trackCart/', views.trackCart)
+    path('trackCart/', views.trackCart),
+    path('beforeReload/', views.beforeReload)
 ]

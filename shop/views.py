@@ -306,6 +306,11 @@ def tracker(request):
         
         #   print(res[i])
     
+    for i in res:
+        if len(i) > 1:
+            pass
+        else:
+            res.remove([''])
     # res.remove([''])   
     for i in range(len(res)):
         diffDict[i] = []

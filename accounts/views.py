@@ -36,7 +36,7 @@ def login_view(request):
     context = {
         'form': form,
     }
-    return render(request, "login.html", context)
+    return render(request, "index.html", context)
 
 
 def register_view(request):
@@ -57,7 +57,7 @@ def register_view(request):
     context = {
         'form': form,
     }
-    return render(request, "signup.html", context)
+    return render(request, "Register.html", context)
 
 
 def logout_view(request):

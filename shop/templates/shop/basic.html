@@ -59,7 +59,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top justify-content-between">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="/shop/">My Awesome Cart</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -81,9 +81,11 @@
             <a class="nav-link" href="/shop/contact"  >Contact Us</a>
           </li>
         </ul>
-        <form class="form-inline" action="/shop/search/" method="POST" >{% csrf_token %}
-          <input class="form-control mr-sm-2" name="search" id="searchValue"  type="search" placeholder="Search" aria-label="Search">
-          <button style="transform: translate(-100px, -35px);" class="btn btn-outline-success my-2 my-sm-0"  type="submit">Search</button>
+        <form class="form-inline" action="/shop/search/" style="width: 100%; display: inline-block;" method="POST" >{% csrf_token %}
+        <p>
+          <button class="btn btn-outline-success my-2 mx-2 my-sm-0" style="float: right;"  type="submit">Search</button>
+          <input class="form-control mr-sm-2" style="width: 60%; float: right;" name="search" id="searchValue"  type="search" placeholder="Search" aria-label="Search">
+          </p>
           {% csrf_token %}
         </form>
         <div class="dropdown mx-3">
@@ -151,6 +153,7 @@ if(localStorage.getItem('cart') == null){
         }
       });
   }
+  
   </script>
   {%block js%} {% endblock %}
 </body>

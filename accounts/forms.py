@@ -5,13 +5,14 @@ from django.contrib.auth import (
     get_user_model
 )
 from django.contrib.auth.models import User
-from django.forms.widgets import PasswordInput
+from django.forms.widgets import EmailInput, PasswordInput
 
 User = get_user_model()
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=PasswordInput(attrs={'class':'class="input100"'}))
+    username = forms.CharField(label = 'Username', help_text="", widget= forms.TextInput
+                           (attrs={'class':'class="input100"'}))
 
     def clean(self, *args, **kwargs):
         username = self.cleaned_data.get('username')
@@ -29,10 +30,15 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm, self).clean(*args, **kwargs)
     
 class UserRegisterForm(forms.ModelForm):
-    email = forms.EmailField(label='Email Address')
-    email2 = forms.EmailField(label='Confirm Email')
-    password = forms.CharField(widget=PasswordInput)
-    username = forms.CharField(label = 'Username', help_text="")
+    email = forms.EmailField(label='Email Address', widget=EmailInput(
+        attrs={'id' : 'your-email', 'class' : 'input-text', 'placeholder' : "Email Address" }
+    ))
+    email2 = forms.EmailField(label='Confirm Email', widget=EmailInput(
+        attrs={'id' : 'your-email', 'class' : 'input-text', 'placeholder' : "Confirm Email Address" }
+    ))
+    password = forms.CharField(widget=PasswordInput(attrs={'id' : "password", 'class' : 'input-text' , 'placeholder' : "Password"}))
+    username = forms.CharField(label = 'Username', help_text="", widget= forms.TextInput
+                           (attrs={'id' : "full-name", 'class' : "input-text" , 'placeholder' : "Username"}))
     class Meta:
         model = User
         feilds = [

@@ -88,6 +88,9 @@
 
     // Get Stripe publishable key
     function checkout(){
+        setTimeout((item) =>{
+            //wait
+        }, 10000);
         document.documentElement.scrollTop = 0;
         document.getElementById("outerdiv").style.opacity = 0.3;
         // document.querySelector(".nonediv").innerHTML = "<h1> Loading...</h1>"
@@ -113,9 +116,6 @@
         }
         
     });
-    
-    
-
 
     fetch("/shop/config/")
     .then((result) => { return result.json(); })

@@ -6,12 +6,117 @@
   body{
     background-color: #defcff;
   }
+  #outerdiv{
+    display: none;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    #outerdiv{
+      display: block;
+    }
+    #outerdiv2{
+      display: none;
+    }  
+  }
 </style>
 {% endblock %}
 <!-- Carousel Start -->
 {%block body%}
 {% load static %}
-{% for products, range, nslides in allprods %}
+<div id='outerdiv'>
+  {% for products, range1, nslides1, range, nslides in allprods %}
+  <div class="mt-5 container" >
+    <h2>{{products.0.category}}</h2>
+    <div id="carouselExampleDark{{forloop.counter}}1" style="background-color: white;"
+      class="carousel carousel-dark  slide" data-bs-ride="carousel">
+      <div class="carousel-indicators" style="width: 60px; margin: auto;">
+        <button type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1" data-bs-slide-to="0"
+          class="active" aria-current="true" aria-label="Slide 1"></button>
+        {% for i in range %}
+        <button type="button" data-bs-target="#carouselExampleDark{{forloop.parent.counter}}1" data-bs-slide-to="{{i}}"
+          aria-label="Slide {{i|add:'1' }}"></button>
+        {% endfor %}
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="10000">
+          <!-- active slide -->
+          <div class="row" style="text-align: center;">
+            <div class="col-lg-3 col-sm-6 col-md-6 p-2">
+              <div class="card" style="width: 18rem;">
+                <img src='../../../media/{{products.0.image}}' class="card-img-top" style="width: 100%; height: 200px;"
+                  alt="...">
+                <div class="card-body" style="height: 200px;">
+
+                  <h5 class="card-title">{{ products.0.product_name }}</h5>
+                  <p class="card-text">{{ products.0.product_desc|slice:"0:50" }}...</p>
+                  <div style="position: absolute; bottom: 2%;">
+                    <span id='divpr{{products.0.product_id}}' class='divpr'>
+                      <button style="display: inline-block; " href="#" id="pr{{products.0.product_id}}"
+                        class="btn btn-primary cart">Add To Cart</button>
+                    </span>
+                    <a type="button" href="/shop/products/{{products.0.product_id}}" id="qv{{products.0.product_id}}"
+                      class="btn btn-primary">Quick View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% for i in products|slice:"1:" %}
+            <div class="col-lg-3 col-sm-6 col-md-6 p-2">
+              <div class="card" style="width: 18rem;">
+                <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top"
+                  alt="...">
+                <div class="card-body" style="height: 200px;">
+                  <h5 class="card-title">{{i.product_name}}</h5>
+                  <p class="card-text">{{ i.product_desc|slice:"0:50" }}...</p>
+                  <div style="position: absolute; bottom: 2%;">
+                    <span id="divpr{{i.product_id}}" class="divpr">
+                      <button style="display: inline-block; " href="#" id="pr{{i.product_id}}"
+                        class="btn btn-primary cart">Add To Cart</button>
+                    </span>
+                    <a type="button" href="/shop/products/{{i.product_id}}" id="qv{{i.product_id}}"
+                      class="btn btn-primary">Quick View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% if forloop.counter|divisibleby:1 and forloop.counter > 0 and not forloop.last and forloop.counter < 2 %}
+              </div>
+          </div>
+          <div class="carousel-item" data-bs-interval="2000">
+            <div class="row">
+              {% endif %}
+
+              {% if forloop.counter|add:'1'|divisibleby:2 and forloop.counter > 0 and not forloop.last and forloop.counter > 2 %}
+            </div>
+          </div>
+          <div class="carousel-item" data-bs-interval="2000">
+            <div class="row">
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
+          data-bs-slide="prev" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
+          data-bs-slide="next" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+<div id='outerdiv2'>
+{% for products, range, nslides, range1, nslides1 in allprods %}
 <div class="mt-5 container" >
   <h2>{{products.0.category}}</h2>
   <div id="carouselExampleDark{{forloop.counter}}" style="background-color: white;" class="carousel carousel-dark  slide" data-bs-ride="carousel">
@@ -84,6 +189,7 @@
       </div>
 
 
+
       <button  class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
         data-bs-slide="prev" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -98,12 +204,46 @@
 
   </div>
   {% endfor %}
+</div>
+
   {% endblock %}
 
 
   {%block js%}
 
   <script>
+
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    console.log(width);
+    if (width  > 1000) {
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+          type: "POST",
+          url: '{{ "/shop/beforeReload/" }}',
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+          success: function callback(response){
+              console.log(response);
+        }
+      });
+      document.getElementById('outerdiv').innerHTML = "";
+        // Mobile code
+    } else {
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+          type: "POST",
+          url: '{{ "/shop/beforeReload/" }}',
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+          success: function callback(response){
+              console.log(response);
+        }
+      });
+        // Other code
+        document.getElementById('outerdiv2').innerHTML = "";
+    }
+
     var str = ""
     var itemsTotal = {{items}};
     //Add pop over to cart
@@ -205,7 +345,7 @@
               console.log(response);
         }
       });
-        return '>>>>>Before You Go<<<<<<<< \n Your custom message go here';
+        // return '>>>>>Before You Go<<<<<<<< \n Your custom message go here';
 });
 
     // window.onbeforeunload = function(event)

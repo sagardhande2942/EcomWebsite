@@ -68,7 +68,7 @@
         var map{{forloop.counter}} = new mapboxgl.Map({
             container: 'map{{forloop.counter}}',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [{{i.0.3}}, {{i.0.4}}],
+            center: [parseFloat({{i.0.3}} + {{i.0.7}}) / 2, parseFloat({{i.0.4}} + {{i.0.8}}) / 2],
             zoom: 5,
         });
         

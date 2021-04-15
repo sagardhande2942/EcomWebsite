@@ -39,8 +39,9 @@ def index(request):
     for cat in cats:
         prod = Product.objects.filter(category=cat)
         n = len(prod)
-        nslides = n//4 + ceil(n/4 - n//4)
-        allprods.append([prod, range(1, nslides), nslides])
+        nslides = n//2 + ceil(n/2 - n//2)
+        nslides1 = n//4 + ceil(n/4 - n//4)
+        allprods.append([prod, range(1, nslides1), nslides1, range(1, nslides), nslides])
 
     # allProds = [
     #     [products, range(1, nslides), nslides],

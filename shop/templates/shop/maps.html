@@ -21,9 +21,9 @@
 <a class="btn btn-primary" href = "/shop/trackCart"> Show complete details </a>
 </div>
 <div class="col-sm-12 col-md-4 col-lg-4">
-    <p>Date Of Purchase : <small>{{i.0.6}}</small></p>
-    <p>Number of days for delivery : {{i.0.2}}</p>
-    <p id = "getMyState{{forloop.counter}}">Getting shipped from : {{i.0.3}}</p>
+    <p>Date Of Purchase : <small>{{i.0.5}}</small></p>
+    <p>Number of days for delivery : {{i.0.6}}</p>
+    <p id = "getMyState{{forloop.counter}}">Getting shipped from : {{i.0.2}}</p>
 </div>
 <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="container my-3">
@@ -68,7 +68,7 @@
         var map{{forloop.counter}} = new mapboxgl.Map({
             container: 'map{{forloop.counter}}',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [75.76676289142033, 21.02766042122859],
+            center: [{{i.0.3}}, {{i.0.4}}],
             zoom: 5,
         });
         
@@ -88,8 +88,8 @@
                     'geometry': {
                         'type': 'LineString',
                         'coordinates': [
-                            [lng, lat],
-                            [{{i.0.5}}, {{i.0.4}}]
+                            [{{i.0.3}}, {{i.0.4}}],
+                            [{{i.0.7}}, {{i.0.8}}]
                         ]
                     }
                 }
@@ -109,7 +109,7 @@
             });
         });
         // Set options
-        var coors = [{{i.0.5}}, {{i.0.4}}];
+        var coors = [{{i.0.7}}, {{i.0.8}}];
         var marker = new mapboxgl.Marker({
             color: "#888",
             draggable: false
@@ -122,10 +122,10 @@
             },
             trackUserLocation: true
         }));
-        console.log('{{i.0.4}} {{i.0.5}}');
+        console.log('{{i.0.7}}, {{i.0.8}}');
         var marker1 = new mapboxgl.Marker()
-            .setLngLat([lng, lat])
-            .setPopup(new mapboxgl.Popup().setHTML("<h1>Your Location</h1>"))
+            .setLngLat([{{i.0.3}}, {{i.0.4}}])
+            .setPopup(new mapboxgl.Popup().setHTML("<h3>your delivery location</h3>"))
             .addTo(map{{forloop.counter}});
 
         console.log(marker1.getPopup()); // return the popup instance

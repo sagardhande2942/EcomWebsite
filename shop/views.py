@@ -1,10 +1,11 @@
+import json
 import random
 from accounts.models import ExtendedUser, PurchaseDate
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product, Contact
 from math import ceil, prod
-from django.conf import settings 
+from django.conf import LazySettings, settings 
 from django.http.response import JsonResponse 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
@@ -117,10 +118,8 @@ def successPay(request):
     global cart12
     username = request.user.username
     a = ExtendedUser.objects.filter(usr = request.user)
-    d = datetime.now()
-    e = PurchaseDate(purdate = a[0], purd = d)
-    e.save()
     c = cart12
+    print('Succes pay cart ',c)
     for i in a:
         c += i.totcarts
     b = ""
@@ -135,7 +134,7 @@ def successPay(request):
         if(c[i] == '}'):
             if(i + 1 < len(c) and c[i + 1] == '}'):
                 continue
-        if i == len(c) - 1: continue
+        # if i == len(c) - 1: continue
         b += c[i]
     print(b)
     a.update(totcarts = b, cart = "{}")
@@ -161,7 +160,7 @@ def showCart(request):
     for i in allprods:
         cnt += 1
         p.append([cnt, i])
-    print(p)
+    # print(p)
     param = {
         'p' : p,
         'range': range(1, len(Product.objects.all()) + 1),
@@ -260,15 +259,19 @@ def getLogoutData(request):
 
 @login_required(login_url='/auth/')
 def tracker(request):
-    print('hiids')  
+    # print('hiids')  
     username  = request.user.username
     a11 = ExtendedUser.objects.filter(usr=request.user)
     b11 = PurchaseDate.objects.filter(purdate = a11[0])
+    for i in a11:
+        print(i)
     avtime = []
     n10 = 0
     for i in b11:
-        avtime.append(i.purd)
+        avtime.append([i.purd, i.lang, i.lat, i.days, i.state, i.lato, i.lango])
         n10 += 1
+    print(avtime)
+    print(n10, 'is n10')
     states = [
         ['Nagpur', 78.893078, 21.1015184],
         ['Nashik', 73.90984434482529, 19.890527214221166],
@@ -307,7 +310,8 @@ def tracker(request):
         #   print(res[i])
     
     for i in res:
-        if len(i) > 1:
+        print('this: ', i)
+        if i != ['']:
             pass
         else:
             res.remove([''])
@@ -333,7 +337,10 @@ def tracker(request):
             print(num)
             mb = Product.objects.filter(product_id = int(num))
             zxcv = random.randint(0, 7)
-            z2.append([mb, j[1], random.randint(3, 7),  states[zxcv][0], states[zxcv][2], states[zxcv][1], avtime[n10 - i - 1]])
+            print(n10 - i - 1)
+            z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
+            assert n10 - i - 1 >= 0
+        # n10-=1
         finallist.append(z2)
     print(finallist)
     param = {
@@ -347,15 +354,19 @@ def tracker(request):
 
 @login_required(login_url='/auth/')
 def trackCart(request):
-    print('hiids')  
+    # print('hiids')  
     username  = request.user.username
     a11 = ExtendedUser.objects.filter(usr=request.user)
     b11 = PurchaseDate.objects.filter(purdate = a11[0])
+    for i in a11:
+        print(i)
     avtime = []
     n10 = 0
     for i in b11:
-        avtime.append(i.purd)
+        avtime.append([i.purd, i.lang, i.lat, i.days, i.state, i.lato, i.lango])
         n10 += 1
+    print(avtime)
+    print(n10, 'is n10')
     states = [
         ['Nagpur', 78.893078, 21.1015184],
         ['Nashik', 73.90984434482529, 19.890527214221166],
@@ -393,6 +404,12 @@ def trackCart(request):
         
         #   print(res[i])
     
+    for i in res:
+        print('this: ', i)
+        if i != ['']:
+            pass
+        else:
+            res.remove([''])
     # res.remove([''])   
     for i in range(len(res)):
         diffDict[i] = []
@@ -415,7 +432,10 @@ def trackCart(request):
             print(num)
             mb = Product.objects.filter(product_id = int(num))
             zxcv = random.randint(0, 7)
-            z2.append([mb, j[1], random.randint(3, 7),  states[zxcv][0], states[zxcv][2], states[zxcv][1], avtime[n10 - i - 1]])
+            print(n10 - i - 1)
+            z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
+            assert n10 - i - 1 >= 0
+        # n10-=1
         finallist.append(z2)
     print(finallist)
     param = {
@@ -433,3 +453,28 @@ def beforeReload(request):
         b = ExtendedUser.objects.filter(usr = request.user)
         b.update(cart = a)
     return JsonResponse({"hii" : "byyw"})
+
+def getAddress(request):
+    if request.method == 'POST':
+        states = [
+            ['Nagpur', 78.893078, 21.1015184],
+            ['Nashik', 73.90984434482529, 19.890527214221166],
+            ['Pune', 73.7191995481777, 18.575145787488346],
+            ['Surat', 72.95662036158728, 21.113012603007366],
+            ['Ahemdabad', 73.02994528337483, 22.55593501134834],
+            ['Kolhapur',  73.85723039994883, 16.98177500464568,],
+            ['Nanded', 76.88549827649183, 19.12996201223232],
+            ['Navi Mumbai', 73.14423088426301, 18.68300231807807]
+        ]
+        a = request.POST.get('text', "{'lat':18.98, 'lon':72.83}")
+        b = json.loads(a)
+        # print(b['lat'])
+        c = ExtendedUser.objects.filter(usr = request.user)
+        d = datetime.now()
+        f = random.randint(0, 7)
+        e = PurchaseDate(purdate = c[0], purd = d, state = states[f][0], lato = states[f][2], lango = states[f][1], lat = str(b['lat']), lang = str(b['lon']), days = random.randint(3, 7))
+        e.save()
+        z = PurchaseDate.objects.filter(purdate = c[0])
+        for i in z:
+            print(i.state)
+    return JsonResponse({'hii':'bye'})

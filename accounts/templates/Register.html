@@ -11,28 +11,42 @@
     <link rel="stylesheet" href="../../media/colorlib-regform-32/css/style.css"/>
 </head>
 <body class="form-v6">
+	<div style="color:white;position: absolute; top: 15%; left: 50%;" style="z-index: 2147483647;">
+		{{ form.non_field_errors }}
+		  {{form.username.errors}}
+		  {{form.email.errors}}
+		  {{form.email2.errors}}
+		  {{form.password.errors}}
+
+	</div>
 	<div class="page-content">
 		<div class="form-v6-content">
+			
 			<div class="form-left">
 				<img src="../../media/colorlib-regform-32/images/RegisterBack.jpg" style="width: 430px;" alt="form">
 			</div>
 			<form class="form-detail" method="post">
 				{% csrf_token %}
 				<h2>Register Form</h2>
+
 				<div class="form-row">
 					<!-- <input type="text" name="full-name" id="full-name" class="input-text" placeholder="Your Name" required> -->
+					{{form.username.errors}}
 					{{form.username}}
 				</div>
 				<div class="form-row">
 					<!-- <input type="text" name="your-email" id="your-email" class="input-text" placeholder="Email Address" required pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}"> -->
+					{{form.email.errors}}
 					{{form.email}}
 				</div>
 				<div class="form-row">
 					<!-- <input type="password" name="password" id="password" class="input-text" placeholder="Password" required> -->
+					{{form.email2.errors}}
 					{{form.email2}}
 				</div>
 				<div class="form-row">
 					<!-- <input type="password" name="comfirm-password" id="comfirm-password" class="input-text" placeholder="Comfirm Password" required> -->
+					{{form.password.errors}}
 					{{form.password}}
 				</div>
 				<div class="form-row-last">

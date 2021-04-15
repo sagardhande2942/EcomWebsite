@@ -15,7 +15,10 @@
         width: 120px;
         height: 120px;
         animation: spin 2s linear infinite;
-}
+    }
+    .backBlur{
+        backdrop-filter: blur(5px);
+    }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -27,6 +30,17 @@
 {% block body %}
 <div class="container nonediv" style="display: none;">
     <div class="loader" style="position: absolute; top: 50%; left: 50%;"></div>
+</div>
+<div class="backBlur" style="width: 100%;height:100%;text-align: center; margin: 0 auto; position: fixed; display: none;"  id = 'addAddressSelection'>
+    <div style="position: absolute; top:40%; width: 100%;">
+        <div class="input-group mb-3" style="width: 30%; margin: 0 auto; ">
+        <span class="input-group-text" id="basic-addon3">City for delivery :   </span>
+        <input type="text" name = 'address' class="form-control" id="basic-url" aria-describedby="basic-addon3" />
+        
+        <button type="button" style="transform: translate(10px, 7px);" onclick="removeBlur();" class="btn-close btn-close-dark" aria-label="Close" aria-required="true"></button>
+    </div>
+    <button id="Checkout" type = "button" onclick = "checkout();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button>
+</div>
 </div>
 
 {% for j, i in p %}
@@ -61,14 +75,13 @@
 </div>
 <!-- <img src='../../../media/{{products.0.image}}' class="card-img-top" style="width: 200px; height: 200px"> -->
 {% endfor %}
-<hr>
 <div class="container" id="nonePriceDiv">
     <div class="row">
         <div class="col-sm-4 col-md-4 col-lg-4">
         </div>
         <div class="col-sm-5 col-md-5 col-lg-5">
             <b>SubTotal(<span id="totalprod"></span> items)</b><br>
-            <button id="Checkout" type = "button" onclick = "checkout();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button>
+            <button id="Checkout" type = "button" onclick = "getAddress();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button>
         </div>
         <div class="col-sm-3 col-md-3 col-lg-3" style="display: inline-block;">
             <b>₹ <span id="totprice"></span></b>
@@ -86,15 +99,50 @@
     var totprod = 0;
     var itemsTotal = {{ items }}
 
+    function removeBlur(){
+        document.getElementById('addAddressSelection').style.display = 'none';
+    }
+
+    function getAddress(){
+        console.log('hii')
+        document.getElementsByTagName('body').className = 'backBlur';
+        // document.getElementById("outerdiv").className = 'backBlur'; //backdrop-filter: blur(5px); = 'none';
+        // document.getElementById('outerdiv').tabIndex = -1;
+        document.getElementById('addAddressSelection').style.display = 'block';
+    }
+
     // Get Stripe publishable key
     function checkout(){
-        setTimeout((item) =>{
-            //wait
-        }, 10000);
+        var lat = 0
+        var lon = 0
         document.documentElement.scrollTop = 0;
+        var addressText = document.getElementById("basic-url").value;
+        if(addressText.length == 0){
+            alert('Please Enter the delivery address.')
+            throw 'invalid value';
+        }
         document.getElementById("outerdiv").style.opacity = 0.3;
         // document.querySelector(".nonediv").innerHTML = "<h1> Loading...</h1>"
         document.querySelector(".nonediv").style.display  = "block";
+        var urlReq = "https://api.weatherapi.com/v1/current.json?key=4c5c2e8f506b4ea29cb41623200208&q=" + addressText;
+        $.getJSON(
+                urlReq,
+                function (data) {
+                    console.log(data);
+                    lat = data.location.lat;
+                    lon = data.location.lon;
+                });
+        setTimeout((x123) =>{
+        var text0 = "{\"lat\":\"" + lat + "\", \"lon\":\"" + lon + "\"}";
+        $.ajax({
+            type: "POST",
+            url: '{{ "/shop/getAddress/" }}',
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text0},
+            success: function callback(response){
+               console.log(response);
+        }
+        });
+
         var text = document.getElementById("totprice1").value;
         $.ajax({
             type: "POST",
@@ -135,6 +183,8 @@
           console.log(res);
         });
     });
+}, 1000)
+
 }
 
 

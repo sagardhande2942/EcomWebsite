@@ -54,6 +54,11 @@
       // console.log('clicked ' + idstr);
       // console.log(idstr)
       // console.log(cart);
+      if(cart[idstr]){
+        ;
+      }else{
+        cart[idstr] = 1;
+      }
       localStorage.setItem('cart', JSON.stringify(cart));
       updateCart(cart); 
       // document.getElementById('cart1').innerHTML = Object.keys(cart).length;

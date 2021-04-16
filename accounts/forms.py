@@ -14,6 +14,7 @@ class UserLoginForm(forms.Form):
     username = forms.CharField(label = 'Username', help_text="", widget= forms.TextInput
                            (attrs={'class':'class="input100"'}))
 
+    field_order = ['username', 'password']
     def clean(self, *args, **kwargs):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')

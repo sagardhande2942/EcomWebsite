@@ -4,28 +4,8 @@
 
 {% block style %}
 <style>
-        ol {
-    list-style: none;
-    counter-reset: steps;
-    }
-    ol li {
-    counter-increment: steps;
-    }
-    ol li::before {
-    content: counter(steps);
-    margin-right: 0.5rem;
-    background: #ff6f00;
-    color: white;
-    width: 1.2em;
-    height: 1.2em;
-    border-radius: 50%;
-    display: inline-grid;
-    place-items: center;
-    line-height: 1.2em;
-    }
-    ol ol li::before {
-    background: darkorchid;
-    }
+
+
 </style>
 {% endblock %}
 
@@ -41,8 +21,16 @@
 {% for j in i %}
     <li>{{j.0.0.product_name}}</li>
     <ol>
-        <li> Pieces : {{j.1}}<br></li>
-        <li> Price : ₹ <span class="price{{forloop.counter}}">{{j.0.0.price}}</span></li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Pieces bought
+            <span class="badge bg-primary rounded-pill">{{j.1}}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Price of single piece
+            <span class="badge bg-info rounded-pill">₹{{j.0.0.price}}</span>
+        </li>
+        <!-- <li> Pieces : {{j.1}}<br></li>
+        <li> Price : ₹ <span class="price{{forloop.counter}}">{{j.0.0.price}}</span></li> -->
     </ol>
 {% endfor %}
 </ol>
@@ -50,9 +38,21 @@
 <a class="btn btn-primary" href = "/shop/trackCart"> Show complete details </a>
 </div>
 <div class="col-sm-12 col-md-4 col-lg-4" style="border: 2px solid black;">
-    <p>Date Of Purchase : <small>{{i.0.5}}</small></p>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Date Of Purchase
+        <span class="badge bg-primary rounded-pill">{{i.0.5}}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Number of days for delivery
+        <span class="badge bg-primary rounded-pill">{{i.0.6}}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Getting shipped from
+        <span class="badge bg-info rounded-pill">{{i.0.2}}</span>
+    </li>
+    <!-- <p>Date Of Purchase : <small>{{i.0.5}}</small></p>
     <p>Number of days for delivery : {{i.0.6}}</p>
-    <p id = "getMyState{{forloop.counter}}">Getting shipped from : {{i.0.2}}</p>
+    <p id = "getMyState{{forloop.counter}}">Getting shipped from : {{i.0.2}}</p> -->
 </div>
 <div class="col-sm-12 col-md-4 col-lg-4" style="border: 2px solid black;">
     <div class="container my-3">

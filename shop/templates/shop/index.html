@@ -29,7 +29,7 @@
 {% load static %}
 <div class="container my-3" style="width: 100%; height: 300px; text-align: center; margin-bottom: 10px;">
   {% for i in trendingProduct %}
-  <h2>Trending Product</h2>
+  <h2><span class="badge bg-secondary">Trending Product</span></h2>
   <div class="row my-3" style="border: 2px solid black; margin-bottom: 10px;">
     <a href="/shop/products/{{i.product_id}}">
     <div class="col-sm-6 col-md-6 col-lg-3">
@@ -263,10 +263,9 @@
           //   // console.log(localStorage.getItem('cart'))
           //    updateCart(cart);
           // }
-          console.log('{{cart}}'.replaceAll("&quot;", '"'));
+    console.log('{{cart}}'.replaceAll("&quot;", '"'));
     var cart = JSON.parse('{{cart}}'.replaceAll("&quot;", '"'));
     localStorage.setItem('cart', JSON.stringify(cart));
-    updateCart(cart);
     
     // If the add to cart is clicked then we get update
     $('.cart').click(function () {
@@ -318,6 +317,7 @@
       // Other code
       document.getElementById('outerdiv2').innerHTML = "";
     }
+    updateCart(cart);
     
     
     function myFunction(){

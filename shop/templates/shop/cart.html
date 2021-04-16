@@ -146,7 +146,8 @@
         });
 
         var text = document.getElementById("totprice1").value;
-        if(parseInt(text) >= 999,999){
+        // console.log(text);
+        if(text >= 999999){
             alert("The maximum amount you can pay at a time is 999,999, Please delete some items from your cart.")
             window.location.href = '/shop/cart/'
             throw "The maximum payment amount exceeded"

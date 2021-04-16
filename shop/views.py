@@ -25,6 +25,7 @@ PDFromgetAddtoSuccessPay = PurchaseDate()
 import simplejson
 @login_required(login_url='/auth/')
 def index(request):
+    print('In Index')
     #Calling trending product
     maxProduct, maxNum = trendingProduct()
     print(maxProduct, maxNum)
@@ -149,7 +150,7 @@ def successPay(request):
         # if i == len(c) - 1: continue
         b += c[i]
     print(b)
-    a.update(totcarts = b, cart = "{}")
+    a.update(totcarts = b, cart = "hiii")
     context = {
         'username' : username
     }
@@ -320,14 +321,32 @@ def tracker(request):
         res[i] = res[i][0].split(',')
         
         #   print(res[i])
-    
+    check = False
+    print(res)
     for i in res:
         print('this: ', i)
-        if i != ['']:
+        if len(i[0]):
             pass
         else:
-            res.remove([''])
-    # res.remove([''])   
+            print('hereeeeeee')
+            check = True
+    if check:
+        res.remove([''])  
+    print(res) 
+
+    check = False
+    print(res)
+    for i in res:
+        print('this: ', i)
+        if len(i[0]):
+            pass
+        else:
+            print('hereeeeeee')
+            check = True
+    if check:
+        res.remove([''])  
+    print(res) 
+
     for i in range(len(res)):
         diffDict[i] = []
         vb = []
@@ -459,8 +478,11 @@ def trackCart(request):
     return render(request, 'shop/trackCart.html', param)
 
 def beforeReload(request):
+    print('IN RELOAD')
     if request.method == "POST":
         a = request.POST.get('text', '{}')
+        if(len(a) < 2):
+            a = '{}'
         print(a)
         b = ExtendedUser.objects.filter(usr = request.user)
         b.update(cart = a)

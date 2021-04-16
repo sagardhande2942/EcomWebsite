@@ -23,7 +23,7 @@
 		<div class="form-v6-content">
 			
 			<div class="form-left">
-				<img src="../../media/colorlib-regform-32/images/RegisterBack.jpg" style="width: 430px;" alt="form">
+				<img src="../../media/colorlib-regform-32/images/20210416_172959_0000.png" style="width: 430px;" alt="form">
 			</div>
 			<form class="form-detail" method="post">
 				{% csrf_token %}
@@ -51,7 +51,9 @@
 				</div>
 				<div class="form-row-last">
 					<input type="submit" name="register" class="register" value="Register">
+					<input type="button" style="margin-left: 20px;" onclick="window.location.href = '/auth/'" name="login" class="register" value="Login">
 				</div>
+			</div>
 			</form>
 		</div>
 	</div>

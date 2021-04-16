@@ -31,9 +31,9 @@
 
 <div class="backBlur" style="width: 100%;height:100%;text-align: center; margin: 0 auto; position: fixed; display: none;"  id = 'addAddressSelection'>
     <div class="container nonediv" style="display: none;">
-        <div class="loader" style="position: absolute; top: 50%; left: 50%;"></div>
+        <div class="loader" style="position: absolute; top: 30%; left: 50%;"></div>
     </div>
-    <div style="position: absolute; top:40%; width: 100%;">
+    <div style="position: absolute; top:40%; width: 100%;" id = 'citySelectionDiv'>
         <div class="input-group mb-3" style="width: 30%; margin: 0 auto; ">
         <span class="input-group-text" id="basic-addon3">City for delivery :   </span>
         <input type="text" name = 'address' class="form-control" id="basic-url" aria-describedby="basic-addon3" />
@@ -116,6 +116,7 @@
     function checkout(){
         var lat = 0
         var lon = 0
+        document.getElementById('citySelectionDiv').style.display = 'none';
         document.documentElement.scrollTop = 0;
         var addressText = document.getElementById("basic-url").value;
         if(addressText.length == 0){
@@ -145,6 +146,11 @@
         });
 
         var text = document.getElementById("totprice1").value;
+        if(parseInt(text) >= 999,999){
+            alert("The maximum amount you can pay at a time is 999,999, Please delete some items from your cart.")
+            window.location.href = '/shop/cart/'
+            throw "The maximum payment amount exceeded"
+        }
         $.ajax({
             type: "POST",
             url: '{{ "/shop/getPrice/" }}',

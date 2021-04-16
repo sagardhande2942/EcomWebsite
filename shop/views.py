@@ -20,14 +20,21 @@ YOUR_DOMAIN = 'http://localhost:8000'
 
 price = 0
 cart12 = ""
+PDFromgetAddtoSuccessPay = PurchaseDate()
 
 import simplejson
 @login_required(login_url='/auth/')
 def index(request):
+    #Calling trending product
+    maxProduct, maxNum = trendingProduct()
+    print(maxProduct, maxNum)
+    maxProductInstance = Product.objects.filter(product_id = int(maxProduct[2:]))
     username = request.user.username
     a = ExtendedUser.objects.filter(usr=request.user)
-    cart = ""
+    cart = "{}"
+    print('hiiii This is')
     for i in a:
+        print('THe cart is : ' + i.cart)
         cart = i.cart
     # products = Product.objects.all()
     # print(products)
@@ -53,6 +60,8 @@ def index(request):
         'items' : len(Product.objects.all()),
         'username': username,
         'cart':cart,
+        'trendingProduct':maxProductInstance,
+        'trendingNum':maxNum,
     }
     
     return render(request, 'shop/index.html', param)
@@ -103,7 +112,7 @@ def create_checkout_session(request):
                 mode='payment',
                 line_items=[
                     {
-                        'name': 'Cart',
+                        'name': 'Your Cart',
                         'quantity': 1,
                         'currency': 'inr',
                         'amount': price,
@@ -117,6 +126,8 @@ def create_checkout_session(request):
 @login_required(login_url='/auth/')
 def successPay(request):
     global cart12
+    global PDFromgetAddtoSuccessPay
+    PDFromgetAddtoSuccessPay.save()
     username = request.user.username
     a = ExtendedUser.objects.filter(usr = request.user)
     c = cart12
@@ -456,6 +467,7 @@ def beforeReload(request):
     return JsonResponse({"hii" : "byyw"})
 
 def getAddress(request):
+    global PDFromgetAddtoSuccessPay
     if request.method == 'POST':
         states = [
             ['Nagpur', 78.893078, 21.1015184],
@@ -473,9 +485,41 @@ def getAddress(request):
         c = ExtendedUser.objects.filter(usr = request.user)
         d = datetime.now()
         f = random.randint(0, 7)
-        e = PurchaseDate(purdate = c[0], purd = d, state = states[f][0], lato = states[f][2], lango = states[f][1], lat = str(b['lat']), lang = str(b['lon']), days = random.randint(3, 7))
-        e.save()
-        z = PurchaseDate.objects.filter(purdate = c[0])
-        for i in z:
-            print(i.state)
+        PDFromgetAddtoSuccessPay = PurchaseDate(purdate = c[0], purd = d, state = states[f][0], lato = states[f][2], lango = states[f][1], lat = str(b['lat']), lang = str(b['lon']), days = random.randint(3, 7))
+        # PDFromgetAddtoSuccessPay.save()
     return JsonResponse({'hii':'bye'})
+
+
+def trendingProduct():
+    print('Trending produt start')
+    extendedUserInstance = ExtendedUser.objects.all()
+    totalObjectsInstance = Product.objects.all()
+    print(len(totalObjectsInstance))
+    finalDictProd = {}
+    for i in range(1, len(totalObjectsInstance) + 1):
+        finalDictProd['pr' + str(i)] = 0
+    for i in extendedUserInstance:
+        print(i.usr.username)
+        totCartsString = i.totcarts
+        totCartsArr = totCartsString.split('}')
+        for i in range(len(totCartsArr)):
+            totCartsArr[i] += '}'
+            Stringa = totCartsArr[i]
+            if len(Stringa) <= 2:
+                continue
+            # print(Stringa)
+            cartToJson = json.loads(Stringa)
+            for i in cartToJson:
+                finalDictProd[i] += cartToJson[i]
+            # print(finalDictProd)
+        # print(totCartsArr)
+    # print(extendedUserInstance)
+    max_ = 0
+    maxProduct = ""
+    for i in finalDictProd:
+        if(max_ < finalDictProd[i]):
+            max_ = finalDictProd[i]
+            maxProduct = i
+    print(maxProduct, max_)
+    print('Trending produt END')
+    return (maxProduct, max_)

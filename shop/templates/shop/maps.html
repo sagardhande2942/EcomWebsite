@@ -2,6 +2,33 @@
 
 {%block title %} Tracker {% endblock %}
 
+{% block style %}
+<style>
+        ol {
+    list-style: none;
+    counter-reset: steps;
+    }
+    ol li {
+    counter-increment: steps;
+    }
+    ol li::before {
+    content: counter(steps);
+    margin-right: 0.5rem;
+    background: #ff6f00;
+    color: white;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    line-height: 1.2em;
+    }
+    ol ol li::before {
+    background: darkorchid;
+    }
+</style>
+{% endblock %}
+
 {%block body%}
 
 <div class="container-fluid">
@@ -9,23 +36,25 @@
 <h2>Cart {{forloop.counter}}</h2>
 <div class="row" > 
     <!-- onclick="window.location.href = '/shop/trackCart/'"> -->
-    <div class="col-sm-12 col-md-4 col-lg-4">
+    <div class="col-sm-12 col-md-4 col-lg-4" style="border: 2px solid black;">
     <ol class="mx-1">
 {% for j in i %}
     <li>{{j.0.0.product_name}}</li>
-     --- Pieces : {{j.1}}<br>
-     --- Price : ₹ <span class="price{{forloop.counter}}">{{j.0.0.price}}</span>
+    <ol>
+        <li> Pieces : {{j.1}}<br></li>
+        <li> Price : ₹ <span class="price{{forloop.counter}}">{{j.0.0.price}}</span></li>
+    </ol>
 {% endfor %}
 </ol>
 <span class="totalPrice{{forloop.counter}}">Total Price : ₹ </span><br><br>
 <a class="btn btn-primary" href = "/shop/trackCart"> Show complete details </a>
 </div>
-<div class="col-sm-12 col-md-4 col-lg-4">
+<div class="col-sm-12 col-md-4 col-lg-4" style="border: 2px solid black;">
     <p>Date Of Purchase : <small>{{i.0.5}}</small></p>
     <p>Number of days for delivery : {{i.0.6}}</p>
     <p id = "getMyState{{forloop.counter}}">Getting shipped from : {{i.0.2}}</p>
 </div>
-<div class="col-sm-12 col-md-4 col-lg-4">
+<div class="col-sm-12 col-md-4 col-lg-4" style="border: 2px solid black;">
     <div class="container my-3">
         <div id='map{{forloop.counter}}' style='width: 300px; height: 300px;'></div>
     </div>

@@ -9,6 +9,10 @@
   #outerdiv{
     display: none;
   }
+  #trendingProductCategory:hover{
+    background-color: red;
+    border: 2px solid red;
+  }
 
   @media only screen and (max-width: 1000px) {
     #outerdiv{
@@ -23,9 +27,39 @@
 <!-- Carousel Start -->
 {%block body%}
 {% load static %}
-<div id='outerdiv'>
+<div class="container my-3" style="width: 100%; height: 300px; text-align: center; margin-bottom: 10px;">
+  {% for i in trendingProduct %}
+  <h2>Trending Product</h2>
+  <div class="row my-3" style="border: 2px solid black; margin-bottom: 10px;">
+    <a href="/shop/products/{{i.product_id}}">
+    <div class="col-sm-6 col-md-6 col-lg-3">
+    <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;">
+  </a>
+  </div>
+  <div class="col-sm-6 col-md-6 col-lg-3">
+    <h3><i>{{i.product_name}}</i></h3>
+    <h4>Price : ₹{{i.price}}</h4>
+    <h4>Category : {{i.category}}</h4>
+    <h4 id = 'trendingProductFinalPrice'>Dicount : 30% (₹) <script>document.getElementById('trendingProductFinalPrice').textContent = 'Dicount : 30% (₹' + eval(0.3 * {{i.price}}) + ')';</script></h4>
+    <h4 style="color: red;">Total Pcs bought : {{trendingNum}}</h4>
+    
+  </div>
+  <div class="col-sm-6 col-md-6 col-lg-3">
+    <!-- <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;"> -->
+    <p>{{i.product_desc}}</p>
+  </div>
+  <div class="col-sm-6 col-md-6 col-lg-3">
+    <!-- <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;"> -->
+    <p style="background-color: antiquewhite; border: 2px solid black;" id = 'trendingProductCategory'>Limited<br> Pieces <br>Left..</p>
+    <button class="btn btn-primary" onclick="window.location.href = '/shop/products/{{i.product_id}}'">View Product</button>
+  </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div id='outerdiv' style="margin-top:10px;">
   {% for products, range1, nslides1, range, nslides in allprods %}
-  <div class="mt-5 container" >
+  <div class="mt-5 container" id = "{{products.0.category}}1">
     <h2>{{products.0.category}}</h2>
     <div id="carouselExampleDark{{forloop.counter}}1" style="background-color: white;"
       class="carousel carousel-dark  slide" data-bs-ride="carousel">
@@ -115,7 +149,7 @@
     {% endfor %}
   </div>
 
-<div id='outerdiv2'>
+<div id='outerdiv2' style="margin-top: 10px;">
 {% for products, range, nslides, range1, nslides1 in allprods %}
 <div class="mt-5 container" >
   <h2>{{products.0.category}}</h2>
@@ -213,58 +247,27 @@
 
   <script>
 
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-    console.log(width);
-    if (width  > 1000) {
-      var text = localStorage.getItem('cart'); 
-      console.log(text);
-      $.ajax({
-          type: "POST",
-          url: '{{ "/shop/beforeReload/" }}',
-          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
-          success: function callback(response){
-              console.log(response);
-        }
-      });
-      document.getElementById('outerdiv').innerHTML = "";
-        // Mobile code
-    } else {
-      var text = localStorage.getItem('cart'); 
-      console.log(text);
-      $.ajax({
-          type: "POST",
-          url: '{{ "/shop/beforeReload/" }}',
-          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
-          success: function callback(response){
-              console.log(response);
-        }
-      });
-        // Other code
-        document.getElementById('outerdiv2').innerHTML = "";
-    }
-
     var str = ""
     var itemsTotal = {{items}};
     //Add pop over to cart
     // $(document).ready(function () {
-    //   $('#cartpop').popover();
-    //   $('#cartpop').attr('data-bs-content', 'Hiii');
-    // });
-
-
-    //Find Out the cart from local storage
-    // if (localStorage.getItem('cart') == null) {
-    //   var cart = {};
-    // } else {
-    //   // console.log(localStorage.getItem('cart'))
-    //    updateCart(cart);
-    // }
-    console.log('{{cart}}'.replaceAll("&quot;", '"'));
+      //   $('#cartpop').popover();
+      //   $('#cartpop').attr('data-bs-content', 'Hiii');
+      // });
+      
+      
+      //Find Out the cart from local storage
+      // if (localStorage.getItem('cart') == null) {
+        //   var cart = {};
+        // } else {
+          //   // console.log(localStorage.getItem('cart'))
+          //    updateCart(cart);
+          // }
+          console.log('{{cart}}'.replaceAll("&quot;", '"'));
     var cart = JSON.parse('{{cart}}'.replaceAll("&quot;", '"'));
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCart(cart);
-
+    
     // If the add to cart is clicked then we get update
     $('.cart').click(function () {
       idstr = this.id.toString();
@@ -276,10 +279,87 @@
       console.log()
       updateCart(cart); 
       // document.getElementById('cart1').innerHTML = Object.keys(cart).length;
-
+      
     });
-
-    //Update cart function
+    
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var ScreenDestroyCounter = 0;
+    console.log(width);
+    if (width  > 1000 && ScreenDestroyCounter <= 1) { 
+      ScreenDestroyCounter++;
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+        type: "POST",
+        url: '{{ "/shop/beforeReload/" }}',
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+        success: function callback(response){
+              console.log(response);
+        }
+      });
+      document.getElementById('outerdiv').innerHTML = "";
+      // Mobile code
+    }else {
+      if(ScreenDestroyCounter > 1){
+        window.location.href = '/shop/'
+      }
+      ScreenDestroyCounter++;
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+        type: "POST",
+        url: '{{ "/shop/beforeReload/" }}',
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+        success: function callback(response){
+          console.log(response);
+        }
+      });
+      // Other code
+      document.getElementById('outerdiv2').innerHTML = "";
+    }
+    
+    
+    function myFunction(){
+      console.log(width);
+    if (width  > 1000 && ScreenDestroyCounter <= 1) {
+      ScreenDestroyCounter++;
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+        type: "POST",
+        url: '{{ "/shop/beforeReload/" }}',
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+        success: function callback(response){
+          console.log(response);
+        }
+      });
+      document.getElementById('outerdiv').innerHTML = "";
+      // Mobile code
+    } else {
+      if(ScreenDestroyCounter > 1){
+        window.location.href = '/shop/'
+      }
+      ScreenDestroyCounter++;
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+        type: "POST",
+        url: '{{ "/shop/beforeReload/" }}',
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+        success: function callback(response){
+          console.log(response);
+        }
+      });
+      // Other code
+      document.getElementById('outerdiv2').innerHTML = "";
+    }
+    
+  }
+window.addEventListener("resize", myFunction);
+  
+  
+  //Update cart function
     function updateCart(cart) {
       // console.log('hihsdfihdsf');
       for (var item in cart) {

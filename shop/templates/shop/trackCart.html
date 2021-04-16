@@ -1,7 +1,69 @@
 {% extends 'shop/basic.html'%}
 
 {%block title %} Track Cart {% endblock %}
+{% block style %}
+<style>
 
+
+
+/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t 
+   follow these rules. Every browser that supports :checked also supports :not(), so
+   it doesn’t make the test unnecessarily selective */
+
+   .rating {
+    float:left;
+}
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:200%;
+    line-height:1.2;
+    color:#ddd;
+    text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+
+.rating > input:checked ~ label {
+    color: #f70;
+    text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: gold;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}
+
+</style>
+{% endblock %}
 {%block body%}
 
 <div class="container">
@@ -9,19 +71,69 @@
 <h2>Cart {{forloop.counter}}</h2>
 <div class="row">
   {% for j in i %}
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <a href = "/shop/products/{{j.0.0.product_id}}" style="text-decoration:none;">
-    <div class="card" style="width: 18rem;">
+  <div class="col-sm-6 col-md-6 col-lg-4 justify-content-center">
+    <!-- <a href = "/shop/products/{{j.0.0.product_id}}" style="text-decoration:none;"> -->
+    <div class="card text-center" style="width: 18rem;">
         <img class="card-img-top" src="../../../media/{{j.0.0.image}}" style="height: 200px;" alt="Card image cap">
+        <form id='formA{{j.0.0.product_id}}' name = 'formA{{j.0.0.product_id}}' style="display: inline-block; text-align: center;">
+          <fieldset class="mx-4 rating">
+            <input type="radio" id="star5{{j.0.0.product_id}}" name="rating{{j.0.0.product_id}}" value="5" /><label for="star5{{j.0.0.product_id}}" title="Rocks!">5 stars</label>
+            <input type="radio" id="star4{{j.0.0.product_id}}" name="rating{{j.0.0.product_id}}" value="4" /><label for="star4{{j.0.0.product_id}}" title="Pretty good">4 stars</label>
+            <input type="radio" id="star3{{j.0.0.product_id}}" name="rating{{j.0.0.product_id}}" value="3" /><label for="star3{{j.0.0.product_id}}" title="Meh">3 stars</label>
+            <input type="radio" id="star2{{j.0.0.product_id}}" name="rating{{j.0.0.product_id}}" value="2" /><label for="star2{{j.0.0.product_id}}" title="Kinda bad">2 stars</label>
+            <input type="radio" id="star1{{j.0.0.product_id}}" name="rating{{j.0.0.product_id}}" value="1" /><label for="star1{{j.0.0.product_id}}" title="Sucks big time">1 star</label>
+        </fieldset>
+        </form>
         <div class="card-body">
           <p class="card-text" style="text-decoration:none; color: black;">{{j.0.0.product_desc|slice:"0:70"}}...</p>
         </div>
       </div>
-    </a>
+    <!-- </a> -->
     </div>
       {% endfor %}
 </div>
 {% endfor %}
 </div>
+
+{% block js %}
+<script>
+  setTimeout(() => {
+    var dict = {};
+    var radios = {};
+  {% for i in final %}
+  {% for j in i %}
+    radios['{{j.0.0.product_id}}'] = document.forms["formA{{j.0.0.product_id}}"].elements["rating{{j.0.0.product_id}}"];
+  for(var i = 0, max = radios['{{j.0.0.product_id}}'].length; i < max; i++) {
+      var text = 0;
+      
+      radios['{{j.0.0.product_id}}'][i].onclick = function() {
+        console.log('hii')
+
+        console.log(radios['{{j.0.0.product_id}}']);
+        radios['{{j.0.0.product_id}}'].forEach((item) =>{
+          // console.log(radios['{{j.0.0.product_id}}']['value']);
+          text = radios['{{j.0.0.product_id}}']['value'];
+        });
+        (dict[{{j.0.0.product_id}}]) ? dict[{{j.0.0.product_id}}]++ : dict[{{j.0.0.product_id}}] = 1
+        document.getElementsByName('formA{{j.0.0.product_id}}').forEach((item) =>{
+          text = '{{j.0.0.product_id}}|' + text + '|' + dict[{{j.0.0.product_id}}]
+        });
+        console.log(text);
+        $.ajax({
+              type: "POST",
+              url: '{{ "/shop/rate/" }}',
+              data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+              success: function callback(response){
+                 console.log(response);
+          }
+      });
+  }
+  }
+  {% endfor %}
+  {% endfor %}
+    
+  }, 1000);
+</script>
+{% endblock %}
 
 {% endblock %}

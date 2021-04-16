@@ -20,5 +20,6 @@ urlpatterns = [
     path('getCart/', views.getCart, name='getCart'),
     path('trackCart/', views.trackCart),
     path('beforeReload/', views.beforeReload),
-    path('getAddress/', views.getAddress)
+    path('getAddress/', views.getAddress),
+    path('rate/', views.rateProduct),
 ]

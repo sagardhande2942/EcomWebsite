@@ -1,8 +1,61 @@
 {% extends 'shop/basic.html'%}
 
 {%block title %} SHOP {% endblock %}
+
+
 {% block style %}
 <style>
+  /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t 
+   follow these rules. Every browser that supports :checked also supports :not(), so
+   it doesn’t make the test unnecessarily selective */
+
+   .rating {
+    float:left;
+}
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:200%;
+    line-height:1.2;
+    color:#ddd;
+    text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+
+.rating > input:checked ~ label {
+    color: #f70;
+    text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}
   body{
     background-color: #defcff;
   }
@@ -60,6 +113,7 @@
 <div id='outerdiv' style="margin-top:10px;">
   {% for products, range1, nslides1, range, nslides in allprods %}
   <div class="mt-5 container" id = "{{products.0.category}}1">
+    
     <h2>{{products.0.category}}</h2>
     <div id="carouselExampleDark{{forloop.counter}}1" style="background-color: white;"
       class="carousel carousel-dark  slide" data-bs-ride="carousel">
@@ -81,7 +135,14 @@
                   alt="...">
                 <div class="card-body" style="height: 200px;">
 
-                  <h5 class="card-title">{{ products.0.product_name }}</h5>
+                  <h5 class="card-title">{{ products.0.product_name }}</h5> 
+                  <fieldset class="mx-4 rating">
+                    <input type="radio" id="star5{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
+                    <input type="radio" id="star4{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
+                    <input type="radio" id="star3{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
+                    <input type="radio" id="star2{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
+                    <input type="radio" id="star1{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
+                </fieldset><br><br>
                   <p class="card-text">{{ products.0.product_desc|slice:"0:50" }}...</p>
                   <div style="position: absolute; bottom: 2%;">
                     <span id='divpr{{products.0.product_id}}' class='divpr'>
@@ -101,7 +162,14 @@
                 <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top"
                   alt="...">
                 <div class="card-body" style="height: 200px;">
-                  <h5 class="card-title">{{i.product_name}}</h5>
+                  <h5 class="card-title">{{i.product_name}}</h5> 
+                  <fieldset class="mx-4 rating" >
+                    <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
+                    <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
+                    <input type="radio" id="star3{{i.product_id}}" name="rating{{i.product_id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
+                    <input type="radio" id="star2{{i.product_id}}" name="rating{{i.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
+                    <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
+                </fieldset><br><br>
                   <p class="card-text">{{ i.product_desc|slice:"0:50" }}...</p>
                   <div style="position: absolute; bottom: 2%;">
                     <span id="divpr{{i.product_id}}" class="divpr">
@@ -172,7 +240,14 @@
                 alt="...">
               <div class="card-body" style="height: 200px;">
 
-                <h5 class="card-title">{{ products.0.product_name }}</h5>
+                <h5 class="card-title">{{ products.0.product_name }}</h5> 
+                <fieldset class="mx-4 rating">
+                  <input type="radio" id="star5{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
+                  <input type="radio" id="star4{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
+                  <input type="radio" id="star3{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
+                  <input type="radio" id="star2{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
+                  <input type="radio" id="star1{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
+              </fieldset><br><br>
                 <p class="card-text">{{ products.0.product_desc|slice:"0:50" }}...</p>
                 <div style="position: absolute; bottom: 2%;">
                   <span id='divpr{{products.0.product_id}}' class = 'divpr'>
@@ -191,7 +266,14 @@
             <div class="card" style="width: 18rem;">
               <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top" alt="...">
               <div class="card-body" style="height: 200px;">
-                <h5 class="card-title">{{i.product_name}}</h5>
+                <h5 class="card-title">{{i.product_name}}</h5> 
+                <fieldset class="mx-4 rating" >
+                  <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
+                  <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
+                  <input type="radio" id="star3{{i.product_id}}" name="rating{{i.product_id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
+                  <input type="radio" id="star2{{i.product_id}}" name="rating{{i.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
+                  <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
+              </fieldset><br><br>
                 <p class="card-text">{{ i.product_desc|slice:"0:50" }}...</p>
                 <div style="position: absolute; bottom: 2%;">
                   <span id="divpr{{i.product_id}}" class = "divpr">
@@ -444,6 +526,15 @@ window.addEventListener("resize", myFunction);
     //           console.log(response);
     //     }
     //   });
+
+    // console.log(document.getElementById('star11').value);
+    // document.getElementById('star11').checked = true;
+    
+    {% for i in ratingProduct %}
+    document.querySelector('#star{{i.rating}}{{i.product_id}}').checked = true;
+    console.log('star{{i.rating}}{{i.product_id}}')
+    // document.getElementsByName('rating{{i.product_id}}').value = {{i.rating}};
+    {% endfor %}
 
   </script>
 

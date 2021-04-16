@@ -63,6 +63,7 @@ def index(request):
         'cart':cart,
         'trendingProduct':maxProductInstance,
         'trendingNum':maxNum,
+        'ratingProduct':Product.objects.all()
     }
     
     return render(request, 'shop/index.html', param)
@@ -131,8 +132,15 @@ def successPay(request):
     PDFromgetAddtoSuccessPay.save()
     username = request.user.username
     a = ExtendedUser.objects.filter(usr = request.user)
+
     c = cart12
     print('Succes pay cart ',c)
+
+    a1 = json.loads(c)
+    for i in a1:
+        zt = Product.objects.filter(product_id = i[2:])
+        num = zt[0].num
+        zt.update(num = a1[i] + num)
     for i in a:
         c += i.totcarts
     b = ""
@@ -519,6 +527,9 @@ def trendingProduct():
     print(len(totalObjectsInstance))
     finalDictProd = {}
     for i in range(1, len(totalObjectsInstance) + 1):
+        # zz = Product.objects.filter(product_id = i)
+        # zz.update(rating = 1)
+        # print(zz[0].rating)
         finalDictProd['pr' + str(i)] = 0
     for i in extendedUserInstance:
         print(i.usr.username)
@@ -545,3 +556,16 @@ def trendingProduct():
     print(maxProduct, max_)
     print('Trending produt END')
     return (maxProduct, max_)
+
+def rateProduct(request):
+    print('hiih in rateProducxt')
+    if request.method == "POST":
+        i = request.POST.get('text', '0')
+        i = i.split('|')
+        print(i)
+        a = Product.objects.filter(product_id = i[0])
+        num = a[0].num 
+        rating = a[0].rating
+        ratingUpdate = min(5, (rating + int(i[1])) / num)
+        a.update(rating = round(ratingUpdate))  
+        return JsonResponse({'hi':'Bye'})

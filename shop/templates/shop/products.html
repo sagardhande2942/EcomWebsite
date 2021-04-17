@@ -1,6 +1,82 @@
 {% extends 'shop/basic.html'%}
 
+
 {%block title%} {{prod.0.product_name}} {% endblock %}
+
+{% block style %}
+<style>
+  /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t 
+   follow these rules. Every browser that supports :checked also supports :not(), so
+   it doesn’t make the test unnecessarily selective */
+
+   .rating {
+    float:left;
+}
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:200%;
+    line-height:1.2;
+    color:#ddd;
+    text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+
+.rating > input:checked ~ label {
+    color: #f70;
+    text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}
+  body{
+    background-color: #defcff;
+  }
+  #outerdiv{
+    display: none;
+  }
+  #trendingProductCategory:hover{
+    background-color: red;
+    border: 2px solid red;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    #outerdiv{
+      display: block;
+    }
+    #outerdiv2{
+      display: none;
+    }  
+  }
+</style>
+{% endblock %}
 
 {%block body%} 
 
@@ -22,7 +98,14 @@
             <h5>{{prod.0.product_name}}</h5>
             <b>Rs.{{prod.0.price}}</b>
             <p>{{prod.0.product_desc}}</p>
-            
+            <h2>Rating : </h2>
+            <fieldset class="mx-4 rating" >
+              <input type="radio" id="star5{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
+              <input type="radio" id="star4{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
+              <input type="radio" id="star3{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
+              <input type="radio" id="star2{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
+              <input type="radio" id="star1{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
+            </fieldset>
         </div>
     </div>
 </div>
@@ -31,7 +114,8 @@
 
 {% block js %}
 <script>
-     var str = ""
+     var str = "";
+     document.getElementById('star{{rating}}{{prod.0.product_id}}').checked = true;
     var itemsTotal = {{items}};
     //Add pop over to cart
     // $(document).ready(function () {

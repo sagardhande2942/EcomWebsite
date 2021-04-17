@@ -1,6 +1,6 @@
 import json
 import random
-from accounts.models import ExtendedUser, PurchaseDate
+from accounts.models import ExtendedUser, PurchaseDate, Rating
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Product, Contact
@@ -56,6 +56,11 @@ def index(request):
     #     [products, range(1, nslides), nslides]
     # ]
 
+    ratingInstance = Product.objects.all()
+    ratings = []
+    for i in ratingInstance:
+        ratings.append([i.product_id, max(1, min(5, round(i.rating)))])
+
     param = {
         'allprods': allprods,
         'items' : len(Product.objects.all()),
@@ -63,7 +68,7 @@ def index(request):
         'cart':cart,
         'trendingProduct':maxProductInstance,
         'trendingNum':maxNum,
-        'ratingProduct':Product.objects.all()
+        'ratingProduct':ratings
     }
     
     return render(request, 'shop/index.html', param)
@@ -140,7 +145,7 @@ def successPay(request):
     for i in a1:
         zt = Product.objects.filter(product_id = i[2:])
         num = zt[0].num
-        zt.update(num = a1[i] + num)
+        zt.update(num = 1 + num)
     for i in a:
         c += i.totcarts
     b = ""
@@ -229,10 +234,12 @@ def productView(request, myid):
     for i in cart:
         print(i.cart)
     product = Product.objects.filter(product_id = myid)
+    print(round(product[0].rating))
     param = {
         'prod': product,
         'username': username,
         'items': len(Product.objects.all()),
+        'rating': max(1, min(5, round(product[0].rating)))
     }
     return render(request, 'shop/products.html', param)
 
@@ -442,13 +449,16 @@ def trackCart(request):
         res[i] = res[i][0].split(',')
         
         #   print(res[i])
-    
-    for i in res:
-        print('this: ', i)
-        if i != ['']:
-            pass
-        else:
-            res.remove([''])
+    check1=  False
+    for j in range(1, 5):
+        for i in res:
+            print('this: ', i)
+            if i != ['']:
+                check1 = True
+                pass
+            else:
+                check1 = False
+                res.remove([''])
     # res.remove([''])   
     for i in range(len(res)):
         diffDict[i] = []
@@ -476,12 +486,16 @@ def trackCart(request):
             assert n10 - i - 1 >= 0
         # n10-=1
         finallist.append(z2)
+    useris = ExtendedUser.objects.filter(usr = request.user)
+    z3 = Rating.objects.filter(rateusers = useris[0])
     print(finallist)
     param = {
         'username' : username,
         'final': finallist,
         'res': res,
         'city': states,
+        'ratingProduct': Product.objects.all(),
+        'ratingUsers':  z3,
     }
     return render(request, 'shop/trackCart.html', param)
 
@@ -527,9 +541,10 @@ def trendingProduct():
     print(len(totalObjectsInstance))
     finalDictProd = {}
     for i in range(1, len(totalObjectsInstance) + 1):
-        # zz = Product.objects.filter(product_id = i)
-        # zz.update(rating = 1)
-        # print(zz[0].rating)
+        zz = Product.objects.filter(product_id = i)
+        print(zz[0].product_name)
+        # zz.update(num = 1)
+        print(zz[0].rating)
         finalDictProd['pr' + str(i)] = 0
     for i in extendedUserInstance:
         print(i.usr.username)
@@ -562,10 +577,23 @@ def rateProduct(request):
     if request.method == "POST":
         i = request.POST.get('text', '0')
         i = i.split('|')
-        print(i)
+        uid = ExtendedUser.objects.filter(usr = request.user)
+        rateid = Rating.objects.filter(rateusers = uid[0])
+        rateid = rateid.filter(product_id = i[0])
+        print(rateid)
+        if not rateid:
+            saverate = Rating(rateusers = uid[0], product_id = i[0], rating = i[1])
+            saverate.save()
+        else:
+            rateid.update(rating = i[1])
+        allRatings = Rating.objects.filter(product_id = i[0])
+        ratecnt = 0
+        for p in allRatings:
+            # print(p.rating)
+            ratecnt += p.rating
         a = Product.objects.filter(product_id = i[0])
         num = a[0].num 
-        rating = a[0].rating
-        ratingUpdate = min(5, (rating + int(i[1])) / num)
-        a.update(rating = round(ratingUpdate))  
+        ratingUpdate = ratecnt / num
+        print('Updated rating for ', a[0].product_name, ' ', ratingUpdate, ' ', i[1], ' ', num)
+        a.update(rating = ratecnt / num)  
         return JsonResponse({'hi':'Bye'})

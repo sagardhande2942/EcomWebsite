@@ -94,7 +94,7 @@
     <h4>Price : ₹{{i.price}}</h4>
     <h4>Category : {{i.category}}</h4>
     <h4 id = 'trendingProductFinalPrice'>Dicount : 30% (₹) <script>document.getElementById('trendingProductFinalPrice').textContent = 'Dicount : 30% (₹' + eval(0.3 * {{i.price}}) + ')';</script></h4>
-    <h4 style="color: red;">Total Pcs bought : {{trendingNum}}</h4>
+    <h4 style="color: red;">Total Pcs Sold : {{trendingNum}}</h4>
     
   </div>
   <div class="col-sm-6 col-md-6 col-lg-3">
@@ -531,8 +531,8 @@ window.addEventListener("resize", myFunction);
     // document.getElementById('star11').checked = true;
     
     {% for i in ratingProduct %}
-    document.querySelector('#star{{i.rating}}{{i.product_id}}').checked = true;
-    console.log('star{{i.rating}}{{i.product_id}}')
+    document.querySelector('#star{{i.1}}{{i.0}}').checked = true;
+    // console.log('star{{i.1}}{{i.0}} ',  {{i.1}})
     // document.getElementsByName('rating{{i.product_id}}').value = {{i.rating}};
     {% endfor %}
 

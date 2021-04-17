@@ -84,7 +84,7 @@
             <input type="radio" id="star1{{j.0.0.product_id}}" name="rating{{j.0.0.product_id}}" value="1" /><label for="star1{{j.0.0.product_id}}" title="Sucks big time">1 star</label>
         </fieldset>
         </form>
-        <div class="card-body">
+        <div class="card-body"><h3>{{j.0.0.product_name}}</h3>
           <p class="card-text" style="text-decoration:none; color: black;">{{j.0.0.product_desc|slice:"0:70"}}...</p>
         </div>
       </div>
@@ -105,18 +105,25 @@
     radios['{{j.0.0.product_id}}'] = document.forms["formA{{j.0.0.product_id}}"].elements["rating{{j.0.0.product_id}}"];
   for(var i = 0, max = radios['{{j.0.0.product_id}}'].length; i < max; i++) {
       var text = 0;
-      
-      radios['{{j.0.0.product_id}}'][i].onclick = function() {
+        
+        radios['{{j.0.0.product_id}}'][i].onclick = function() {
         console.log('hii')
-
+        for(let x = 0; x < 5; x++)
+          // console.log(radios['{{j.0.0.product_id}}'][x].disabled);
+          // radios['{{j.0.0.product_id}}'][x].disabled = true;
         console.log(radios['{{j.0.0.product_id}}']);
+        (dict[{{j.0.0.product_id}}]) ? dict[{{j.0.0.product_id}}]++ : dict[{{j.0.0.product_id}}] = 1
+        var cnt = 0;
         radios['{{j.0.0.product_id}}'].forEach((item) =>{
           // console.log(radios['{{j.0.0.product_id}}']['value']);
           text = radios['{{j.0.0.product_id}}']['value'];
         });
-        (dict[{{j.0.0.product_id}}]) ? dict[{{j.0.0.product_id}}]++ : dict[{{j.0.0.product_id}}] = 1
+        var cnt1 = 0;
         document.getElementsByName('formA{{j.0.0.product_id}}').forEach((item) =>{
-          text = '{{j.0.0.product_id}}|' + text + '|' + dict[{{j.0.0.product_id}}]
+          if(cnt1 == 0){
+            text = '{{j.0.0.product_id}}|' + text + '|' + dict[{{j.0.0.product_id}}]
+            cnt1++;
+          }
         });
         console.log(text);
         $.ajax({
@@ -127,12 +134,18 @@
                  console.log(response);
           }
       });
-  }
+    }
+  
   }
   {% endfor %}
   {% endfor %}
-    
+  
+  {% for i in ratingUsers %}
+    document.querySelector('#star{{i.rating}}{{i.product_id}}').checked = true;
+  {% endfor %}
   }, 1000);
+
+
 </script>
 {% endblock %}
 

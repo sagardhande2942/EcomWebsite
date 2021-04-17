@@ -20,4 +20,9 @@ class PurchaseDate(models.Model):
     lang = models.CharField(default='78.893078', null=True, max_length=50)
     days = models.IntegerField(default='5', null=True)
     lato = models.CharField(default='21.1015184', null=True, max_length=50)
-    lango = models.CharField(default='78.893078', null=True, max_length=50)
+    lango = models.CharField(default='78.893', null=True, max_length=50)
+
+class Rating(models.Model):
+    rateusers = models.ForeignKey(ExtendedUser, on_delete=CASCADE, default=1, null= True)
+    product_id = models.IntegerField(default=0, null=True)
+    rating = models.IntegerField(default=1, null = True)

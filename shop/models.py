@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
 # Create your models here.
 
 class Product(models.Model):
@@ -14,6 +15,15 @@ class Product(models.Model):
     num = models.IntegerField(default=1)
     def __str__(self):
         return self.product_name
+
+
+class Comments(models.Model):
+    product_id = models.ForeignKey(Product, on_delete=CASCADE, null=True, default=1)
+    usr_id = models.CharField(default='1', null=True, max_length=50)
+    username = models.CharField(default='User', null=True, max_length=50)
+    cmt_title = models.CharField(default='Title', null=True, max_length=100)
+    cmt_desc = models.CharField(default='This is a demo desc...', null=True, max_length=500)
+    rating = models.IntegerField(default=3, null=True)
 
 
 class Contact(models.Model):

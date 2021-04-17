@@ -5,6 +5,12 @@
 {% block style %}
 <style>
 
+.customMap:hover{
+    transform: scale(1.3);
+    z-index: 99999;
+    border: 1px solid black;
+    box-shadow: 10px 10px 8px 10px grey;
+}
 
 </style>
 {% endblock %}
@@ -13,9 +19,109 @@
 
 <div class="container-fluid">
 {% for i in final %}
-<h2>Cart {{forloop.counter}}</h2>
-<div class="row" > 
-    <!-- onclick="window.location.href = '/shop/trackCart/'"> -->
+<h2 class="mx-2 my-3"><span class="badge bg-info">Cart {{forloop.counter}}</span></h2>
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-3">
+        <div class="card" style="height:425px; overflow: scroll;">
+            <div class="card-block" style="height:100%">
+                <div class="card" style="height:100%">
+                    <div class="card-header text-center bg-secondary text-white">
+                        <b>Cart Info</b>
+                    </div>
+                    {%for j in i%}
+                    <div class="mx-auto" style="background-color: #d4d2d2; width: 100%;">
+                    <ul class="list-group list-group-flush">
+
+                        <li class="list-group-item list-group-item-secondary">
+                            <span class="badge bg-warning text-dark my-1">{{j.0.0.product_name}}</span>
+                            <ol>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Pieces bought
+                                    <span class="badge bg-primary rounded-pill">{{j.1}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Price
+                                    <span class="badge bg-info rounded-pill">₹{{j.0.0.price}}</span>
+                                </li>
+                            </ol>
+                        </li>
+
+                    </ul>
+                </div>
+                    {% endfor %}
+                    <!-- <span class="totalPrice{{forloop.parentloop.counter}}">Total Price : ₹ </span><br><br> -->
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3">
+        <div class="card" style="height:100%">
+            <div class="card-block" style="height:100%">
+                <div class="card" style="height:100%">
+                    <div class="card-header text-center bg-secondary text-white">
+                        <b>Delivery INFO</b>
+                    </div>
+                    <div class="text-center">
+                        <p class="mx-auto p-3 my-4" style="background-color:antiquewhite;">Date Of Purchase<br>
+                            <span class="mx-auto badge bg-primary rounded-pill">{{i.0.5}}</span><br>
+                        </p><hr>
+                        <p class="mx-auto p-3 my-3" style="background-color:antiquewhite;">
+                            Number of days for delivery<br>
+                            <h4><span class="badge bg-primary">{{i.0.6}}</span></h4>
+                        </p><hr>
+                        <p class="mx-auto p-3 my-3" style="background-color:antiquewhite;">
+                            Getting shipped from<br>
+                            <span class="badge bg-info rounded-pill">{{i.0.2}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3">
+        <div class="card" style="height:100%">
+            <div class="card-block" style="height:100%">
+                <div class="card" style="height:100%">
+                    <div class="card-header text-center bg-secondary text-white">
+                        <b>Map Visual</b>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+
+                        <!-- <li class="list-group-item list-group-item-secondary"></li> -->
+                        <div class="mx-auto customMap" id='map{{forloop.counter}}' style="height: 378px; width: 100%;"></div>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3">
+        <div class="card" style="height:100%">
+            <div class="card-block" style="height:100%">
+                <div class="card" style="height:100%">
+                    <div class="card-header text-center bg-secondary text-white text-center">
+                        <b>Total Price</b>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+
+                            <h1 class="mx-auto my-5"><span class="totalPrice{{forloop.counter}}"></span></h1>
+                            <br><br>
+                        <a class="btn btn-primary mx-auto" style="width: 60%;" href = "/shop/trackCart"> <b style="color: yellow;">Rate | Comment</b></a>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<!-- <div class="row" > 
     <div class="col-sm-12 col-md-4 col-lg-4" style="border: 2px solid black;">
     <ol class="mx-1">
 {% for j in i %}
@@ -29,8 +135,6 @@
             Price of single piece
             <span class="badge bg-info rounded-pill">₹{{j.0.0.price}}</span>
         </li>
-        <!-- <li> Pieces : {{j.1}}<br></li>
-        <li> Price : ₹ <span class="price{{forloop.counter}}">{{j.0.0.price}}</span></li> -->
     </ol>
 {% endfor %}
 </ol>
@@ -50,15 +154,13 @@
         Getting shipped from
         <span class="badge bg-info rounded-pill">{{i.0.2}}</span>
     </li>
-    <!-- <p>Date Of Purchase : <small>{{i.0.5}}</small></p>
-    <p>Number of days for delivery : {{i.0.6}}</p>
-    <p id = "getMyState{{forloop.counter}}">Getting shipped from : {{i.0.2}}</p> -->
+ 
 </div>
 <div class="col-sm-12 col-md-4 col-lg-4" style="border: 2px solid black;">
     <div class="container my-3">
         <div id='map{{forloop.counter}}' style='width: 300px; height: 300px;'></div>
     </div>
-</div>
+</div> -->
 {% endfor %}
 </div>
 
@@ -159,14 +261,15 @@
 
         console.log(marker1.getPopup()); // return the popup instance
         {% endfor %}
-
+        
         {% for i in final %}
         var z = 0;
         {% for j in i %}
             z += {{j.1}} * {{j.0.0.price}}
         {% endfor %}
-            document.querySelector('.totalPrice{{forloop.counter}}').innerHTML = 'Total Price : ₹ '+ z;
+        document.querySelector('.totalPrice{{forloop.counter}}').innerHTML = '₹' + z;
         {% endfor %}
+        
     }, 2000);
 </script>
 {% endblock %}

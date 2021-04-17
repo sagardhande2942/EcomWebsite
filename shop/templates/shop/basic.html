@@ -241,9 +241,9 @@
             <a class="nav-link" href ='#below'>More</a>
           </li>
         </ul>
-        <form class="form-inline" action="/shop/search/" style="width: 100%; display: inline-block;" method="POST" >{% csrf_token %}
+        <form class="form-inline" id ='searchForm' name="searchForm" action="/shop/search/" style="width: 100%; display: inline-block;" method="POST" >{% csrf_token %}
         <p>
-          <input class="form-control mr-sm-2" style="width: 60%; float: left;" name="search" id="searchValue"  type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control mr-sm-2" style="width: 60%; float: left;" name="search" id="searchValue"  type="search" placeholder="Search for any Product / Category" aria-label="Search">
           <button class="btn btn-outline-success my-2 mx-2 my-sm-0" style="float: left;"  type="submit">Search</button>
           </p>
           {% csrf_token %}

@@ -58,9 +58,12 @@ def index(request):
 
     ratingInstance = Product.objects.all()
     ratings = []
+    categoriesNeed = []
     for i in ratingInstance:
         ratings.append([i.product_id, max(1, min(5, round(i.rating)))])
-
+    for i in ratingInstance:
+        if i.category not in categoriesNeed:
+            categoriesNeed.append(i.category)
     param = {
         'allprods': allprods,
         'items' : len(Product.objects.all()),
@@ -68,7 +71,8 @@ def index(request):
         'cart':cart,
         'trendingProduct':maxProductInstance,
         'trendingNum':maxNum,
-        'ratingProduct':ratings
+        'ratingProduct':ratings,
+        'category':categoriesNeed,
     }
     
     return render(request, 'shop/index.html', param)
@@ -260,16 +264,29 @@ def search(request):
             dd.append(i)
 
         b = []
+        # if not checkx:
         for i in dd:
             if a in i.product_name.lower():
-                b.append(Product.objects.filter(product_name = i))
-                       
+                b.append(Product.objects.filter(product_name = i.product_name))
+
+        for i in dd:
+            if a in i.category.lower():
+                for z in Product.objects.filter(category = i.category):
+                    b.append(Product.objects.filter(product_name = z))
+                    print(z)
+                print('here bois ', Product.objects.filter(category = i.category))
         c = []
-        if not b:
-            return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
-        print(a)
+        zzz = []
         for i in b:
-            c.append(i)
+            if(i[0].product_name not in zzz):
+                zzz.append(i[0].product_name)
+        print(a)
+        for i in zzz:
+            c.append(Product.objects.filter(product_name = i))
+
+        if not b: #and not checkx:
+            return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
+                
         return render(request, 'shop/search.html', {'c':c, 'username' : username})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
 

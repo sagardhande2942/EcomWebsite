@@ -74,7 +74,9 @@
   <div class="col-sm-6 col-md-6 col-lg-4 justify-content-center">
     <!-- <a href = "/shop/products/{{j.0.0.product_id}}" style="text-decoration:none;"> -->
     <div class="card text-center" style="width: 18rem;">
+      <a href = '/shop/products/{{j.0.0.product_id}}'>
         <img class="card-img-top" src="../../../media/{{j.0.0.image}}" style="height: 200px;" alt="Card image cap">
+      </a>
         <form id='formA{{j.0.0.product_id}}' name = 'formA{{j.0.0.product_id}}' style="display: inline-block; text-align: center;">
           <fieldset class="mx-4 rating">
             <input type="radio" id="star5{{j.0.0.product_id}}" name="rating{{j.0.0.product_id}}" value="5" /><label for="star5{{j.0.0.product_id}}" title="Rocks!">5 stars</label>
@@ -85,6 +87,32 @@
         </fieldset>
         </form>
         <div class="card-body"><h3>{{j.0.0.product_name}}</h3>
+          <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cmt{{j.0.0.product_id}}">Comment</button>
+          </div>
+          <div class="modal fade" id="cmt{{j.0.0.product_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{j.0.0.product_id}}" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel{{j.0.0.product_id}}">Modal title</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/shop/trackCart/">
+                  {% csrf_token %}
+                <div class="modal-body">
+                  <input class="form-control" type="text" placeholder="Comment Title" name="cmt_title">
+                  <br>
+                    <textarea style="height: 198px;" class="form-control" type="text" placeholder="Enter your comment description" name="cmt_desc"></textarea>
+                  </div>
+                  <input type="text" style="display: none;" name="product_id" value="{{j.0.0.product_id}}">
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <input type="submit"  class="btn btn-primary">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
           <p class="card-text" style="text-decoration:none; color: black;">{{j.0.0.product_desc|slice:"0:70"}}...</p>
         </div>
       </div>

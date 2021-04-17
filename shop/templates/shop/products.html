@@ -9,6 +9,9 @@
    follow these rules. Every browser that supports :checked also supports :not(), so
    it doesn’t make the test unnecessarily selective */
 
+   ul.ba {
+    list-style: none;
+}
    .rating {
     float:left;
 }
@@ -96,7 +99,21 @@
         </div>
         <div class = "col-sm-6 col-md-4-col-lg4">
             <h5>{{prod.0.product_name}}</h5>
-            <b>Rs.{{prod.0.price}}</b>
+            <p style="display: inline-block;">
+              <b style="font-size:xx-large;">₹{{prod.0.price}}</b>
+            <span style="color: grey; font-size: medium;"><strike>₹{{incPrice}}</strike></span>
+            <span style="color: green;">30% Off</span>
+          </p><br>
+          <span>Available offers</span><br>
+            
+            <img src="https://rukminim1.flixcart.com/www/36/36/promos/06/09/2016/c22c9fc4-0555-4460-8401-bf5c28d7ba29.png?q=90" width="18" height="18" class="_3HLfAg">
+            <span>BTB Pay Later</span><br>
+            <img src="https://rukminim1.flixcart.com/www/36/36/promos/06/09/2016/c22c9fc4-0555-4460-8401-bf5c28d7ba29.png?q=90" width="18" height="18" class="_3HLfAg">
+            <span>Special PriceGet extra ₹76 off (price inclusive of discount)</span><br>
+            <img src="https://rukminim1.flixcart.com/www/36/36/promos/06/09/2016/c22c9fc4-0555-4460-8401-bf5c28d7ba29.png?q=90" width="18" height="18" class="_3HLfAg">
+            <span>Combo OfferBuy 3 items save 5%;Buy 4 or more save 10%</span><br>
+            <br>
+            <h6>Description : </h6>
             <p>{{prod.0.product_desc}}</p>
             <h2>Rating : </h2>
             <fieldset class="mx-4 rating" >
@@ -105,7 +122,32 @@
               <input type="radio" id="star3{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
               <input type="radio" id="star2{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
               <input type="radio" id="star1{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
-            </fieldset>
+            </fieldset><br>
+            <span class="badge bg-primary rounded-pill">{{totReviews}}</span>
+            <small>Ratings</small>
+            <span class="badge bg-info rounded-pill">{{totComments}}</span>
+            <small>Reviews</small>
+            <hr>
+            <h3><span class="badge bg-secondary my-4">Comments : </span></h3>
+            <div style="width: 100%; background-color: aliceblue;">
+              {% for i in comments %}
+              <div style="border: 1px solid #cccccc;width: 100%;">
+              <p style="display: inline-block; width: 100%;" class="mx-4 justify-content-between">
+                <span class="mx-1 badge rounded-pill  bg-warning text-dark">{{i.rating}}☆</span>
+                <span style="font-size: large; font-weight: 500;">{{i.cmt_title}}</span>
+                <span style="position: absolute; right: 24%;" class="mt-1 float-right mx-4 badge rounded-pill  bg-info text-dark">{{i.cmt_time}}</span>
+              </p>
+              {% if i.edited %}
+              <span class="badge bg-secondary mx-4">Edited : </span>
+              {% endif %}
+              <p class="mx-4">{{i.cmt_desc}}</p>
+              <small style="font-style: italic;  letter-spacing: 1px;" class="mx-4 badge rounded-pill  bg-primary">{{i.username}}</small><br><br>
+              {% if i.edited %}
+              <span class="mx-4 text-dark " style="font-style: italic;">Edit time : </span><small style="font-style: italic;" class="mx-4 badge rounded-pill  bg-secondary">{{i.edit_time}}</small><br><br>
+              {% endif %}
+            </div>
+              {% endfor %}
+            </div>
         </div>
     </div>
 </div>

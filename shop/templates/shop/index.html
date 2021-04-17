@@ -89,7 +89,7 @@
     <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;">
   </a>
   </div>
-  <div class="col-sm-6 col-md-6 col-lg-3">
+  <div class="col-sm-6 col-md-6 col-lg-3 text-start">
     <h3><i>{{i.product_name}}</i></h3>
     <h4>Price : ₹{{i.price}}</h4>
     <h4>Category : {{i.category}}</h4>
@@ -97,7 +97,7 @@
     <h4 style="color: red;">Total Pcs Sold : {{trendingNum}}</h4>
     
   </div>
-  <div class="col-sm-6 col-md-6 col-lg-3">
+  <div class="col-sm-6 col-md-6 col-lg-3 text-start">
     <!-- <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;"> -->
     <p>{{i.product_desc}}</p>
   </div>
@@ -108,6 +108,17 @@
   </div>
   </div>
   {% endfor %}
+</div>
+
+<div class="container input-group">
+  <span class="input-group-text" style="color: orangered; font-weight: 500;">Select Category you wish to explore </span>
+  <input class="form-select" type="text" name ='cat' list = 'cat' placeholder="category" onchange="category(this)">
+    <datalist id= 'cat' >
+      {% for i in category %}
+      <option name = 'cat' value = '{{i}}'>{{i}}</option>
+      {% endfor %}
+    </datalist>
+  </select>
 </div>
 
 <div id='outerdiv' style="margin-top:10px;">
@@ -535,6 +546,13 @@ window.addEventListener("resize", myFunction);
     // console.log('star{{i.1}}{{i.0}} ',  {{i.1}})
     // document.getElementsByName('rating{{i.product_id}}').value = {{i.rating}};
     {% endfor %}
+
+
+    function category(item){
+      document.getElementById('searchValue').value = item.value
+      document.getElementById('searchForm').submit();
+      console.log(item.value);
+    }
 
   </script>
 

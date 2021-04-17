@@ -70,6 +70,10 @@
     border: 2px solid red;
   }
 
+  .cmtTime{
+    position: absolute;
+    right: 5%;
+  }
   @media only screen and (max-width: 1000px) {
     #outerdiv{
       display: block;
@@ -77,6 +81,10 @@
     #outerdiv2{
       display: none;
     }  
+
+    .cmtTime{
+    position: static;
+  }
   }
 </style>
 {% endblock %}
@@ -129,13 +137,13 @@
             <small>Reviews</small>
             <hr>
             <h3><span class="badge bg-secondary my-4">Comments : </span></h3>
-            <div style="width: 100%; background-color: aliceblue;">
+            <div style="width: 100%; background-color: aliceblue; position: relative;">
               {% for i in comments %}
               <div style="border: 1px solid #cccccc;width: 100%;">
-              <p style="display: inline-block; width: 100%;" class="mx-4 justify-content-between">
-                <span class="mx-1 badge rounded-pill  bg-warning text-dark">{{i.rating}}☆</span>
-                <span style="font-size: large; font-weight: 500;">{{i.cmt_title}}</span>
-                <span style="position: absolute; right: 24%;" class="mt-1 float-right mx-4 badge rounded-pill  bg-info text-dark">{{i.cmt_time}}</span>
+              <p style="display: inline-block; width: 100%; position: relative;" class="mx-4 justify-content-between">
+                <span id="rate{{i.usr_id}}" class="mx-1 badge rounded-pill text-dark">{{i.rating}}☆</span>
+                <span style="font-size: large; font-weight: 500;">{{i.cmt_title|slice:"0:30"}}</span>
+                <span style="" class="cmtTime mt-1 float-right mx-4 badge rounded-pill  bg-info text-dark">{{i.cmt_time}}</span>
               </p>
               {% if i.edited %}
               <span class="badge bg-secondary mx-4">Edited : </span>
@@ -156,6 +164,15 @@
 
 {% block js %}
 <script>
+
+  {% for i in comments %}
+  if(parseInt('{{i.rating}}') <= 2)
+      document.getElementById('rate{{i.usr_id}}').className = "bg-danger mx-1 badge rounded-pill";
+  else if(parseInt('{{i.rating}}') == 3)
+    document.getElementById('rate{{i.usr_id}}').className = "bg-warning mx-1 badge rounded-pill";
+  else if(parseInt('{{i.rating}}') > 3)
+    document.getElementById('rate{{i.usr_id}}').className = "bg-success mx-1 badge rounded-pill";
+  {% endfor %}
      var str = "";
      document.getElementById('star{{rating}}{{prod.0.product_id}}').checked = true;
     var itemsTotal = {{items}};

@@ -27,7 +27,6 @@ PDFromgetAddtoSuccessPay = PurchaseDate()
 import simplejson
 @login_required(login_url='/auth/')
 def index(request):
-    print('In Index')
     #Calling trending product
     maxProduct, maxNum = trendingProduct()
     print(maxProduct, maxNum)
@@ -412,7 +411,7 @@ def tracker(request):
             zxcv = random.randint(0, 7)
             print(n10 - i - 1)
             z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
-            assert n10 - i - 1 >= 0
+            # assert n10 - i - 1 >= 0
         # n10-=1
         finallist.append(z2)
     print(finallist)
@@ -431,6 +430,7 @@ def trackCart(request):
         cmt_title = request.POST.get('cmt_title', 'Title')
         cmt_desc = request.POST.get('cmt_desc', 'The is a demo desc')
         product_id = request.POST.get('product_id', '1')
+        z1 = Rating.objects.all()
         a = Comments.objects.filter(usr_id = request.user.id, product_id = product_id)
         c = ExtendedUser.objects.filter(usr = request.user)
         z = Rating.objects.filter(rateusers = c[0], product_id = product_id)
@@ -525,7 +525,7 @@ def trackCart(request):
             zxcv = random.randint(0, 7)
             print(n10 - i - 1)
             z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
-            assert n10 - i - 1 >= 0
+            # assert n10 - i - 1 >= 0
         # n10-=1
         finallist.append(z2)
     useris = ExtendedUser.objects.filter(usr = request.user)

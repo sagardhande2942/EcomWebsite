@@ -253,7 +253,7 @@ def productView(request, myid):
         'rating': max(1, min(5, round(product[0].rating))),
         'totReviews':z.count,
         'comments':cmtInstance,
-        'totComments':cmtInstance.count
+        'totComments':cmtInstance.count,
     }
     return render(request, 'shop/products.html', param)
 
@@ -437,11 +437,11 @@ def trackCart(request):
         prodInstance = Product.objects.filter(product_id = product_id)
         if not a:
             a = Comments(product_id = prodInstance[0], usr_id = request.user.id, username = request.user.username,
-            cmt_title = cmt_title, cmt_desc = cmt_desc, rating = z[0].rating)
+            cmt_title = cmt_title, cmt_desc = cmt_desc, rating = z[0].rating, cmt_time = datetime.now(), edited = False,
+            edit_time = datetime.now())
             a.save()
         else:
-            a.update(product_id = prodInstance[0], usr_id = request.user.id, username = request.user.username,
-            cmt_title = cmt_title, cmt_desc = cmt_desc, rating = z[0].rating)
+            a.update(cmt_title = cmt_title, cmt_desc = cmt_desc, rating = z[0].rating, edited = True, edit_time = datetime.now())
     # print('hiids')  
     username  = request.user.username
     a11 = ExtendedUser.objects.filter(usr=request.user)

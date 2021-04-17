@@ -129,15 +129,22 @@
             <small>Reviews</small>
             <hr>
             <h3><span class="badge bg-secondary my-4">Comments : </span></h3>
-            <div>
+            <div style="width: 100%; background-color: aliceblue;">
               {% for i in comments %}
-              <div style="border: 1px solid grey;">
-              <p style="display: inline-block;" class="mx-4">
-                <span class="mx-4 badge rounded-pill  bg-warning text-dark">{{i.rating}}☆</span>
+              <div style="border: 1px solid #cccccc;width: 100%;">
+              <p style="display: inline-block; width: 100%;" class="mx-4 justify-content-between">
+                <span class="mx-1 badge rounded-pill  bg-warning text-dark">{{i.rating}}☆</span>
                 <span style="font-size: large; font-weight: 500;">{{i.cmt_title}}</span>
+                <span style="position: absolute; right: 24%;" class="mt-1 float-right mx-4 badge rounded-pill  bg-info text-dark">{{i.cmt_time}}</span>
               </p>
+              {% if i.edited %}
+              <span class="badge bg-secondary mx-4">Edited : </span>
+              {% endif %}
               <p class="mx-4">{{i.cmt_desc}}</p>
-              <small style="font-style: italic;" class="mx-4 badge rounded-pill  bg-primary">{{i.username}}</small><br><br>
+              <small style="font-style: italic;  letter-spacing: 1px;" class="mx-4 badge rounded-pill  bg-primary">{{i.username}}</small><br><br>
+              {% if i.edited %}
+              <span class="mx-4 text-dark " style="font-style: italic;">Edit time : </span><small style="font-style: italic;" class="mx-4 badge rounded-pill  bg-secondary">{{i.edit_time}}</small><br><br>
+              {% endif %}
             </div>
               {% endfor %}
             </div>

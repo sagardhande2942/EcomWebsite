@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
+from datetime import datetime
 # Create your models here.
 
 class Product(models.Model):
@@ -24,6 +25,9 @@ class Comments(models.Model):
     cmt_title = models.CharField(default='Title', null=True, max_length=100)
     cmt_desc = models.CharField(default='This is a demo desc...', null=True, max_length=500)
     rating = models.IntegerField(default=3, null=True)
+    edited = models.BooleanField(default=False)
+    edit_time = models.DateTimeField(default = datetime.now())
+    cmt_time = models.DateTimeField(default=datetime.now())
 
 
 class Contact(models.Model):

@@ -88,22 +88,25 @@
     {
       margin:0
     }
+    #cart1{
+      font-weight: 700;
+      position: absolute;
+      z-index: 2147483647;
+      transform: translate(-35px, -5px); 
+      color: orange;
+    }
     @media (max-width:991px)
     {
       .site-footer [class^=col-]
       {
         margin-bottom:30px
       }
-    }
-    @media (max-width:767px)
-    {
-      .site-footer
-      {
-        padding-bottom:0
-      }
-      .site-footer .copyright-text,.site-footer .social-icons
-      {
-        text-align:center
+      #cart1{
+      font-weight: 700;
+      position: absolute;
+      z-index: 2147483647;
+      transform: translate(-35px, 15px); 
+      color: red;
       }
     }
     .social-icons
@@ -176,6 +179,21 @@
         margin-right:0;
         font-weight:600
       }
+      .site-footer
+      {
+        padding-bottom:0
+      }
+      .site-footer .copyright-text,.site-footer .social-icons
+      {
+        text-align:center
+      }
+      #cart1{
+      font-weight: 700;
+      position: absolute;
+      z-index: 2147483647;
+      transform: translate(-35px, 5px); 
+      color: red;
+      }
     }
     /* Dropdown Button */
 .dropbtn {
@@ -222,7 +240,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" style="z-index: 999999;">
     <div class="container-fluid">
       <a class="navbar-brand" href="/shop/">My Awesome Cart</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -260,7 +278,7 @@
         </div>
         <!-- <button style="" onclick="window.location.href = '/shop/cart';" href="/shop/cart" type="button" class="btn btn-secondary mx-2 " data-container="body" data-toggle="popover" data-placement="bottom" data-content="Right popover" id = "cartpop"> -->
         <a href="/shop/cart" style="color: white;">
-          <i class="fas fa-shopping-cart" style="margin-right: 20px;transform: scale(2.2);"></i><b<span  id = "cart1" style="font-weight: 700;position: absolute;z-index: 2147483647;transform: translate(-35px, -5px); color: orange;">0</span></b>
+          <i class="fas fa-shopping-cart" style="margin-right: 20px;transform: scale(2.2);"></i><b<span  id = "cart1" >0</span></b>
         </a>
         <span style="transform: translate(-10px,0px);color: white; margin-top: 10px;"><span class="badge rounded-pill bg-warning text-dark">Cart</span></span>
         <!-- </button> -->

@@ -81,9 +81,11 @@
     background-color:#defcff;
     box-shadow: 10px 10px 8px 10px #888888;
     z-index: 9999;
-    transform:;
   }
-
+  .myTrendingImage{
+    height: 200px;
+    float: left;
+  }
 
   @media only screen and (max-width: 1000px) {
     #outerdiv{
@@ -91,6 +93,11 @@
     }
     #outerdiv2{
       display: none;
+    }
+    .myTrendingImage{
+      text-align: center;
+      height: 200px;
+      float: none;
     }
   }
 </style>
@@ -104,7 +111,7 @@
   <div class="row my-3" style="border: 2px solid black; margin-bottom: 10px;">
     <a href="/shop/products/{{i.product_id}}">
     <div class="mt-3 col-sm-6 col-md-6 col-lg-3">
-    <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;">
+    <img class="myTrendingImage" src = '../../../media/{{i.image}}'>
   </a>
   </div>
   <div class="mt-3 col-sm-6 col-md-6 col-lg-3 text-start">
@@ -122,7 +129,7 @@
   <div class="mt-3 col-sm-6 col-md-6 col-lg-3">
     <!-- <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;"> -->
     <p style="background-color: antiquewhite; border: 2px solid black;" id = 'trendingProductCategory'>Limited<br> Pieces <br>Left..</p>
-    <button class="btn btn-primary" onclick="window.location.href = '/shop/products/{{i.product_id}}'">View Product</button>
+    <button class="btn btn-primary my-3" onclick="window.location.href = '/shop/products/{{i.product_id}}'">View Product</button>
   </div>
   </div>
   {% endfor %}
@@ -140,10 +147,9 @@
 </div>
 
 <div id='outerdiv' style="margin-top:10px;">
-  {% for products, range1, nslides1, range, nslides in allprods %}
+  {% for products, range1, nslides1, range, nslides, range2, nslides2 in allprods %}
   <div class="mt-5 container" id = "{{products.0.category}}1">
-    
-    <h2>{{products.0.category}}</h2>
+    <h2><span class="badge bg-secondary">{{products.0.category}}</span></h2>
     <div id="carouselExampleDark{{forloop.counter}}1" style="background-color: white;"
       class="carousel carousel-dark  slide" data-bs-ride="carousel">
       <div class="carousel-indicators" style="width: 60px; margin: auto;">
@@ -230,12 +236,12 @@
         </div>
 
 
-        <button style="z-index: 9999;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
+        <button style="z-index: 9999; margin-top: auto; margin-bottom: auto; height: 100px; width: 100px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
           data-bs-slide="prev" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button  style="z-index: 9999;"class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
+        <button  style="z-index: 9999; margin-top: auto; margin-bottom: auto;  height: 100px; width: 100px;"class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
           data-bs-slide="next" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
@@ -247,9 +253,9 @@
   </div>
 
 <div id='outerdiv2' style="margin-top: 10px;">
-{% for products, range, nslides, range1, nslides1 in allprods %}
+{% for products, range, nslides, range1, nslides1, range2, nslides2 in allprods %}
 <div class="mt-5 container" >
-  <h2>{{products.0.category}}</h2>
+  <h2><span class="badge bg-secondary">{{products.0.category}}</span></h2>
   <div id="carouselExampleDark{{forloop.counter}}" style="background-color: white;" class="carousel carousel-dark  slide" data-bs-ride="carousel">
     <div class="carousel-indicators" style="width: 60px; margin: auto;">
       <button type="button"  data-bs-target="#carouselExampleDark{{forloop.counter}}" data-bs-slide-to="0" class="active"
@@ -335,12 +341,12 @@
 
 
 
-      <button  style="z-index: 9999;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
+      <button  style="z-index: 9999;margin-top: auto; margin-bottom: auto; height: 100px; width: 100px;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
         data-bs-slide="prev" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button  style="z-index: 9999;" class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
+      <button  style="z-index: 9999; margin-top: auto; margin-bottom: auto; height: 100px; width: 100px;" class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
         data-bs-slide="next" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
@@ -348,6 +354,30 @@
     </div>
 
   </div>
+  {% endfor %}
+</div>
+
+<div class="outerdiv3 my-2" id='outerdiv3'>
+  {% for products, range1, nslides1, range2, nslides2, range, nslides in allprods %}
+  <h2><span class="badge bg-secondary">{{products.0.category}}</span></h2>
+  {% for i in products %}
+  <div class="mx-3 card mycard" style="width: 18rem;">
+    <img src="../../../media/{{i.image}}" class="card-img-top myimg" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{i.product_name}}</h5>
+     <fieldset class="mx-4 rating" >
+          <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
+          <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
+          <input type="radio" id="star3{{i.product_id}}" name="rating{{i.product_id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
+          <input type="radio" id="star2{{i.product_id}}" name="rating{{i.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
+          <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
+      </fieldset><br><br>
+      <p class="card-text">{{i.product_desc|slice:"0:50"}}</p>
+      <a href="#" style="display: inline-block; "id="pr{{i.product_id}}"
+      class="btn btn-primary">Add To Cart</a>
+    </div>
+  </div>
+  {% endfor %}
   {% endfor %}
 </div>
 
@@ -408,9 +438,10 @@
               console.log(response);
         }
       });
+      document.getElementById('outerdiv3').innerHTML = ""
       document.getElementById('outerdiv').innerHTML = "";
       // Mobile code
-    }else {
+    }else if(width > 600){
       if(ScreenDestroyCounter > 1){
         window.location.href = '/shop/'
       }
@@ -426,7 +457,28 @@
         }
       });
       // Other code
-      document.getElementById('outerdiv2').innerHTML = "";
+      document.getElementById('outerdiv2').innerHTML = ""
+      document.getElementById('outerdiv3').innerHTML = "";
+    }else{
+      if(ScreenDestroyCounter > 1){
+        window.location.href = '/shop/'
+      }
+      ScreenDestroyCounter++;
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+        type: "POST",
+        url: '{{ "/shop/beforeReload/" }}',
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+        success: function callback(response){
+          console.log(response);
+        }
+      });
+      // Other code
+      if(document.getElementById('outerdiv'))
+          document.getElementById('outerdiv').innerHTML = "";
+      if(document.getElementById('outerdiv2'))
+          document.getElementById('outerdiv2').innerHTML = ""
     }
     updateCart(cart);
     

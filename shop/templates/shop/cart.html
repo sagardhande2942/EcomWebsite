@@ -8,14 +8,7 @@
         width: 200px;
         height: 200px;
     }
-    .loader {
-        border: 16px solid #f3f3f3; /* Light grey */
-        border-top: 16px solid #3498db; /* Blue */
-        border-radius: 50%;
-        width: 120px;
-        height: 120px;
-        animation: spin 2s linear infinite;
-    }
+
     .backBlur{
         backdrop-filter: blur(5px);
     }
@@ -31,14 +24,23 @@
 
 <div class="backBlur" style="width: 100%;height:100%;text-align: center; margin: 0 auto; position: fixed; display: none;"  id = 'addAddressSelection'>
     <div class="container nonediv" style="display: none;">
-        <div class="loader" style="position: absolute; top: 30%; left: 50%;"></div>
+        <div class="loader" style="
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        background: url('//upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif') 
+                    50% 50% no-repeat rgb(249,249,249);
+                    transform: scale(2);"></div>
     </div>
     <div style="position: absolute; top:40%; width: 100%;" id = 'citySelectionDiv'>
-        <div class="input-group mb-3" style="width: 30%; margin: 0 auto; ">
-        <span class="input-group-text" id="basic-addon3">City for delivery :   </span>
-        <input type="text" name = 'address' class="form-control" id="basic-url" aria-describedby="basic-addon3" />
+        <div class="input-group mb-3 my-3" style="width: 50%; margin: 0 auto; ">
+        <span class="input-group-text my-3" id="basic-addon3">City for delivery :   </span>
+        <input type="text" name = 'address' class="form-control my-3" id="basic-url" aria-describedby="basic-addon3" />
         
-        <button type="button" style="transform: translate(10px, 7px);" onclick="removeBlur();" class="btn-close btn-close-dark" aria-label="Close" aria-required="true"></button>
+        <button type="button" style=" position: relative; top: 0; right: 0;" onclick="removeBlur();" class="btn-close btn-close-dark" aria-label="Close" aria-required="true"></button>
     </div>
     <button id="Checkout" type = "button" onclick = "checkout();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button>
 </div>
@@ -48,26 +50,26 @@
 <div id = "outerdiv">
 <div class="container prods{{j}} my-3" style="display: none;">
     <div class="row">
-        <div class="col-sm-4 col-md-4 col-lg-4">
+        <div class="mx-3 col-sm-4 col-md-4 col-lg-4 my-3">
             <img src="../../../media/{{i.image}}">
         </div>
-        <div class="col-sm-5 col-md-5 col-lg-5">
+        <div class="mx-3 col-sm-5 col-md-5 col-lg-5 my-3">
             <div class="row">
                 <h2>{{i.product_name}}</h2>
                 {{i.product_desc}}
             </div>
             <div class="row" id="divBut{{j}}" style="display: inline-block;">
-                <p style="width: 50%; border: 1px solid black; background-color: #edf5ff;">
+                <p class="my-3"  style="width: 50%; border: 1px solid black; background-color: #edf5ff;">
                     <label>Qty:</label>
                     <input id="inputprod{{j}}" type="number" style="width: 65%; background-color: #fdffe8;" min="0">
                 </p>
-                <button class="btn btn-warning mx-3" style="width: 70px; height: 35px;" value="Update" type="button"
+                <button class="btn btn-warning mx-3 my-3" style="width: 70px; height: 35px;" value="Update" type="button"
                     onclick="updateItem(this);">Update</button>
                 <button class="btn btn-danger mx-3" onclick="deleteItem(this);" id="delete{{j}}"
                     style="width: 70px; height: 35px;" value="Delete" type="button">Delete</button>
             </div>
         </div>
-        <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="mx-3  col-sm-3 col-md-3 col-lg-3">
 
             <b><label>Price </label><br>₹ <span class="price{{j}}">{{i.price}}</span></b>
         </div>
@@ -78,13 +80,13 @@
 {% endfor %}
 <div class="container" id="nonePriceDiv">
     <div class="row">
-        <div class="col-sm-4 col-md-4 col-lg-4">
+        <div class="mx-3 col-sm-4 col-md-4 col-lg-4 my-3">
         </div>
-        <div class="col-sm-5 col-md-5 col-lg-5">
+        <div class="mx-3 col-sm-5 col-md-5 col-lg-5 my-3">
             <b>SubTotal(<span id="totalprod"></span> items)</b><br>
             <button id="Checkout" type = "button" onclick = "getAddress();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button>
         </div>
-        <div class="col-sm-3 col-md-3 col-lg-3" style="display: inline-block;">
+        <div class="mx-3 col-sm-3 col-md-3 col-lg-3 my-3" style="display: inline-block;">
             <b>₹ <span id="totprice"></span></b>
             <input type="text" name='data1' style="display: none;" id = "totprice1">
         </div>
@@ -117,10 +119,11 @@
         var lat = 0
         var lon = 0
         document.getElementById('citySelectionDiv').style.display = 'none';
-        document.documentElement.scrollTop = 0;
+        document.documentElement.scrollTop = 50;
         var addressText = document.getElementById("basic-url").value;
         if(addressText.length == 0){
             alert('Please Enter the delivery address.')
+            document.getElementById('citySelectionDiv').style.display = 'block';
             throw 'invalid value';
         }
         document.getElementById("outerdiv").style.opacity = 0.3;

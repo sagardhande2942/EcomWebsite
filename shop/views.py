@@ -50,7 +50,8 @@ def index(request):
         n = len(prod)
         nslides = n//2 + ceil(n/2 - n//2)
         nslides1 = n//4 + ceil(n/4 - n//4)
-        allprods.append([prod, range(1, nslides1), nslides1, range(1, nslides), nslides])
+        nslides2 = n
+        allprods.append([prod, range(1, nslides1), nslides1, range(1, nslides), nslides, range(1, nslides2), nslides2])
 
     # allProds = [
     #     [products, range(1, nslides), nslides],

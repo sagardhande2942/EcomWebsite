@@ -66,6 +66,24 @@
     background-color: red;
     border: 2px solid red;
   }
+  /* .myimg:hover{
+    transform: scale(0.9);
+  } */
+
+  .mycard{
+    transition: 1s;
+  }
+
+  .mycard:hover{
+    
+    transition: transform 0.6s ease;
+    transform: scale(0.9)  skew(0deg, 1deg);
+    background-color:#defcff;
+    box-shadow: 10px 10px 8px 10px #888888;
+    z-index: 9999;
+    transform:;
+  }
+
 
   @media only screen and (max-width: 1000px) {
     #outerdiv{
@@ -73,23 +91,23 @@
     }
     #outerdiv2{
       display: none;
-    }  
+    }
   }
 </style>
 {% endblock %}
 <!-- Carousel Start -->
 {%block body%}
 {% load static %}
-<div class="container my-3" style="width: 100%; height: 300px; text-align: center; margin-bottom: 10px;">
+<div class="container my-3" style="width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
   {% for i in trendingProduct %}
   <h2><span class="badge bg-secondary">Trending Product</span></h2>
   <div class="row my-3" style="border: 2px solid black; margin-bottom: 10px;">
     <a href="/shop/products/{{i.product_id}}">
-    <div class="col-sm-6 col-md-6 col-lg-3">
+    <div class="mt-3 col-sm-6 col-md-6 col-lg-3">
     <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;">
   </a>
   </div>
-  <div class="col-sm-6 col-md-6 col-lg-3 text-start">
+  <div class="mt-3 col-sm-6 col-md-6 col-lg-3 text-start">
     <h3><i>{{i.product_name}}</i></h3>
     <h4>Price : ₹{{i.price}}</h4>
     <h4>Category : {{i.category}}</h4>
@@ -97,11 +115,11 @@
     <h4 style="color: red;">Total Pcs Sold : {{trendingNum}}</h4>
     
   </div>
-  <div class="col-sm-6 col-md-6 col-lg-3 text-start">
+  <div class="mt-3 col-sm-6 col-md-6 col-lg-3 text-start">
     <!-- <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;"> -->
     <p>{{i.product_desc}}</p>
   </div>
-  <div class="col-sm-6 col-md-6 col-lg-3">
+  <div class="mt-3 col-sm-6 col-md-6 col-lg-3">
     <!-- <img src = '../../../media/{{i.image}}' style="height: 200px;float: left;"> -->
     <p style="background-color: antiquewhite; border: 2px solid black;" id = 'trendingProductCategory'>Limited<br> Pieces <br>Left..</p>
     <button class="btn btn-primary" onclick="window.location.href = '/shop/products/{{i.product_id}}'">View Product</button>
@@ -111,7 +129,7 @@
 </div>
 
 <div class="container input-group">
-  <span class="input-group-text" style="color: orangered; font-weight: 500;">Select Category you wish to explore </span>
+  <span class="input-group-text" style="color: orangered; font-weight: 500;">Select Category </span>
   <input class="form-select" type="text" name ='cat' list = 'cat' placeholder="category" onchange="category(this)">
     <datalist id= 'cat' >
       {% for i in category %}
@@ -141,9 +159,11 @@
           <!-- active slide -->
           <div class="row" style="text-align: center;">
             <div class="col-lg-3 col-sm-6 col-md-6 p-2">
-              <div class="card" style="width: 18rem;">
-                <img src='../../../media/{{products.0.image}}' class="card-img-top" style="width: 100%; height: 200px;"
+              <div class="card mycard" style="width: 18rem;">
+                <a href = '/shop/products/{{products.0.product_id}}'>
+                <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
                   alt="...">
+                </a>
                 <div class="card-body" style="height: 200px;">
 
                   <h5 class="card-title">{{ products.0.product_name }}</h5> 
@@ -157,11 +177,9 @@
                   <p class="card-text">{{ products.0.product_desc|slice:"0:50" }}...</p>
                   <div style="position: absolute; bottom: 2%;">
                     <span id='divpr{{products.0.product_id}}' class='divpr'>
-                      <button style="display: inline-block; " href="#" id="pr{{products.0.product_id}}"
+                      <button style="display: inline-block;" href="#" id="pr{{products.0.product_id}}"
                         class="btn btn-primary cart">Add To Cart</button>
                     </span>
-                    <a type="button" href="/shop/products/{{products.0.product_id}}" id="qv{{products.0.product_id}}"
-                      class="btn btn-primary">Quick View</a>
                   </div>
                 </div>
               </div>
@@ -169,9 +187,11 @@
 
             {% for i in products|slice:"1:" %}
             <div class="col-lg-3 col-sm-6 col-md-6 p-2">
-              <div class="card" style="width: 18rem;">
-                <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top"
+              <div class="card mycard" style="width: 18rem;">
+                <a href = '/shop/products/{{i.product_id}}'>
+                <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top myimg"
                   alt="...">
+                </a>
                 <div class="card-body" style="height: 200px;">
                   <h5 class="card-title">{{i.product_name}}</h5> 
                   <fieldset class="mx-4 rating" >
@@ -187,8 +207,6 @@
                       <button style="display: inline-block; " href="#" id="pr{{i.product_id}}"
                         class="btn btn-primary cart">Add To Cart</button>
                     </span>
-                    <a type="button" href="/shop/products/{{i.product_id}}" id="qv{{i.product_id}}"
-                      class="btn btn-primary">Quick View</a>
                   </div>
                 </div>
               </div>
@@ -212,12 +230,12 @@
         </div>
 
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
+        <button style="z-index: 9999;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
           data-bs-slide="prev" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
+        <button  style="z-index: 9999;"class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}1"
           data-bs-slide="next" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
@@ -246,9 +264,11 @@
         <!-- active slide -->
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-md-4 p-2">
-            <div class="card" style="width: 18rem;">
-              <img src='../../../media/{{products.0.image}}' class="card-img-top" style="width: 100%; height: 200px;"
+            <div class="card mycard" style="width: 18rem;">
+              <a href = '/shop/products/{{products.0.product_id}}'>
+              <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
                 alt="...">
+              </a>
               <div class="card-body" style="height: 200px;">
 
                 <h5 class="card-title">{{ products.0.product_name }}</h5> 
@@ -265,8 +285,6 @@
                     <button style="display: inline-block; " href="#" id="pr{{products.0.product_id}}"
                       class="btn btn-primary cart">Add To Cart</button>
                   </span>
-                  <a type="button" href="/shop/products/{{products.0.product_id}}" id="qv{{products.0.product_id}}"
-                    class="btn btn-primary">Quick View</a>
                 </div>
               </div>
             </div>
@@ -274,8 +292,10 @@
 
           {% for i in products|slice:"1:" %}
           <div class="col-lg-3 col-sm-6 col-md-4 p-2">
-            <div class="card" style="width: 18rem;">
-              <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top" alt="...">
+            <div class="card mycard" style="width: 18rem;">
+              <a href = '/shop/products/{{i.product_id}}'>
+              <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top myimg" alt="...">
+            </a>
               <div class="card-body" style="height: 200px;">
                 <h5 class="card-title">{{i.product_name}}</h5> 
                 <fieldset class="mx-4 rating" >
@@ -291,8 +311,6 @@
                     <button style="display: inline-block; " href="#" id="pr{{i.product_id}}"
                       class="btn btn-primary cart">Add To Cart</button>
                   </span>
-                  <a type="button" href="/shop/products/{{i.product_id}}" id="qv{{i.product_id}}"
-                    class="btn btn-primary">Quick View</a>
                 </div>
               </div>
             </div>
@@ -317,12 +335,12 @@
 
 
 
-      <button  class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
+      <button  style="z-index: 9999;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
         data-bs-slide="prev" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
+      <button  style="z-index: 9999;" class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark{{forloop.counter}}"
         data-bs-slide="next" style="height: 110px; width: 110px; margin-top: auto; margin-bottom: auto;">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>

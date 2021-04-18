@@ -231,13 +231,13 @@
       cart = JSON.parse(localStorage.getItem('cart'));
       var finalcart = []
       // console.log("Hey this is the cart : " + cart["pr1"]);
-      for(let i = 1; i <= itemsTotal; i++){
-        // console.log("The item no. " + i + " has units : " + cart["pr" + i]);
-        if(cart["pr" + i]){
+        {% for i in products %}
+        // console.log("The item no. " + {{i.product_id}} + " has units : " + cart["pr" + {{i.product_id}}]);
+        if(cart["pr" + {{i.product_id}}]){
           // console.log("i is : " + i);
-          finalcart.push([i, cart["pr" + i]])
+          finalcart.push([{{i.product_id}}, cart["pr" + {{i.product_id}}]])
         }
-      }
+        {% endfor %}
       // console.log("Final cart here : ")
       // console.log(finalcart)
       var sumis = 0;

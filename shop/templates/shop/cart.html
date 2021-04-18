@@ -223,15 +223,15 @@
     function viewCart() {
         var cart = localStorage.getItem('cart');
         cart = JSON.parse(cart);
-        for (let x = 1; x <= itemsTotal; x++) {
-            var prodDiv = document.querySelector(".prods" + x);
-            if (cart["pr" + x]) {
+        {% for i in products %}
+            var prodDiv = document.querySelector(".prods" + {{i.product_id}});
+            if (cart["pr" + '{{i.product_id}}']) {
                 prodDiv.style.display = "block";
                 // prodDiv.innerHTML += 'Pieces : ' + cart["pr" + x];
-                document.getElementById("inputprod" + x).value = cart["pr" + x];
+                document.getElementById("inputprod" + {{i.product_id}}).value = cart["pr" + {{i.product_id}}];
                 // console.log(cart["pr" + x]);
             }
-        }
+        {% endfor %}
         // console.log(cart["pr1"]);
     }
 
@@ -272,10 +272,10 @@
 
         setTimeout(() => {
             // document.getElementById("totalprice").innerHTML = totprice;
-            for (let x = 1; x <= itemsTotal; x++) {
-                var tt = document.querySelector(".price" + x);
-                var zz = document.querySelector(".prods" + x);
-                var yy = document.querySelector("#inputprod" + x);
+            {% for i in products %}
+                var tt = document.querySelector(".price" + {{i.product_id}});
+                var zz = document.querySelector(".prods" + {{i.product_id}});
+                var yy = document.querySelector("#inputprod" + {{i.product_id}});
                 if (zz.style.display == "block") {
                     totprod++;
                     if (parseInt(tt.textContent)) {
@@ -283,7 +283,7 @@
                         totprice += parseInt(tt.textContent) * z;
                     }
                 }
-            }
+            {% endfor %}
             // console.log(tt.style.display);
 
             // console.log(totprice);

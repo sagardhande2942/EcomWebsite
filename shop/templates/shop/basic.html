@@ -159,6 +159,9 @@
       background-color:#ea4c89
     }
 
+    #mobileSearch{
+      display: none;
+    }
     @media only screen and (max-width:991px)
     {
       .site-footer [class^=col-]
@@ -185,6 +188,22 @@
       .site-footer .copyright-text,.site-footer .social-icons
       {
         text-align:center
+      }
+    }
+    @media only screen and (max-width:991px)
+    {
+      #mobileSearch{
+        display: block;
+        position: fixed;
+        top: 5%;
+        z-index: 9999;
+        right: 5%;
+        background-color: #4CAF50;
+        border-radius: 10px;
+      }
+      #mobileSearch:hover{
+        background-color: lightgreen;
+        cursor: pointer;
       }
     }
     /* Dropdown Button */
@@ -232,7 +251,10 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" style="z-index: 999999;">
+  <div id='mobileSearch' onclick="searchVisible()">
+    <i class="fas fa-search p-3" style="transform: scale(1.2);"></i>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" id='mainNav' style="z-index: 999999;">
     <div class="container-fluid">
       <a class="navbar-brand" href="/shop/">My Awesome Cart</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -291,16 +313,21 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
   <script>
     
-    $("#navbarSupportedContent").on('show.bs.collapse', function() {
-    $('a.nav-link').click(function() {
-        $("#navbarSupportedContent").collapse('hide');
-    });
-  });
+
 
 
 var width = window.innerWidth;
 var height = window.innerHeight;
 
+if(width< 600){
+  document.getElementById('mainNav').style.display = 'none';
+
+}else{
+$("#navbarSupportedContent").on('show.bs.collapse', function() {
+    $('a.nav-link').click(function() {
+        $("#navbarSupportedContent").collapse('hide');
+    });
+  });
 if(localStorage.getItem('cart') == null){
   var cart = {};
 }else{
@@ -345,8 +372,9 @@ if(localStorage.getItem('cart') == null){
                window.location.href = "/shop/search/";
         }
       });
+    }
   }
-  
+    
   $(window).bind('beforeunload', function(){
       var text = localStorage.getItem('cart'); 
       console.log(text);

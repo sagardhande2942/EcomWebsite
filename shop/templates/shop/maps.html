@@ -7,9 +7,20 @@
 
 .customMap:hover{
     transform: scale(1.3);
-    z-index: 99999;
+    z-index: 9999;
+    position: absolute;
     border: 1px solid black;
     box-shadow: 10px 10px 8px 10px grey;
+}
+
+#nonediv{
+    width: 100%;
+    height: 100%px;
+    background-color: white;
+    display: block;
+    position: absolute;
+    top: 50%; 
+    z-index: 999999;
 }
 
 @media (max-width:767px)
@@ -26,6 +37,10 @@
 {% endblock %}
 
 {%block body%}
+
+<div class="mx-4 p-3" id="nonediv">
+        <h1>You never bought anything..<br>Redirecting..</h1>
+</div>
 
 <div class="container-fluid">
 {% for i in final %}
@@ -190,6 +205,7 @@
         // var lng = 75.76676289142033;
         var lat = 0;
         var lng = 0;
+        var testcounter = 0;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(geoSuccess);
         } else {
@@ -203,9 +219,11 @@
         }
         setTimeout(() => {
             
-    
+            
           mapboxgl.accessToken = 'pk.eyJ1Ijoic2FnYXIxMSIsImEiOiJja25nZWxqdXYzNDB2MnFwOWd5Y3gyNjdoIn0.gPdqfO1KFWb7XMGGd6IoKQ';
         {% for i in final %}
+        testcounter ++;
+        document.getElementById('nonediv').style.display = 'none'
         var map{{forloop.counter}} = new mapboxgl.Map({
             container: 'map{{forloop.counter}}',
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -279,7 +297,9 @@
         {% endfor %}
         document.querySelector('.totalPrice{{forloop.counter}}').innerHTML = '₹' + z;
         {% endfor %}
-        
+        if(testcounter == 0){
+            window.location.href = '/shop/';
+        }
     }, 2000);
 </script>
 {% endblock %}

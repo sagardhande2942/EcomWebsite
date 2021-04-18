@@ -326,7 +326,7 @@
         <b style="color: white; display: inline-block; min-width: 50px" ><span>{{username}} </span><i class="fas fa-angle-down"></i></b>
       </button>
       <div class="dropdown-content" style="border-radius: 20px;" >
-        <a href="#" style="border-radius: 20px;">Link 1</a>
+        <a href="/shop/changeUname/" style="border-radius: 20px;">Change Details</a>
         <a href="#" style="border-radius: 20px;">Link 2</a>
         <button  onclick="loggingout();"style="border-radius: 20px; height:100%; width:100%" class="bg-danger">Log Out</button>
       </div>
@@ -342,13 +342,14 @@
     <form class="form-inline mx-auto" id ='searchForm1' name="searchForm" action="/shop/search/" style="width: 100%; display: inline-block; position: fixed; z-index: 99999; top: 20%; left: 5%;"  method="POST" >{% csrf_token %}
       <p>
         <input class="form-control mr-sm-2" style="width: 80%; float: left; " name="search" id="searchValue1"  type="search" placeholder="Search for any Product / Category" aria-label="Search">
-        <button class="btn btn-outline-success my-2 mx-2 my-sm-0 bg-success text-white" style="float: left;"  type="submit">Search</button>
-        <button type="button" class="btn btn-danger  my-2 mx-2" onclick="document.getElementById('searchForm').style.display = 'none';">Close</button>
+        <!-- <button class="btn btn-outline-success my-2 mx-2 my-sm-0 bg-success text-white" style="float: left;"  type="submit">Search</button> -->
+        <!-- <button type="button" class="btn btn-danger  my-2 mx-2" >Close</button> -->
+        <button type="button" class="btn-close" onclick="document.getElementById('searchForm').style.display = 'none';" aria-label="Close"></button>
         </p>
         {% csrf_token %}
       </form>
   </div>
-  <div id='mainNav' class="sticky-top"   style="z-index: 999999;">
+  <div id='mainNav' class="sticky-top" style="z-index: 999999;">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top"  style="z-index: 999999;">
     <div class="container-fluid">
       <a class="navbar-brand" href="/shop/">My Awesome Cart</a>
@@ -380,7 +381,7 @@
             <b style="color: white; display: inline-block; min-width: 50px" ><span>{{username}} </span><i class="fas fa-angle-down"></i></b>
           </button>
           <div class="dropdown-content" style="border-radius: 20px;" >
-            <a href="#" style="border-radius: 20px;">Link 1</a>
+            <a href="/shop/changeUname/" style="border-radius: 20px;">Change Details</a>
             <a href="#" style="border-radius: 20px;">Link 2</a>
             <button  onclick="loggingout();"style="border-radius: 20px; height:100%; width:100%" class="bg-danger">Log Out</button>
           </div>
@@ -534,9 +535,9 @@ if(localStorage.getItem('cart') == null){
 });
 
   </script>
-  {%block js%} {% endblock %}
+  
     <!-- Site footer -->
-    <footer class="site-footer my-3">
+    <footer class="site-footer my-3 footer1">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 col-md-6">
@@ -588,6 +589,7 @@ if(localStorage.getItem('cart') == null){
         </div>
       </div>
 </footer>
+{%block js%} {% endblock %}
 </body>
 
 </html>

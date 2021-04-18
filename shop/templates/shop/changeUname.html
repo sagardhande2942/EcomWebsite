@@ -1,0 +1,99 @@
+{% extends 'shop/basic.html'%}
+
+{%block title %} Change Details {% endblock %}
+{% block style %}
+<style>
+#changeUname{
+    display: none;
+}
+#changePass{
+    display: none;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div style="width: 100%; height: 100%;"></div>
+<div style="position: absolute; top: 30%; left: 40%;" id=startDiv>
+    <h1>Hello!! <span class="badge bg-secondary">{{username}}</span></h1>
+    <button class="btn btn-primary " onclick="changeUname();">Change Username</button><br>
+    <button class="btn btn-primary mt-4" onclick="changePass();">Change Password</button>
+</div>
+
+{% for i in errors %}
+
+<div class="alert alert-danger m-4" role="alert">
+    {{i}}
+</div>
+{% endfor %}
+
+<div id='changeUname' style="position: absolute; top: 30%; left: 40%;">
+
+    <form id="changeUnameForm" action="/shop/changeUname/" class="text-center" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Current Username</label>
+          <input type="text" name="curuname" class="form-control" id="usr1" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text">We'll never share your details with anyone else.</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">New Username</label>
+          <input type="text" name="newuname"  class="form-control" id="usr2">
+        </div>
+        <button type="button"  class="btn btn-primary" onclick="uname();">Submit</button>
+      </form>
+</div>
+
+<div id='changePass' style="position: absolute; top: 30%; left: 40%;">
+    <form id="changePassForm" action="/shop/changeUname/" class="text-center"  method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Username</label>
+            <input type="text" name='curuname' class="form-control" id="pass1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Current Password</label>
+          <input type="password" name='curpass' class="form-control" id="pass1" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+          <label  class="form-label">New Password</label>
+          <input type="password" name='newpass' class="form-control" id="pass2">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="pass();">Submit</button>
+      </form>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+    document.querySelector('.footer1').style.display = 'none';
+    function changeUname(){
+        document.getElementById('changeUname').style.display = 'block';
+        document.getElementById('startDiv').style.display = 'none';
+    }
+    function changePass(){
+        a = document.getElementById('startDiv').style.display = 'none';
+        document.getElementById('changePass').style.display = 'block'
+    }
+
+    function uname(){
+        document.getElementById('usr1').textContent += '|u';
+        document.getElementById('usr2').textContent += '|u';
+        document.getElementById('changeUnameForm').submit();
+    }
+
+    
+    function pass(){
+        document.getElementById('pass1').textContent += '|p'
+        document.getElementById('pass2').textContent += '|p'
+        document.getElementById('changePassForm').submit();
+    }
+
+</script>
+
+{% endblock %}

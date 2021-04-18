@@ -10,9 +10,9 @@ from django.forms.widgets import EmailInput, PasswordInput
 User = get_user_model()
 
 class UserLoginForm(forms.Form):
-    password = forms.CharField(widget=PasswordInput(attrs={'class':'class="input100"'}))
+    password = forms.CharField(widget=PasswordInput(attrs={'class':'class="input100"', 'placeholder' : 'Password'}))
     username = forms.CharField(label = 'Username', help_text="", widget= forms.TextInput
-                           (attrs={'class':'class="input100"'}))
+                           (attrs={'class':'class="input100"', 'placeholder' : 'UName'}))
 
     field_order = ['username', 'password']
     def clean(self, *args, **kwargs):
@@ -24,7 +24,7 @@ class UserLoginForm(forms.Form):
             if not user:
                 raise forms.ValidationError("User does not exist")
             if not user.check_password(password):
-                raise forms.ValidationError("Incorrect Password")
+                raise forms.ValidationError("Incorrect Passwo   rd")
             if not user.is_active:
                 raise forms.ValidationError("This user is not active")
         

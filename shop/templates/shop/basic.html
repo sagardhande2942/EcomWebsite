@@ -162,6 +162,9 @@
     #mobileSearch{
       display: none;
     }
+    #cartMobile{
+      display: none;
+    }
     @media only screen and (max-width:991px)
     {
       .site-footer [class^=col-]
@@ -460,6 +463,7 @@ if(localStorage.getItem('cart') == null){
 
 
 }else{
+  document.getElementById('cartMobile').innerHTML = '';
   function searchVisible(){
     document.getElementById('searchForm').style.display = 'block';
   }

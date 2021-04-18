@@ -65,7 +65,9 @@
 </style>
 {% endblock %}
 {%block body%}
-
+<script>
+alert('If you have already rated and reviewed a product then its review will be updated..');  
+</script>
 
 <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 10%; right: 0; z-index: 9999;">
   <b>Please Note : </b> If you don't rate the product before posting comment then rating will be taken 3 by default
@@ -131,7 +133,7 @@
 
 {% block js %}
 <script>
-  alert('If you have already rated and reviewed a product then its review will be updated..');
+  
   setTimeout(() => {
     var dict = {};
     var radios = {};
@@ -182,8 +184,7 @@
     
   }
   {% endfor %}
-  }, 1000);
-
+}, 1000);
 
 </script>
 {% endblock %}

@@ -586,10 +586,18 @@ def trendingProduct():
     print('Trending produt start')
     extendedUserInstance = ExtendedUser.objects.all()
     totalObjectsInstance = Product.objects.all()
+    print(totalObjectsInstance)
     print(len(totalObjectsInstance))
+    zx= len(totalObjectsInstance)
     finalDictProd = {}
-    for i in range(1, len(totalObjectsInstance) + 1):
+    for i in range(1, zx + 1):
         zz = Product.objects.filter(product_id = i)
+        # print(zz)
+        # print(len(zz))
+        if not len(zz):
+            zx += 1
+            continue
+        print(zz[0].product_id)
         print(zz[0].product_name)
         # zz.update(num = 1)
         print(zz[0].rating)

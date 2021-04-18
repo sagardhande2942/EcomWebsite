@@ -50,7 +50,8 @@ def index(request):
         n = len(prod)
         nslides = n//2 + ceil(n/2 - n//2)
         nslides1 = n//4 + ceil(n/4 - n//4)
-        allprods.append([prod, range(1, nslides1), nslides1, range(1, nslides), nslides])
+        nslides2 = n
+        allprods.append([prod, range(1, nslides1), nslides1, range(1, nslides), nslides, range(1, nslides2), nslides2])
 
     # allProds = [
     #     [products, range(1, nslides), nslides],
@@ -434,10 +435,15 @@ def trackCart(request):
         a = Comments.objects.filter(usr_id = request.user.id, product_id = product_id)
         c = ExtendedUser.objects.filter(usr = request.user)
         z = Rating.objects.filter(rateusers = c[0], product_id = product_id)
+        rating1 = 0
+        if not z:
+            rating1 = 3
+        else:
+            rating1 = z[0].rating
         prodInstance = Product.objects.filter(product_id = product_id)
         if not a:
             a = Comments(product_id = prodInstance[0], usr_id = request.user.id, username = request.user.username,
-            cmt_title = cmt_title, cmt_desc = cmt_desc, rating = z[0].rating, cmt_time = datetime.now(), edited = False,
+            cmt_title = cmt_title, cmt_desc = cmt_desc, rating = rating1, cmt_time = datetime.now(), edited = False,
             edit_time = datetime.now())
             a.save()
         else:

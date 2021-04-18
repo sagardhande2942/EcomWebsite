@@ -186,11 +186,19 @@
           <!-- active slide -->
           <div class="row" style="text-align: center;">
             <div class="col-lg-3 col-sm-6 col-md-6 p-2">
-              <div class="card mycard" style="width: 18rem;">
+              {% if products.0.category == 'SmartPhone' %}
+              <div class="card mycard" style="width: 18rem; height: 500px;">
                 <a href = '/shop/products/{{products.0.product_id}}'>
-                <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
+                  <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                   alt="...">
                 </a>
+                  {% else %}
+                  <div class="card mycard" style="width: 18rem;">
+                    <a href = '/shop/products/{{products.0.product_id}}'>
+                    <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
+                      alt="...">
+                    </a>
+                    {% endif %}
                 <div class="card-body" style="height: 200px;">
 
                   <h5 class="card-title">{{ products.0.product_name }}</h5> 
@@ -214,11 +222,19 @@
 
             {% for i in products|slice:"1:" %}
             <div class="col-lg-3 col-sm-6 col-md-6 p-2">
-              <div class="card mycard" style="width: 18rem;">
+              {% if i.category == 'SmartPhone' %}
+              <div class="card mycard" style="width: 18rem; height: 500px;">
                 <a href = '/shop/products/{{i.product_id}}'>
-                <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top myimg"
+                  <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                   alt="...">
                 </a>
+                  {% else %}
+                  <div class="card mycard" style="width: 18rem;">
+                    <a href = '/shop/products/{{i.product_id}}'>
+                    <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
+                      alt="...">
+                    </a>
+                    {% endif %}
                 <div class="card-body" style="height: 200px;">
                   <h5 class="card-title">{{i.product_name}}</h5> 
                   <fieldset class="mx-4 rating" >
@@ -291,10 +307,19 @@
         <!-- active slide -->
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-md-4 p-2">
-            <div class="card mycard" style="width: 18rem;">
+            {% if products.0.category == 'SmartPhone' %}
+            <div class="card mycard" style="width: 18rem; height: 500px;">
               <a href = '/shop/products/{{products.0.product_id}}'>
-              <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
+                <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                 alt="...">
+              </a>
+                {% else %}
+                <div class="card mycard" style="width: 18rem;">
+                  <a href = '/shop/products/{{products.0.product_id}}'>
+                  <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
+                    alt="...">
+                  </a>
+                  {% endif %}
               </a>
               <div class="card-body" style="height: 200px;">
 
@@ -319,10 +344,19 @@
 
           {% for i in products|slice:"1:" %}
           <div class="col-lg-3 col-sm-6 col-md-4 p-2">
-            <div class="card mycard" style="width: 18rem;">
+            {% if i.category == 'SmartPhone' %}
+            <div class="card mycard" style="width: 18rem; height: 500px;">
               <a href = '/shop/products/{{i.product_id}}'>
-              <img src="../../../media/{{i.image}}" style="width: 100%; height: 200px;" class="card-img-top myimg" alt="...">
-            </a>
+                <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
+                alt="...">
+              </a>
+                {% else %}
+                <div class="card mycard" style="width: 18rem;">
+                  <a href = '/shop/products/{{i.product_id}}'>
+                  <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
+                    alt="...">
+                  </a>
+                  {% endif %}
               <div class="card-body" style="height: 200px;">
                 <h5 class="card-title">{{i.product_name}}</h5> 
                 <fieldset class="mx-4 rating" >
@@ -602,6 +636,16 @@ window.addEventListener("resize", myFunction);
       //   console.log("here is ; " + i);
       //   console.log(document.getElementById(i).textContent);
       // }
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+          type: "POST",
+          url: '{{ "/shop/beforeReload/" }}',
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+          success: function callback(response){
+              console.log(response);
+        }
+      });
     }
     
     // Plus minus buttons

@@ -197,7 +197,7 @@ def showCart(request):
     for i in allprods:
         cnt += 1
         print(i)
-        p.append([i['product_id'], i])
+        p.append([i['product_id'], i, (i['price'] + i['price'] * 0.3)])
     # print(p)
     param = {
         'p' : p,
@@ -352,7 +352,7 @@ def tracker(request):
     str1 = z[0].totcarts
     print('printing this', str1)
     if(len(str1) == 2):
-        return render(request, 'shop/NoItem.html')
+        return render(request, 'shop/maps.html')
     print(str1)
     str1 = str1.split('}')
     res = []

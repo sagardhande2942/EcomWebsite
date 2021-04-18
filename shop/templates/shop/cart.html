@@ -12,7 +12,12 @@
     .backBlur{
         backdrop-filter: blur(5px);
     }
-
+    #nonediv1{
+        display: none;
+        height: 100%;
+        width: 100%;
+        background-color: white;
+    }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -23,7 +28,9 @@
 
 {% block body %}
 
-  <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 10%; right: 0; z-index: 9999;">
+    <div id='nonediv1'></div>
+
+  <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 10%; right: 0; z-index: 999999;">
     <b>Please Note : </b> After clicking checkout use <b>4242 4242 4242 4242</b> <br>as the card number for payment
     And <b>other data can be random.</b>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -37,48 +44,77 @@
         top: 0px;
         width: 100%;
         height: 100%;
-        z-index: 9999;
+        z-index: 99999;
         background: url('//upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif') 
                     50% 50% no-repeat rgb(249,249,249);
                     transform: scale(2);"></div>
     </div>
     <div style="position: absolute; top:40%; width: 100%;" id = 'citySelectionDiv'>
     <div class="input-group mb-3 my-3 " style="width: 50%; margin: 0 auto; ">
-        <span class="input-group-text my-3 " id="basic-addon3">City to Deliver : </span>
+        <!-- <span class="input-group-text my-3 " id="basic-addon3">City to Deliver : </span>
         <input type="text" name = 'address' class="form-control my-3 myinputDiv" id="basic-url" aria-describedby="basic-addon3" />
         
-        <button type="button" style=" position: relative; top: 0; right: 0;" onclick="removeBlur();" class="btn-close btn-close-dark" aria-label="Close" aria-required="true"></button>
+        <button type="button" style=" position: relative; top: 0; right: 0;" onclick="removeBlur();" class="btn-close btn-close-dark" aria-label="Close" aria-required="true"></button> -->
     </div>
-    <button id="Checkout" type = "button" onclick = "checkout();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button>
+    <!-- <button id="Checkout" type = "button" onclick = "checkout();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button> -->
 </div>
 </div>
 
-{% for j, i in p %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="removeBlur();" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <h5>Please enter the city for deliver : </h5>
+        <input type="text" name = 'address' class="form-control my-3 myinputDiv" id="basic-url" aria-describedby="basic-addon3" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button"  onclick = "checkout();" data-bs-dismiss="modal" class="btn btn-primary">Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% for j, i, k in p %}
 <div id = "outerdiv">
 <div class="container prods{{j}} my-3" style="display: none;">
     <div class="row">
-        <div class="mx-3 col-sm-4 col-md-4 col-lg-4 my-3">
+        <div class="col-sm-12 col-md-4 col-lg-4 my-3">
+            <a href='/shop/products/{{i.product_id}}'>
             <img src="../../../media/{{i.image}}">
+        </a>
         </div>
-        <div class="mx-3 col-sm-5 col-md-5 col-lg-5 my-3">
+        <div class="col-sm-12 col-md-4 col-lg-4 my-3">
             <div class="row">
+            <a style="text-decoration: none; color: black;" href='/shop/products/{{i.product_id}}'>
                 <h2>{{i.product_name}}</h2>
-                {{i.product_desc}}
+            </a>
+                {{i.product_desc|slice:"0:100"}}...
             </div>
             <div class="row" id="divBut{{j}}" style="display: inline-block;">
                 <p class="my-3"  style="width: 50%; border: 1px solid black; background-color: #edf5ff;">
                     <label>Qty:</label>
                     <input id="inputprod{{j}}" type="number" style="width: 65%; background-color: #fdffe8;" min="0">
                 </p>
-                <button class="btn btn-warning mx-3 my-3" style="width: 70px; height: 35px;" value="Update" type="button"
+                <button class="btn btn-warning mx-2 my-3" style="width: 70px; height: 35px;" value="Update" type="button"
                     onclick="updateItem(this);">Update</button>
                 <button class="btn btn-danger mx-3" onclick="deleteItem(this);" id="delete{{j}}"
                     style="width: 70px; height: 35px;" value="Delete" type="button">Delete</button>
             </div>
         </div>
-        <div class="mx-3  col-sm-3 col-md-3 col-lg-3">
-
-            <b><label>Price </label><br>₹ <span class="price{{j}}">{{i.price}}</span></b>
+        <div class="col-sm-12 col-md-4 col-lg-4 text-center">
+            <p style="display: inline-block;">
+                <h5>Price : </h5><b style="font-size:xx-large;">₹<span class="price{{j}}">{{i.price}}</span></b>
+              <span style="color: grey; font-size: medium;"><strike>{{k}}</strike></span>
+              <span style="color: green;">30% Off</span>
+            </p>
+            <!-- <b><label>Price </label><br><h2>₹ <span class="price{{j}}">{{i.price}}</span></h2></b> -->
         </div>
     </div>
 
@@ -87,14 +123,15 @@
 {% endfor %}
 <div class="container" id="nonePriceDiv">
     <div class="row">
-        <div class="mx-3 col-sm-4 col-md-4 col-lg-4 my-3">
+        <div class="col-sm-4 col-md-4 col-lg-4 my-3">
         </div>
-        <div class="mx-3 col-sm-5 col-md-5 col-lg-5 my-3">
+        <div class="col-sm-5 col-md-5 col-lg-4 my-3">
             <b>SubTotal(<span id="totalprod"></span> items)</b><br>
-            <button id="Checkout" type = "button" onclick = "getAddress();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button>
+            <button id="Checkout" type = "button"  data-bs-toggle="modal" data-bs-target="#exampleModal" onclick = "getAddress();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Checkout</button>
         </div>
-        <div class="mx-3 col-sm-3 col-md-3 col-lg-3 my-3" style="display: inline-block;">
-            <b>₹ <span id="totprice"></span></b>
+        <div class="col-sm-3 col-md-3 col-lg-4 my-3 text-center" style="display: inline-block;">
+            <h5><label>Total : </label></h5>
+            <h2><b>₹ <span id="totprice"></span></b></h2>
             <input type="text" name='data1' style="display: none;" id = "totprice1">
         </div>
     </div>
@@ -210,10 +247,10 @@
 
     // console.log(localStorage.getItem('cart'));
     if (localStorage.getItem('cart').length == 2) {
-        let reqdiv = document.querySelector(".nonediv");
+        let reqdiv = document.getElementById("nonediv1");
         document.getElementById("nonePriceDiv").style.display = "none";
         reqdiv.style.display = "block";
-        reqdiv.innerHTML = `<h1 class = "my-4" style='z-index:9999; color:white;'> The cart is empty </h1><br>Your shopping cart is waiting. Give it purpose – fill it with groceries, clothing, household supplies, electronics and more.
+        reqdiv.innerHTML = `<h1 class = "my-4 p-3 mx-4" style='z-index:9999; color:black;'> The cart is empty </h1><br>Your shopping cart is waiting. Give it purpose – fill it with groceries, clothing, household supplies, electronics and more.
         <a href = "/shop/">Home</a>`;
 
     } else {

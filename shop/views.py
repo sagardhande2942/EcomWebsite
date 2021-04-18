@@ -18,7 +18,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 
-YOUR_DOMAIN = 'http://localhost:8000'
+YOUR_DOMAIN = 'http://3.143.242.177'
 
 price = 0
 cart12 = ""
@@ -107,7 +107,7 @@ def getCart(request):
 def create_checkout_session(request):
     if request.method == 'GET':
         print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://127.0.0.1:8000/'
+        domain_url = 'http://3.143.242.177/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order

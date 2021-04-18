@@ -75,6 +75,7 @@ def index(request):
         'trendingNum':maxNum,
         'ratingProduct':ratings,
         'category':categoriesNeed,
+        'products': Product.objects.all(),
     }
     
     return render(request, 'shop/index.html', param)
@@ -191,13 +192,15 @@ def showCart(request):
     cnt = 0
     for i in allprods:
         cnt += 1
-        p.append([cnt, i])
+        print(i)
+        p.append([i['product_id'], i])
     # print(p)
     param = {
         'p' : p,
         'range': range(1, len(Product.objects.all()) + 1),
         'items': len(Product.objects.all()),
-        'username':  username
+        'username':  username,
+        'products':Product.objects.all()
     }
     return render(request, 'shop/cart.html', param)
 
@@ -254,6 +257,7 @@ def productView(request, myid):
         'totReviews':z.count,
         'comments':cmtInstance,
         'totComments':cmtInstance.count,
+        'products': Product.objects.all()
     }
     return render(request, 'shop/products.html', param)
 
@@ -590,8 +594,8 @@ def trendingProduct():
     print(len(totalObjectsInstance))
     zx= len(totalObjectsInstance)
     finalDictProd = {}
-    for i in range(1, zx + 1):
-        zz = Product.objects.filter(product_id = i)
+    for i in Product.objects.all():
+        zz = Product.objects.filter(product_id = i.product_id)
         # print(zz)
         # print(len(zz))
         if not len(zz):
@@ -601,7 +605,7 @@ def trendingProduct():
         print(zz[0].product_name)
         # zz.update(num = 1)
         print(zz[0].rating)
-        finalDictProd['pr' + str(i)] = 0
+        finalDictProd['pr' + str(i.product_id)] = 0
     for i in extendedUserInstance:
         print(i.usr.username)
         totCartsString = i.totcarts

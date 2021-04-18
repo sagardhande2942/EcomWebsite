@@ -160,12 +160,10 @@
 
 <div class="container input-group">
   <span class="input-group-text" style="color: orangered; font-weight: 500;">Select Category </span>
-  <input class="form-select" type="text" name ='cat' list = 'cat' placeholder="category" onchange="category(this)">
-    <datalist id= 'cat' >
+  <select class="form-select" type="text" list = 'cat' placeholder="category" onchange="category(this)">
       {% for i in category %}
       <option name = 'cat' value = '{{i}}'>{{i}}</option>
       {% endfor %}
-    </datalist>
   </select>
 </div>
 
@@ -572,7 +570,12 @@ window.addEventListener("resize", myFunction);
       // console.log('hihsdfihdsf');
       for (var item in cart) {
         if(cart[item])
+        try{
           document.getElementById('div' + item).innerHTML = "<button id = 'minus" + item + "' class = 'btn btn-primary minus'> - </button> <span id = 'val" + item + "'>" + cart[item] + "</span> <button id = 'plus" + item + "' class = 'btn btn-primary plus'> + </button>"
+        }catch(err){
+          localStorage.setItem('cart', '{}');
+          window.location.href = '/shop/'
+        }
       }
       cart = JSON.parse(localStorage.getItem('cart'));
       var tocart = localStorage.getItem('cart');
@@ -664,9 +667,15 @@ window.addEventListener("resize", myFunction);
 
 
     function category(item){
+      try{
       document.getElementById('searchValue').value = item.value
       document.getElementById('searchForm').submit();
       console.log(item.value);
+      }catch(err){
+        document.getElementById('searchValue1').value = item.value
+      document.getElementById('searchForm1').submit();
+      console.log(item.value);
+      }
     }
 
   </script>

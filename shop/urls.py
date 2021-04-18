@@ -22,4 +22,5 @@ urlpatterns = [
     path('beforeReload/', views.beforeReload),
     path('getAddress/', views.getAddress),
     path('rate/', views.rateProduct),
+    path('changeUname/', views.changeUname),
 ]

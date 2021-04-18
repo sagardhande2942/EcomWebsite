@@ -380,9 +380,10 @@
 
 <div class="outerdiv3 my-2" id='outerdiv3'>
   {% for products, range1, nslides1, range2, nslides2, range, nslides in allprods %}
-  <h2><span class="badge bg-secondary">{{products.0.category}}</span></h2>
+  <hr>
+  <h2><span class="badge bg-secondary mt-3">{{products.0.category}}</span></h2>
   {% for i in products %}
-  <div class="mx-3 card mycard" style="width: 18rem; transform: scaleY(0.7);">
+  <div class="mx-3 card mycard mt-1" style="width: 18rem;">
     <a href = '/shop/products/{{i.product_id}}'>
     <img src="../../../media/{{i.image}}" class="card-img-top myimg" alt="...">
   </a>

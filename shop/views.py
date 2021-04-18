@@ -11,6 +11,8 @@ from django.conf import LazySettings, settings
 from django.http.response import JsonResponse 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import stripe
 import logging
@@ -23,6 +25,8 @@ YOUR_DOMAIN = 'http://localhost:8000'
 price = 0
 cart12 = ""
 PDFromgetAddtoSuccessPay = PurchaseDate()
+
+User = get_user_model()
 
 import simplejson
 @login_required(login_url='/auth/')
@@ -672,3 +676,64 @@ def rateProduct(request):
         a.update(rating = ratecnt / num)  
         return JsonResponse({'hi':'Bye'})
 
+
+def changeUname(request):
+    username = request.user.username
+    if request.method == 'POST':
+        a = request.POST.get('curuname', '')
+        b = request.POST.get('newuname', '')
+        c = request.POST.get('curpass', '')
+        d = request.POST.get('newpass', '')
+        errors = []
+        if not c:
+            usrInstance = User.objects.all()
+            check = False
+            for i in usrInstance:
+                if a == i.username:
+                    if i.username == b:
+                        continue
+                    check = True
+                    z = User.objects.get(username = a)
+                    try:
+                        z.username = b
+                        z.save()
+                    except Exception as e:
+                        errors.append(e)
+                    break
+            if not check:
+                errors.append('No user with current username found')
+            if not len(errors):
+                errors.append('Username Succesfully Changed')
+                print(errors)
+                return HttpResponse('<h1> DONE </h1><script> window.location.href = "/shop/";</script>')
+            else:
+                print(errors)
+                return render(request, 'shop/changeUname.html', {'username' : username, 'errors': errors})
+        else:
+            usrInstance = User.objects.all()
+            check = False
+            for i in usrInstance:
+                if a == i.username:
+                    print(a)
+                    check = True
+                    z = User.objects.get(username = a)
+                    try:
+                        print(z.password, c)
+                        if request.user.check_password(c):
+                            z.set_password(d)
+                            z.save()
+                        else:
+                            errors.append('Current Password incorrect')
+                    except Exception as e:
+                        errors.append(e)
+                    break
+            if not check:
+                errors.append('No user with current username found')
+            if not len(errors):
+                errors.append('Password Succesfully Changed')
+                print(errors)
+                return HttpResponse('<h1> DONE </h1><script> window.location.href = "/shop/";</script>')
+            else:
+                print(errors)
+                return render(request, 'shop/changeUname.html', {'username' : a, 'errors': errors})
+    return render(request, 'shop/changeUname.html', {'username' : username})

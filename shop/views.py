@@ -400,7 +400,8 @@ def tracker(request):
             j = j.split(',')
             vb.append(j[0].split(':'))
         diffDict[i] = vb
-    print(diffDict)
+
+    print('\nDIff DICT', diffDict)
     finallist = []
     for i in diffDict:
         m = diffDict[i]
@@ -415,6 +416,8 @@ def tracker(request):
             mb = Product.objects.filter(product_id = int(num))
             zxcv = random.randint(0, 7)
             print(n10 - i - 1)
+            if not len(mb):
+                continue
             z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
             # assert n10 - i - 1 >= 0
         # n10-=1
@@ -500,7 +503,8 @@ def trackCart(request):
             continue
         res[i] = res[i][0].split(',')
         
-        #   print(res[i])
+        # print(res[i])       
+    
     check1=  False
     for j in range(1, 5):
         for i in res:
@@ -512,6 +516,9 @@ def trackCart(request):
                 check1 = False
                 res.remove([''])
     # res.remove([''])   
+
+    
+
     for i in range(len(res)):
         diffDict[i] = []
         vb = []
@@ -534,6 +541,8 @@ def trackCart(request):
             mb = Product.objects.filter(product_id = int(num))
             zxcv = random.randint(0, 7)
             print(n10 - i - 1)
+            if not len(mb):
+                continue
             z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
             # assert n10 - i - 1 >= 0
         # n10-=1
@@ -618,7 +627,12 @@ def trendingProduct():
             # print(Stringa)
             cartToJson = json.loads(Stringa)
             for i in cartToJson:
-                finalDictProd[i] += cartToJson[i]
+                try:
+                    finalDictProd[i] += cartToJson[i]
+                except Exception:
+                    continue
+                print(finalDictProd[i])
+                print(cartToJson[i])
             # print(finalDictProd)
         # print(totCartsArr)
     # print(extendedUserInstance)

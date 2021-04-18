@@ -212,7 +212,7 @@
         let reqdiv = document.querySelector(".nonediv");
         document.getElementById("nonePriceDiv").style.display = "none";
         reqdiv.style.display = "block";
-        reqdiv.innerHTML = `<h1 class = "my-4"> The cart is empty </h1><br>Your shopping cart is waiting. Give it purpose – fill it with groceries, clothing, household supplies, electronics and more.
+        reqdiv.innerHTML = `<h1 class = "my-4" style='z-index:9999; color:white;'> The cart is empty </h1><br>Your shopping cart is waiting. Give it purpose – fill it with groceries, clothing, household supplies, electronics and more.
         <a href = "/shop/">Home</a>`;
 
     } else {
@@ -222,14 +222,26 @@
 
     function viewCart() {
         var cart = localStorage.getItem('cart');
+        console.log(cart);
         cart = JSON.parse(cart);
         {% for i in products %}
             var prodDiv = document.querySelector(".prods" + {{i.product_id}});
+            if(parseInt(cart["pr" + '{{i.product_id}}']) == 0){
+                alert('Sorry for the inconvinence please refill your cart')
+                localStorage.clear()
+                window.location.href = '/shop/'
+                throw "Invalid Cart"
+                
+            }
             if (cart["pr" + '{{i.product_id}}']) {
+                
+                // console.log(cart["pr" + '{{i.product_id}}']);
+
                 prodDiv.style.display = "block";
                 // prodDiv.innerHTML += 'Pieces : ' + cart["pr" + x];
                 document.getElementById("inputprod" + {{i.product_id}}).value = cart["pr" + {{i.product_id}}];
                 // console.log(cart["pr" + x]);
+                
             }
         {% endfor %}
         // console.log(cart["pr1"]);

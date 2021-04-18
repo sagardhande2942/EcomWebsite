@@ -95,20 +95,7 @@
       transform: translate(-35px, -5px); 
       color: orange;
     }
-    @media (max-width:991px)
-    {
-      .site-footer [class^=col-]
-      {
-        margin-bottom:30px
-      }
-      #cart1{
-      font-weight: 700;
-      position: absolute;
-      z-index: 2147483647;
-      transform: translate(-35px, 15px); 
-      color: red;
-      }
-    }
+    
     .social-icons
     {
       padding-left:0;
@@ -171,8 +158,20 @@
     {
       background-color:#ea4c89
     }
-    @media (max-width:767px)
+
+    @media only screen and (max-width:991px)
     {
+      .site-footer [class^=col-]
+      {
+        margin-bottom:30px
+      }
+      #cart1{
+      font-weight: 700;
+      position: absolute;
+      z-index: 2147483647;
+      transform: translate(-35px, 5px); 
+      color: skyblue;
+      }
       .social-icons li.title
       {
         display:block;
@@ -186,13 +185,6 @@
       .site-footer .copyright-text,.site-footer .social-icons
       {
         text-align:center
-      }
-      #cart1{
-      font-weight: 700;
-      position: absolute;
-      z-index: 2147483647;
-      transform: translate(-35px, 5px); 
-      color: red;
       }
     }
     /* Dropdown Button */
@@ -278,7 +270,7 @@
         </div>
         <!-- <button style="" onclick="window.location.href = '/shop/cart';" href="/shop/cart" type="button" class="btn btn-secondary mx-2 " data-container="body" data-toggle="popover" data-placement="bottom" data-content="Right popover" id = "cartpop"> -->
         <a href="/shop/cart" style="color: white;">
-          <i class="fas fa-shopping-cart" style="margin-right: 20px;transform: scale(2.2);"></i><b<span  id = "cart1" >0</span></b>
+          <i class="fas fa-shopping-cart" style="margin-right: 20px;transform: scale(2.2);"></i><b<span id="cart1">0</span></b>
         </a>
         <span style="transform: translate(-10px,0px);color: white; margin-top: 10px;"><span class="badge rounded-pill bg-warning text-dark">Cart</span></span>
         <!-- </button> -->
@@ -306,6 +298,8 @@
   });
 
 
+var width = window.innerWidth;
+var height = window.innerHeight;
 
 if(localStorage.getItem('cart') == null){
   var cart = {};
@@ -318,7 +312,11 @@ if(localStorage.getItem('cart') == null){
   }
   if(z.toString().length < 2){
     console.log(z);
-    $('#cart1').css({'transform' : "translate(-30px, -5px)"})
+    if(width < 991){
+      $('#cart1').css({'transform' : "translate(-30px, 5px)"})
+    }else{
+      $('#cart1').css({'transform' : "translate(-30px, -5px)"})
+    }
   }
   document.getElementById('cart1').innerHTML = parseInt(z); 
 }

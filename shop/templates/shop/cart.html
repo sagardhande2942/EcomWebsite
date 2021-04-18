@@ -22,6 +22,12 @@
 
 {% block body %}
 
+  <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 10%; right: 0; z-index: 9999;">
+    <b>Please Note : </b> After clicking checkout use <b>4242 4242 4242 4242</b> <br>as the card number for payment
+    And <b>other data can be random.</b>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
 <div class="backBlur" style="width: 100%;height:100%;text-align: center; margin: 0 auto; position: fixed; display: none;"  id = 'addAddressSelection'>
     <div class="container nonediv" style="display: none;">
         <div class="loader" style="
@@ -112,10 +118,12 @@
         // document.getElementById("outerdiv").className = 'backBlur'; //backdrop-filter: blur(5px); = 'none';
         // document.getElementById('outerdiv').tabIndex = -1;
         document.getElementById('addAddressSelection').style.display = 'block';
+        alert("Please Note : Just enter the town, city, state name");
     }
 
     // Get Stripe publishable key
     function checkout(){
+        
         var lat = 0
         var lon = 0
         document.getElementById('citySelectionDiv').style.display = 'none';

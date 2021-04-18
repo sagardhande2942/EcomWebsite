@@ -195,7 +195,7 @@
       #mobileSearch{
         display: block;
         position: fixed;
-        top: 10%;
+        top: 7%;
         z-index: 99999;
         right: 5%;
         background-color: #4CAF50;
@@ -204,6 +204,18 @@
       #mobileSearch:hover{
         background-color: lightgreen;
         cursor: pointer;
+      }
+      #cartMobile{
+        display: block;
+        position: fixed;
+        top: 2%;
+        z-index: 99999;
+        right: 2%;
+        
+      }
+      #cart1{
+        transform: translate(-35px, -5px); 
+        color: black;
       }
     }
     /* Dropdown Button */
@@ -292,8 +304,13 @@
 
 <body>
 
+  <div id='cartMobile'>
+    <a href="/shop/cart" style="color: yellow;">
+      <i class="fas fa-shopping-cart" style="margin-right: 20px;transform: scale(2.2);"></i><b<span id="cart1">0</span></b>
+    </a>
+  </div>
   <div id='mobileSearch' onclick="searchVisible()">
-    <i class="fas fa-search p-3" style="transform: scale(1.2);"></i>
+    <i class="fas fa-search p-2" style="transform: scale(1);"></i>
   </div>
   <div id="mySidenav" class="sidenav" style="z-index: 99999;">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -301,6 +318,17 @@
     <a href="/shop/tracker/">Orders</a>
     <a href="#below">More</a>
     <a class="text-white" style="cursor: pointer;" onclick="closeNav(); searchVisible();">Search</a>
+    <div class="dropdown mx-4">
+      <button class="dropbtn" style="border-radius: 20px; background-color: black;">
+        <b style="color: white; display: inline-block; min-width: 50px" ><span>{{username}} </span><i class="fas fa-angle-down"></i></b>
+      </button>
+      <div class="dropdown-content" style="border-radius: 20px;" >
+        <a href="#" style="border-radius: 20px;">Link 1</a>
+        <a href="#" style="border-radius: 20px;">Link 2</a>
+        <button  onclick="loggingout();"style="border-radius: 20px; height:100%; width:100%" class="bg-danger">Log Out</button>
+      </div>
+    </div>
+    
   </div>
   
   <div id='mobileNav' class="bg-secondary" style="z-index: 99999; display: none; position: fixed; top: 5%;">
@@ -398,6 +426,39 @@ function closeNav() {
     document.getElementById('mobileNav').style.display = 'block';
   document.getElementById("mySidenav").style.width = "0";
 }
+
+
+if(localStorage.getItem('cart') == null){
+  var cart = {};
+}else{
+  let z = 0;
+  // console.log(localStorage.getItem('cart'));
+  cart = JSON.parse(localStorage.getItem('cart'));
+  for(var x in cart){
+    z += parseInt(cart[x]);
+  }
+  if(z.toString().length < 2){
+    console.log(z);
+      $('#cart1').css({'transform' : "translate(-30px, -5px)"})
+  }
+  document.getElementById('cart1').innerHTML = parseInt(z); 
+}
+
+  function loggingout(){
+    var text = localStorage.getItem('cart');
+    $.ajax({
+          type: "POST",
+          url: '{{ "/shop/getLogoutData/" }}',
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text },
+          success: function callback(response){
+                      console.log(response);
+            }
+    });
+
+    window.location.href = "/auth/logout/";
+  }
+
+
 }else{
   function searchVisible(){
     document.getElementById('searchForm').style.display = 'block';

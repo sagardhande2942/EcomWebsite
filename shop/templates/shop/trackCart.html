@@ -176,7 +176,11 @@
   {% endfor %}
   
   {% for i in ratingUsers %}
+  try{
     document.querySelector('#star{{i.rating}}{{i.product_id}}').checked = true;
+  }catch(err){
+    
+  }
   {% endfor %}
   }, 1000);
 

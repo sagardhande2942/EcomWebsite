@@ -20,7 +20,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 
-YOUR_DOMAIN = 'http://3.143.242.177'
+YOUR_DOMAIN = 'http://localhost:8000'
 
 price = 0
 cart12 = ""
@@ -35,6 +35,7 @@ def index(request):
     maxProduct, maxNum = trendingProduct()
     print(maxProduct, maxNum)
     maxProductInstance = []
+    maxProduct.reverse()
     for i in maxProduct:
         maxProductInstance.append(Product.objects.filter(product_id = int(i[2:])))
     username = request.user.username
@@ -113,7 +114,7 @@ def getCart(request):
 def create_checkout_session(request):
     if request.method == 'GET':
         print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://3.143.242.177/'
+        domain_url = 'http://127.0.0.1:8000/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -654,8 +655,8 @@ def trendingProduct():
 
     max_ = []
     maxProduct = []
-    for i in finalDictProd:
-        max_.append(finalDictProd[i])
+    for i in sorted_dict:
+        max_.append([i, sorted_dict[i]])
         maxProduct.append(i)
 
     print(maxProduct, max_)

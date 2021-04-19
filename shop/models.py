@@ -10,6 +10,7 @@ class Product(models.Model):
     product_pubs_date = models.DateField(auto_now_add=True)
     category = models.CharField(max_length=50, default="")
     subcategory = models.CharField(max_length=50, default="")
+    subcategory1 = models.CharField(max_length=50, default="")
     price = models.IntegerField(default=0)
     image = models.ImageField(upload_to="shop/images", default="")
     rating = models.FloatField(default=1, null=True)

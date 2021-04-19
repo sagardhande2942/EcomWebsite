@@ -128,9 +128,70 @@
 <!-- Carousel Start -->
 {%block body%}
 {% load static %}
-<div class="container-fluid my-3 text-dark" style="width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
-  <h4><span class="badge bg-secondary">Great Deals</span></h4>
-  <div id="trendCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+<div class="container-fluid mb-2">
+  <div class="row">
+    <div class="col-1">
+
+    </div>
+    
+    <div class="col-1">
+    </div>
+    <div class="col-1">
+      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/GroceryCat.png' style="height: 64px; width:64px;">
+      <p class="d-inline">
+        <span>Grocery</span><i class="mx-1 fas fa-angle-down"></i>
+      </p>
+    </div>
+    <div class="col-1">
+      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/FashionCat.jpg' style="height: 64px; width:64px;">
+      <p class="d-inline">
+        <span>Fashion</span><i class="mx-1 fas fa-angle-down"></i>
+      </p>
+    </div>
+    <div class="col-1">
+      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/MobileCat.png' style="height: 64px; width:64px;">
+      <p class="d-inline">
+        <span>Mobiles</span><i class="mx-1 fas fa-angle-down"></i>
+      </p>
+    </div>
+    <div class="col-1">
+      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/tvCat.png' style="height: 64px; width:64px;">
+      <p class="d-inline">
+        <span>Appliances</span><i class="mx-1 fas fa-angle-down"></i>
+      </p>
+    </div>
+    <div class="col-1">
+      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/ElectronicsCat.png' style="height: 64px; width:64px;">
+      <p class="d-inline">
+        <span>Electronics</span><i class="mx-1 fas fa-angle-down"></i>
+      </p>
+    </div>
+    <div class="col-1">
+      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HomeCat.png' style="height: 64px; width:64px;">
+      <p class="d-inline">
+        <span>Home</span><i class="mx-1 fas fa-angle-down"></i>
+      </p>
+    </div>
+    <div class="col-1">
+      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HeadphoneCat.png' style="height: 64px; width:64px;">
+      <p class="d-inline">
+        <span>Music</span><i class="mx-1 fas fa-angle-down"></i>
+      </p>
+    </div>
+    <div class="col-1">
+      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/OtherCat.png' style="height: 64px; width:64px;">
+      <p class="d-inline">
+        <span>Others</span><i class="mx-1 fas fa-angle-down"></i>
+      </p>
+    </div>
+
+    <div class="col-1">
+    </div>
+  </div>
+</div>
+<h4 class="text-center"><span class="badge bg-secondary">Great Deals</span></h4>
+<div class="container-fluid my-3 text-white p-3" style="background-color:#464a82; width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
+  <div id="trendCarousel" class="carousel  slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
         {% for i in trendingProduct|slice:"0:1" %}
@@ -147,6 +208,7 @@
             <h2>{{i.0.product_name}}</h2>
             <h3>₹{{i.0.price}}</h3>
             <pre style="font-size: large;">{{i.0.product_desc|slice:"0:30"}}...</pre>
+            <h5 id="trendingNumber{{i.0.product_id}}"></h5>
           </div>
           <div class="col-lg-2">
       
@@ -169,7 +231,7 @@
             <h2>{{i.0.product_name}}</h2>
             <h3>₹{{i.0.price}}</h3>
             <pre style="font-size: large;">{{i.0.product_desc|slice:"0:30"}}...</pre>
-            <h5>{{trendingNum}}</h5>
+            <h5 id="trendingNumber{{i.0.product_id}}"></h5>
             </div>
             <div class="col-lg-2">
         
@@ -835,6 +897,11 @@ window.addEventListener("resize", myFunction);
       }
     }
 
+    {% for i in trendingNum %}
+    
+    document.getElementById('trendingNumber{{i.0|slice:"2:"}}').textContent = 'Total sale : ' + {{i.1}};
+
+    {% endfor %}
   </script>
 
   {%endblock%}

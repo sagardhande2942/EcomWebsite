@@ -9,6 +9,9 @@
         height: 200px;
     }
 
+    body{
+        background-color: bisque;
+    }
     .backBlur{
         backdrop-filter: blur(5px);
     }
@@ -18,6 +21,15 @@
         width: 100%;
         background-color: white;
     }
+
+    @media only screen and (max-width: 767px) {
+        .myProdsRow{
+            text-align: center;
+        }
+        .betweenDivMobile{
+            margin-top: 20px;
+        }
+  }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -61,7 +73,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" style="z-index: 999999;" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -73,7 +85,7 @@
         <input type="text" name = 'address' class="form-control my-3 myinputDiv" id="basic-url" aria-describedby="basic-addon3" />
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" onclick="removeBlur();" data-bs-dismiss="modal">Close</button>
           <button type="button"  onclick = "checkout();" data-bs-dismiss="modal" class="btn btn-primary">Checkout</button>
         </div>
       </div>
@@ -81,8 +93,72 @@
   </div>
 
 
-{% for j, i, k in p %}
-<div id = "outerdiv">
+  <div id = "outerdiv">
+      <div class="container mt-5">
+          <div class="row">
+              <div class="col-sm-12 col-md-8 col-lg-8 p-3" style="background-color: white;">
+                <p>
+                    <h4>My Cart (<span id="totalprod"></span>)</h4>
+                </p>
+                {% for j, i, k, d, e in p %}
+                <div class="prods{{i.product_id}}" style="display: none;"> 
+                <div class="row myProdsRow betweenDivMobile">
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                        <a href='/shop/products/{{i.product_id}}'>
+                            <img src="../../../media/{{i.image}}" class="mb-3" style="height: 202px; width: 112px;">
+                        </a><br>
+                        <p class="d-inline" id='inputInlineP{{i.product_id}}'>
+                            <button id="minusBut" type="button" onclick="updateItem(this);" style="border: 1px solid black; width: 25px;border-radius: 20px;"><b>-</b></button>
+                            <input class="text-center" id="inputprod{{i.product_id}}" type="text" style="border: 1px solid black;width:50px; background-color: #fdffe8;" min="0">
+                            <button id="plusBut" onclick="updateItem(this);" style="border: 1px solid black; width: 25px;border-radius: 20px;"><b>+</b></button>
+
+                        </p><br><br>
+                        <!-- <button class="btn btn-warning mx-2 my-3" style="width: 70px; height: 35px;" value="Update" type="button"
+                            onclick="updateItem(this);">Update</button> -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                        <h5>{{i.product_name}}</h5>
+                        <p>
+                            {{i.product_desc|slice:"0:50"}}...
+                        </p>
+                        Seller : <pre style="color: grey;">{{e}}</pre>
+                        <p style="display: inline-block;">
+                            ₹<b style="font-size:large;" class="price{{i.product_id}}">{{i.price}}</b>
+                          <span style="color: grey; font-size: medium;"><strike id="trendingIncPrice{{i.product_id}}">₹{{incPrice}}</strike></span>
+                          <span style="color: green;">{{i.discount}}% Off</span>
+                          <br>
+                          <small class="text-success"><b>Offers Available</b></small><br>
+                          <button class="mt-2 btn btn-danger mx-3" onclick="deleteItem(this);" id="delete{{j}}"
+                          style="width: 70px; height: 35px;" value="Delete" type="button">Delete</button>
+                        </p>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                        Delivered By <p id="daysToDeliver{{i.product_id}}"></p>
+                        <small style="color: grey;">7 days replacement policy</small>
+                    </div>
+                </div>
+            </div>  
+            <hr>
+                {% endfor %}
+                <p style="float: right;">
+                        <button id="Checkout" type = "button"  data-bs-toggle="modal" data-bs-target="#exampleModal" onclick = "getAddress();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Place Order</button>
+                    </p>
+
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4" style="background-color: white; border-left: 5px solid bisque;">
+                <span style="font-size: larger; color: gray; font-weight: 500;">PRICE DETAILS</span><br>
+                <span style="font-size: large;">Price : </span><h5 style="float: right;">₹ <span id="totIncPrice1"></span></h5><br><br><br>
+                <span style="font-size: large;">Discount : </span><h5 style="float: right; color: green;">-₹ <span id="totDiscount"></span></h5><br><br><br>
+                <span style="font-size: large;">Delivery Charges : </span><h5 style="float: right; color: green;"><span>FREE</span></h5><br><br>
+                <hr>
+                <span style="font-size: large;"><b>Total Amount : </b></span><h5 style="float: right; color: green;">₹ <span id="totprice"></span></h5>
+                
+            <input type="text" name='data1' style="display: none;" id = "totprice1">
+        </div>
+        </div>
+    </div>
+<!-- 
+
 <div class="container prods{{j}} my-3" style="display: none;">
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-4 my-3">
@@ -112,15 +188,15 @@
             <p style="display: inline-block;">
                 <h5>Price : </h5><b style="font-size:xx-large;">₹<span class="price{{j}}">{{i.price}}</span></b>
               <span style="color: grey; font-size: medium;"><strike>{{k}}</strike></span>
-              <span style="color: green;">30% Off</span>
-            </p>
+              <span style="color: green;">{{i.discount}}% Off</span>
+            </p> -->
             <!-- <b><label>Price </label><br><h2>₹ <span class="price{{j}}">{{i.price}}</span></h2></b> -->
-        </div>
+        <!-- </div>
     </div>
 
-</div>
+</div> -->
 <!-- <img src='../../../media/{{products.0.image}}' class="card-img-top" style="width: 200px; height: 200px"> -->
-{% endfor %}
+<!-- {#% endfor %#}
 <div class="container" id="nonePriceDiv">
     <div class="row">
         <div class="col-sm-4 col-md-4 col-lg-4 my-3">
@@ -135,7 +211,7 @@
             <input type="text" name='data1' style="display: none;" id = "totprice1">
         </div>
     </div>
-</div>
+</div> -->
 </div>
 
 {% endblock %}
@@ -161,7 +237,6 @@
 
     // Get Stripe publishable key
     function checkout(){
-        
         var lat = 0
         var lon = 0
         document.getElementById('citySelectionDiv').style.display = 'none';
@@ -263,18 +338,22 @@
         console.log(cart);
         cart = JSON.parse(cart);
         {% for i in products %}
-            var prodDiv = document.querySelector(".prods" + {{i.product_id}});
+            var prodDiv = document.querySelector(".prods" + '{{i.product_id}}');
             if(parseInt(cart["pr" + '{{i.product_id}}']) == 0){
-                alert('Sorry for the inconvinence please refill your cart')
-                localStorage.clear()
-                window.location.href = '/shop/'
-                throw "Invalid Cart"
-                
+                for (let x in cart) {
+                    // console.log("X IS : " + x);
+                    // console.log("id is : " + st);
+                    if (x == "pr" + '{{i.product_id}}') continue;
+                    cart1[x] = cart[x];
+                }
+                // console.log(cart["pr" + st]);
+                localStorage.setItem('cart', JSON.stringify(cart1));
+                // console.log(localStorage.getItem('cart'));
+                window.location.href = "/shop/cart/"                
             }
             if (cart["pr" + '{{i.product_id}}']) {
                 
                 // console.log(cart["pr" + '{{i.product_id}}']);
-
                 prodDiv.style.display = "block";
                 // prodDiv.innerHTML += 'Pieces : ' + cart["pr" + x];
                 document.getElementById("inputprod" + {{i.product_id}}).value = cart["pr" + {{i.product_id}}];
@@ -307,15 +386,34 @@
     }
 
     function updateItem(e) {
+        if(e.id == 'minusBut'){
+            let id = e.parentNode.id.slice(12,);
+            console.log(id);
+            let value1 = document.getElementById("inputprod" + id);
+            let z = parseInt(value1.value);
+            z = Math.max(0, z - 1);
+            value1.value = z;
+            // console.log(value1);
+            cart["pr" + id] = parseInt(z);
+            console.log(cart["pr" + id]);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            // console.log(localStorage.getItem('cart'));
+            window.location.href = "/shop/cart/"
+        }else{
+            let id = e.parentNode.id.slice(12,);
+            console.log(id);
+            let value1 = document.getElementById("inputprod" + id);
+            let z = parseInt(value1.value);
+            z = z + 1;
+            value1.value = z;
+            // console.log(value1);
+            cart["pr" + id] = parseInt(z);
+            console.log(cart["pr" + id]);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            // console.log(localStorage.getItem('cart'));
+            window.location.href = "/shop/cart/"
+        }
         // console.log(e.parentNode.id);
-        let id = e.parentNode.id.slice(6,);
-        // console.log(id);
-        console.log(document.getElementById("inputprod" + id).value);
-        cart["pr" + id] = parseInt(document.getElementById("inputprod" + id).value);
-        console.log(cart["pr" + id]);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        // console.log(localStorage.getItem('cart'));
-        window.location.href = "/shop/cart/"
     }
 
     function displayPrice() {
@@ -330,7 +428,7 @@
                     totprod++;
                     if (parseInt(tt.textContent)) {
                         let z = parseInt(yy.value);
-                        totprice += parseInt(tt.textContent) * z;
+                        totprice += parseFloat(tt.textContent) * z;
                     }
                 }
             {% endfor %}
@@ -341,6 +439,29 @@
             document.querySelector("#totprice1").value = totprice;
             document.querySelector("#totalprod").textContent = totprod;
 
+            {% for j, i, k, d, e in p %}
+            var someDate = new Date();
+            var numberOfDaysToAdd = {{d}};
+            someDate.setDate(someDate.getDate() + numberOfDaysToAdd); 
+            console.log(someDate);
+            document.getElementById('daysToDeliver{{i.product_id}}').innerHTML = someDate.getDate() + '-' + someDate.getMonth() + '-' + someDate.getFullYear();
+            {% endfor %}
+
+            var totalDiscount = 0;
+            var totalINcPrice = 0;
+            {% for j, i, k, d, e in p  %}
+            var yy = document.querySelector("#inputprod" + {{i.product_id}});
+            var z = parseInt(yy.value);
+            document.getElementById('trendingIncPrice{{i.product_id}}').innerHTML = '₹' 
+            + (({{i.price}} * ({{i.discount}} / 100)) + {{i.price}});
+            totalDiscount += parseFloat(({{i.discount}} / 100) * {{i.price}}) * z;
+            totalINcPrice += parseFloat((({{i.price}} * ({{i.discount}} / 100)) + {{i.price}})) * z;
+            {% endfor %}
+
+            totalDiscount = totalDiscount.toFixed(3)
+            totalINcPrice = totalINcPrice.toFixed(3)
+            document.getElementById('totDiscount').innerHTML = totalDiscount;
+            document.getElementById('totIncPrice1').innerHTML = totalINcPrice;
         }, 1000);
     }
 

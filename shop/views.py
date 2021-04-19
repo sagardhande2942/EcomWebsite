@@ -34,7 +34,9 @@ def index(request):
     #Calling trending product
     maxProduct, maxNum = trendingProduct()
     print(maxProduct, maxNum)
-    maxProductInstance = Product.objects.filter(product_id = int(maxProduct[2:]))
+    maxProductInstance = []
+    for i in maxProduct:
+        maxProductInstance.append(Product.objects.filter(product_id = int(i[2:])))
     username = request.user.username
     a = ExtendedUser.objects.filter(usr=request.user)
     cart = "{}"
@@ -52,7 +54,7 @@ def index(request):
     for cat in cats:
         prod = Product.objects.filter(category=cat)
         n = len(prod)
-        nslides = n//2 + ceil(n/2 - n//2)
+        nslides = n//3 + ceil(n/3 - n//3)
         nslides1 = n//5 + ceil(n/5 - n//5)
         nslides2 = n
         allprods.append([prod, range(1, nslides1), nslides1, range(1, nslides), nslides, range(1, nslides2), nslides2])
@@ -275,6 +277,7 @@ def search(request):
     username = request.user.username
     if request.method == "POST":
         a = request.POST.get('search','no')
+        aReal = a
         a = a.lower()
         d = Product.objects.all()
         dd = []
@@ -305,7 +308,7 @@ def search(request):
         if not b: #and not checkx:
             return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
                 
-        return render(request, 'shop/search.html', {'c':c, 'username' : username})
+        return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
 
 def getLogoutData(request):
@@ -640,15 +643,24 @@ def trendingProduct():
             # print(finalDictProd)
         # print(totCartsArr)
     # print(extendedUserInstance)
-    max_ = 0
-    maxProduct = ""
+    sorted_values = sorted(finalDictProd.values()) # Sort the values
+    sorted_dict = {}
+
+    for i in sorted_values:
+        for k in finalDictProd.keys():
+            if finalDictProd[k] == i:
+                sorted_dict[k] = finalDictProd[k]
+                break
+
+    max_ = []
+    maxProduct = []
     for i in finalDictProd:
-        if(max_ < finalDictProd[i]):
-            max_ = finalDictProd[i]
-            maxProduct = i
+        max_.append(finalDictProd[i])
+        maxProduct.append(i)
+
     print(maxProduct, max_)
     print('Trending produt END')
-    return (maxProduct, max_)
+    return (maxProduct[-5:], max_[-5:])
 
 def rateProduct(request):
     print('hiih in rateProducxt')

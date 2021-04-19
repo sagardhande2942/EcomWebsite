@@ -16,25 +16,32 @@
     box-shadow: 10px 10px 8px 10px #888888;
     z-index: 9999;
   }
+  @media (max-width:600px)
+    {
+        .myDiv{
+          margin-left: auto;
+          margin-right: auto;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block body %}
 <div class = "conatiner mx-3 my-3">
-  <h1>Search Results : </h1>
+  <h1>{{value}}</h1>
 </div>
-<div class="container my-3">
+<div class="container-fluid my-3">
 <div class="row">
 {% for i in c %}
-  <div class="col-sm-12 col-md-4 col-lg-3" style="min-width: 300px;">
-    <div class="card mx-auto mycard" style="width: 18rem;">
+  <div class="col-sm-12 col-md-6 col-lg-3">
+    <div class="card mx-auto mycard mb-2" style="height: 300px; width: 16rem;">
       <a href='/shop/products/{{i.0.product_id}}'>
-        <img class="card-img-top" src="/media/{{i.0.image}}" style = "height: 300px;" alt="Card image cap">
+        <img class="card-img-top" src="/media/{{i.0.image}}" height="120px" alt="Card image cap">
       </a>
-        <div class="card-body" style="text-align: center;">
+        <div class="card-body position-relative" style="text-align: center;">
           <h5 class="card-title">{{i.0.product_name}}</h5>
           <p class="card-text">{{i.0.product_desc|slice:"0:50"}}</p>
-          <a href="/shop/products/{{i.0.product_id}}"  class="btn btn-primary">View</a>
+          <a href="/shop/products/{{i.0.product_id}}"  class="btn btn-primary position-absolute my-1" style="bottom: 2%; left: 40%;">View</a>
         </div>
       </div>
     </div>

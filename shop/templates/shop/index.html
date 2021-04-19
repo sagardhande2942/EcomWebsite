@@ -205,8 +205,13 @@
             </a>
           </div>
           <div class="col-lg-4">
-            <h2>{{i.0.product_name}}</h2>
-            <h3>₹{{i.0.price}}</h3>
+            <!-- <h2>{{i.0.product_name}}</h2>
+            <h3>₹{{i.0.price}}</h3> -->
+            <p style="display: inline-block;">
+              <b style="font-size:xx-large;">₹{{i.0.price}}</b>
+            <span style="color: lightgrey; font-size: medium;"><strike id="trendingIncPrice{{i.0.product_id}}">₹</strike></span>
+            <span style="color: lightgreen;">{{i.0.discount}}% Off</span>
+          </p>
             <pre style="font-size: large;">{{i.0.product_desc|slice:"0:30"}}...</pre>
             <h5 id="trendingNumber{{i.0.product_id}}"></h5>
           </div>
@@ -228,8 +233,13 @@
               </a>
             </div>
             <div class="col-lg-4">
-            <h2>{{i.0.product_name}}</h2>
-            <h3>₹{{i.0.price}}</h3>
+            <!-- <h2>{{i.0.product_name}}</h2>
+            <h3>₹{{i.0.price}}</h3> -->
+            <p style="display: inline-block;">
+              <b style="font-size:xx-large;">₹{{i.0.price}}</b>
+            <span style="color: lightgrey; font-size: medium;"><strike id="trendingIncPrice{{i.0.product_id}}">₹</strike></span>
+            <span style="color: lightgreen;">{{i.0.discount}}% Off</span>
+          </p>
             <pre style="font-size: large;">{{i.0.product_desc|slice:"0:30"}}...</pre>
             <h5 id="trendingNumber{{i.0.product_id}}"></h5>
             </div>
@@ -580,7 +590,12 @@
               <input type="radio" id="star2{{i.product_id}}" name="rating{{i.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
               <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
           </fieldset><br><br>
-          <span><b>₹{{i.price}}</b></span>
+          <p style="display: inline-block;">
+            <b style="font-size:xx-large;">₹{{i.price}}</b>
+          <span style="color: grey; font-size: medium;"><strike id="mobileIncPrice{{i.product_id}}">₹</strike></span>
+          <span style="color: green;">{{i.discount}}% Off</span>
+        </p>
+          <!-- <span><b>₹{{i.price}}</b></span> -->
           <p class="card-text">{{i.product_desc|slice:"0:50"}}</p>
           <small>No Cost EMI</small>
         </div>
@@ -897,11 +912,25 @@ window.addEventListener("resize", myFunction);
       }
     }
 
+
     {% for i in trendingNum %}
     
     document.getElementById('trendingNumber{{i.0|slice:"2:"}}').textContent = 'Total sale : ' + {{i.1}};
 
     {% endfor %}
+
+    if(width < 600){
+    {% for products, range1, nslides1, range2, nslides2, range, nslides in allprods %}
+      {% for i in products|slice:"0:5"%}
+      document.getElementById('mobileIncPrice{{i.product_id}}').innerHTML = '₹' + (({{i.price}} * ({{i.discount}} / 100)) + {{i.price}})
+      {% endfor %}
+    {% endfor %}
+    }
+
+    {% for i in trendingProduct|slice:"0:6" %}
+    document.getElementById('trendingIncPrice{{i.0.product_id}}').innerHTML = '₹' + (({{i.0.price}} * ({{i.0.discount}} / 100)) + {{i.0.price}})
+    {% endfor %}
+
   </script>
 
   {%endblock%}

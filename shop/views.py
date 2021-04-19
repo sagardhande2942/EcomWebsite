@@ -25,6 +25,7 @@ YOUR_DOMAIN = 'http://localhost:8000'
 price = 0
 cart12 = ""
 PDFromgetAddtoSuccessPay = PurchaseDate()
+daysRequiredInCart = 0
 
 User = get_user_model()
 
@@ -193,14 +194,19 @@ def cancelPay(request):
 
 @login_required(login_url='/auth/')
 def showCart(request):
-    allprods = Product.objects.values("product_id", "product_desc", "price", "image", "product_pubs_date", "product_name")
+    global daysRequiredInCart
+    daysRequiredInCart = random.randint(3, 7)
+    sellersList = [
+        'Ron International', 'Hari Om Shoppie', 'HT-International', 'SimpAlert','OpInChat'
+    ]
+    allprods = Product.objects.values("product_id", "product_desc", "price", "image", "product_pubs_date", "product_name", 'discount', 'offers')
     username = request.user.username
     p = []
     cnt = 0
     for i in allprods:
         cnt += 1
         print(i)
-        p.append([i['product_id'], i, (i['price'] + i['price'] * 0.3)])
+        p.append([i['product_id'], i, (i['price'] + i['price'] * (i['discount'] / 100)), daysRequiredInCart, sellersList[random.randint(0,4)]])
     # print(p)
     param = {
         'p' : p,
@@ -253,10 +259,24 @@ def productView(request, myid):
     product = Product.objects.filter(product_id = myid)
     z = Rating.objects.filter(product_id = myid)
     prodCount = Product.objects.filter(product_id = myid)
+    z1 = ""
+    offers = Product.objects.filter(product_id = myid)
+    if 'T&C' not in offers[0].offers:
+        z1 = '''Bank Offer10% off on Axis Bank Debit Cards, up to 1000. On orders of 5000 and aboveT&C
+                    Bank Offer5% Unlimited Cashback on Flipkart Axis Bank Credit CardT&C
+                    No cost EMI 1,750/month. Standard EMI also availableView Plans
+                    View 5 more offers","'''
+        offersUse = z1.split('T&C')
+    else:
+        offersUse = offers[0].offers.split('T&C')
+    zz = len(offersUse)
+    for i in range(zz):
+        if 'Flipkart' in offersUse[i]:
+            offersUse[i] = offersUse[i].replace('Flipkart', 'BTB')
     cmtInstance = Comments.objects.filter(product_id = prodCount[0])
     print(round(product[0].rating))
     param = {
-        'incPrice' : product[0].price + 0.4 * product[0].price,
+        'incPrice' : product[0].price + (product[0].discount / 100) * product[0].price,
         'prod': product,
         'username': username,
         'items': len(Product.objects.all()),
@@ -264,7 +284,8 @@ def productView(request, myid):
         'totReviews':z.count,
         'comments':cmtInstance,
         'totComments':cmtInstance.count,
-        'products': Product.objects.all()
+        'products': Product.objects.all(),
+        'offerUse': offersUse,
     }
     return render(request, 'shop/products.html', param)
 
@@ -581,6 +602,7 @@ def beforeReload(request):
 
 def getAddress(request):
     global PDFromgetAddtoSuccessPay
+    global daysRequiredInCart
     if request.method == 'POST':
         states = [
             ['Nagpur', 78.893078, 21.1015184],
@@ -598,7 +620,7 @@ def getAddress(request):
         c = ExtendedUser.objects.filter(usr = request.user)
         d = datetime.now()
         f = random.randint(0, 7)
-        PDFromgetAddtoSuccessPay = PurchaseDate(purdate = c[0], purd = d, state = states[f][0], lato = states[f][2], lango = states[f][1], lat = str(b['lat']), lang = str(b['lon']), days = random.randint(3, 7))
+        PDFromgetAddtoSuccessPay = PurchaseDate(purdate = c[0], purd = d, state = states[f][0], lato = states[f][2], lango = states[f][1], lat = str(b['lat']), lang = str(b['lon']), days = daysRequiredInCart)
         # PDFromgetAddtoSuccessPay.save()
     return JsonResponse({'hii':'bye'})
 

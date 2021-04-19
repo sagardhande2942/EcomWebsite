@@ -128,10 +128,10 @@
 <!-- Carousel Start -->
 {%block body%}
 {% load static %}
-<div class="container my-3" style="width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
+<div class="container-fluid my-3" style="width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
   {% for i in trendingProduct %}
   <h2><span class="badge bg-secondary">Trending Product</span></h2>
-  <div class="row my-3" style="border: 2px solid black; margin-bottom: 10px;">
+  <div class="row my-3" style="margin-bottom: 10px;">
     <a href="/shop/products/{{i.product_id}}">
     <div class="mt-3 col-sm-6 col-md-6 col-lg-3">
     <img class="myTrendingImage" src = '../../../media/{{i.image}}'>
@@ -169,7 +169,7 @@
 
 <div id='outerdiv' style="margin-top:10px;">
   {% for products, range1, nslides1, range, nslides, range2, nslides2 in allprods %}
-  <div class="mt-2 container" id = "{{products.0.category}}1">
+  <div class="mt-2 container-fluid" id = "{{products.0.category}}1">
     <h2><span class="badge bg-secondary">{{products.0.category}}</span></h2>
     <div id="carouselExampleDark{{forloop.counter}}1" style="background-color: white;"
       class="carousel carousel-dark  slide" data-bs-ride="carousel">
@@ -291,7 +291,7 @@
 
 <div id='outerdiv2' style="margin-top: 10px;">
 {% for products, range, nslides, range1, nslides1, range2, nslides2 in allprods %}
-<div class="mt-2 container" >
+<div class="mt-2 container-fluid" >
   <h2><span class="badge bg-secondary">{{products.0.category}}</span></h2>
   <div id="carouselExampleDark{{forloop.counter}}" style="background-color: white;" class="carousel carousel-dark  slide" data-bs-ride="carousel">
     <div class="carousel-indicators" style="width: 60px; margin: auto;">
@@ -305,16 +305,16 @@
     <div class="carousel-inner">
       <div class="carousel-item active" data-bs-interval="10000">
         <!-- active slide -->
-        <div class="row">
-          <div class="col-lg-3 col-sm-6 col-md-4 p-2">
+        <div class="row justify-content-between">
+          <div class="col-lg-2 col-sm-6 col-md-4 p-2">
             {% if products.0.category == 'SmartPhone' %}
-            <div class="card mycard" style="width: 18rem; height: 500px;">
+            <div class="card mycard" style="width: 16rem; height: 500px;">
               <a href = '/shop/products/{{products.0.product_id}}'>
                 <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                 alt="...">
               </a>
                 {% else %}
-                <div class="card mycard" style="width: 18rem;">
+                <div class="card mycard" style="width: 16rem;">
                   <a href = '/shop/products/{{products.0.product_id}}'>
                   <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
                     alt="...">
@@ -343,15 +343,15 @@
           </div>
 
           {% for i in products|slice:"1:" %}
-          <div class="col-lg-3 col-sm-6 col-md-4 p-2">
+          <div class="col-lg-2 col-sm-6 col-md-4 p-2">
             {% if i.category == 'SmartPhone' %}
-            <div class="card mycard" style="width: 18rem; height: 500px;">
+            <div class="card mycard" style="width: 16rem; height: 500px;">
               <a href = '/shop/products/{{i.product_id}}'>
                 <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                 alt="...">
               </a>
                 {% else %}
-                <div class="card mycard" style="width: 18rem;">
+                <div class="card mycard" style="width: 16rem;">
                   <a href = '/shop/products/{{i.product_id}}'>
                   <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
                     alt="...">
@@ -376,14 +376,14 @@
               </div>
             </div>
           </div>
-          {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop.last and forloop.counter < 4 %}
+          {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last and forloop.counter < 5 %}
             </div>
         </div>
         <div class="carousel-item" data-bs-interval="2000">
           <div class="row">
             {% endif %}
 
-            {% if forloop.counter|add:'1'|divisibleby:4 and forloop.counter > 0 and not forloop.last and forloop.counter > 4 %}
+            {% if forloop.counter|add:'1'|divisibleby:5 and forloop.counter > 0 and not forloop.last and forloop.counter > 5 %}
           </div>
         </div>
         <div class="carousel-item" data-bs-interval="2000">
@@ -416,22 +416,34 @@
   {% for products, range1, nslides1, range2, nslides2, range, nslides in allprods %}
   <hr>
   <h2><span class="badge bg-secondary mt-3">{{products.0.category}}</span></h2>
-  {% for i in products %}
-  <div class="mx-3 card mycard mt-1" style="width: 18rem;">
-    <a href = '/shop/products/{{i.product_id}}'>
-    <img src="../../../media/{{i.image}}" class="card-img-top myimg" alt="...">
-  </a>
-    <div class="card-body">
-      <h5 class="card-title">{{i.product_name}}</h5>
-     <fieldset class="mx-4 rating" >
-          <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
-          <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
-          <input type="radio" id="star3{{i.product_id}}" name="rating{{i.product_id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
-          <input type="radio" id="star2{{i.product_id}}" name="rating{{i.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
-          <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
-      </fieldset><br><br>
-      <p class="card-text">{{i.product_desc|slice:"0:50"}}</p>
-
+  {% for i in products|slice:"0:5"%}
+  <div class="card mycard mt-1" style="height: 230px;position: relative;">
+    <div class="row">
+      <div class="col-3">
+        <a href = '/shop/products/{{i.product_id}}'>
+          <img src="../../../media/{{i.image}}" class="card-img-top myimg" style="height: 200px; width: 100px;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);" alt="...">
+        </a>
+      </div>
+      <div class="col-9">
+        <div class="card-body">
+          <h5 class="card-title">{{i.product_name}}</h5>
+        <fieldset class="rating" >
+              <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
+              <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
+              <input type="radio" id="star3{{i.product_id}}" name="rating{{i.product_id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
+              <input type="radio" id="star2{{i.product_id}}" name="rating{{i.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
+              <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
+          </fieldset><br><br>
+          <span><b>₹{{i.price}}</b></span>
+          <p class="card-text">{{i.product_desc|slice:"0:50"}}</p>
+          <small>No Cost EMI</small>
+        </div>
+      </div>
     </div>
   </div>
   {% endfor %}
@@ -637,6 +649,7 @@ window.addEventListener("resize", myFunction);
       //   console.log(document.getElementById(i).textContent);
       // }
       var text = localStorage.getItem('cart'); 
+      localStorage.setItem('cart', cart);
       console.log(text);
       $.ajax({
           type: "POST",

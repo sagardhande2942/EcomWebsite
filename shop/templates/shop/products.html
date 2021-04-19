@@ -253,6 +253,17 @@
       //   console.log("here is ; " + i);
       //   console.log(document.getElementById(i).textContent);
       // }
+      var text = localStorage.getItem('cart'); 
+      console.log(text);
+      $.ajax({
+          type: "POST",
+          url: '{{ "/shop/beforeReload/" }}',
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text},
+          success: function callback(response){
+              console.log(response);
+        }
+      });
+      localStorage.setItem('cart', cart);
     }
     
     // Plus minus buttons

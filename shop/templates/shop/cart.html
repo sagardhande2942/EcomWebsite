@@ -98,7 +98,7 @@
           <div class="row">
               <div class="col-sm-12 col-md-8 col-lg-8 p-3" style="background-color: white;">
                 <p>
-                    <h4>My Cart (<span id="totalprod"></span>)</h4>
+                    <h4 id='MyCartDisplay'>My Cart (<span id="totalprod"></span>)</h4>
                 </p>
                 {% for j, i, k, d, e in p %}
                 <div class="prods{{i.product_id}}" style="display: none;"> 
@@ -138,7 +138,6 @@
                     </div>
                 </div>
             </div>  
-            <hr>
                 {% endfor %}
                 <p style="float: right;">
                         <button id="Checkout" type = "button"  data-bs-toggle="modal" data-bs-target="#exampleModal" onclick = "getAddress();" style = "width: 150px; height: 40px;" class="btn btn-warning my-3">Place Order</button>
@@ -244,12 +243,14 @@
         var addressText = document.getElementById("basic-url").value;
         if(addressText.length == 0){
             alert('Please Enter the delivery address.')
+            removeBlur();
             document.getElementById('citySelectionDiv').style.display = 'block';
             throw 'invalid value';
         }
         document.getElementById("outerdiv").style.opacity = 0.3;
         // document.querySelector(".nonediv").innerHTML = "<h1> Loading...</h1>"
         document.querySelector(".nonediv").style.display  = "block";
+        console.log(addressText);
         var urlReq = "https://api.weatherapi.com/v1/current.json?key=4c5c2e8f506b4ea29cb41623200208&q=" + addressText;
         $.getJSON(
                 urlReq,
@@ -322,8 +323,11 @@
 
     // console.log(localStorage.getItem('cart'));
     if (localStorage.getItem('cart').length == 2) {
-        let reqdiv = document.getElementById("nonediv1");
-        document.getElementById("nonePriceDiv").style.display = "none";
+        document.getElementById('Checkout').disabled = true;
+        document.getElementById('MyCartDisplay').innerHTML = 'Cart is Emtpy...';
+
+        // let reqdiv = document.getElementById("nonediv1");
+        // document.getElementById("nonePriceDiv").style.display = "none";
         reqdiv.style.display = "block";
         reqdiv.innerHTML = `<h1 class = "my-4 p-3 mx-4" style='z-index:9999; color:black;'> The cart is empty </h1><br>Your shopping cart is waiting. Give it purpose – fill it with groceries, clothing, household supplies, electronics and more.
         <a href = "/shop/">Home</a>`;
@@ -335,6 +339,11 @@
 
     function viewCart() {
         var cart = localStorage.getItem('cart');
+        var xx = JSON.stringify(cart);
+        console.log(xx);
+        if(xx == '{}'){
+            document.getElementById('Checkout').disabled = true;
+        }
         console.log(cart);
         cart = JSON.parse(cart);
         {% for i in products %}
@@ -440,24 +449,31 @@
             document.querySelector("#totalprod").textContent = totprod;
 
             {% for j, i, k, d, e in p %}
-            var someDate = new Date();
-            var numberOfDaysToAdd = {{d}};
-            someDate.setDate(someDate.getDate() + numberOfDaysToAdd); 
-            console.log(someDate);
-            document.getElementById('daysToDeliver{{i.product_id}}').innerHTML = someDate.getDate() + '-' + someDate.getMonth() + '-' + someDate.getFullYear();
+            var zz = document.querySelector(".prods" + {{i.product_id}});
+            if (zz.style.display == "block") {
+                var someDate = new Date();
+                var numberOfDaysToAdd = {{d}};
+                someDate.setDate(someDate.getDate() + numberOfDaysToAdd); 
+                console.log(someDate);
+                document.getElementById('daysToDeliver{{i.product_id}}').innerHTML = someDate.getDate() + '-' + someDate.getMonth() + '-' + someDate.getFullYear();
+            }
             {% endfor %}
 
             var totalDiscount = 0;
             var totalINcPrice = 0;
             {% for j, i, k, d, e in p  %}
-            var yy = document.querySelector("#inputprod" + {{i.product_id}});
-            var z = parseInt(yy.value);
-            document.getElementById('trendingIncPrice{{i.product_id}}').innerHTML = '₹' 
-            + (({{i.price}} * ({{i.discount}} / 100)) + {{i.price}});
-            totalDiscount += parseFloat(({{i.discount}} / 100) * {{i.price}}) * z;
-            totalINcPrice += parseFloat((({{i.price}} * ({{i.discount}} / 100)) + {{i.price}})) * z;
+            var zz = document.querySelector(".prods" + {{i.product_id}});
+            if (zz.style.display == "block") {
+                var yy = document.querySelector("#inputprod" + {{i.product_id}});
+                var z = parseInt(yy.value);
+                document.getElementById('trendingIncPrice{{i.product_id}}').innerHTML = '₹' 
+                + (({{i.price}} * ({{i.discount}} / 100)) + {{i.price}});
+                totalDiscount += parseFloat(({{i.discount}} / 100) * {{i.price}}) * z;
+                console.log(totalDiscount);
+                totalINcPrice += parseFloat((({{i.price}} * ({{i.discount}} / 100)) + {{i.price}})) * z;
+            }
             {% endfor %}
-
+            
             totalDiscount = totalDiscount.toFixed(3)
             totalINcPrice = totalINcPrice.toFixed(3)
             document.getElementById('totDiscount').innerHTML = totalDiscount;

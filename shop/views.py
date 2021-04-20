@@ -16,7 +16,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import stripe
 import logging
+import threading
 from datetime import datetime
+import spacy
+import operator
+import pandas as pd
 logger = logging.getLogger(__name__)
 
 
@@ -51,10 +55,10 @@ def index(request):
     # n = len(products)
     # nslides =   n//4 +  ceil(n/4 - n//4)
     allprods = []
-    catprods = Product.objects.values('category', 'product_id')
-    cats = {item['category'] for item in catprods}
+    catprods = Product.objects.values('subcategory1', 'product_id')
+    cats = {item['subcategory1'] for item in catprods}
     for cat in cats:
-        prod = Product.objects.filter(category=cat)
+        prod = Product.objects.filter(subcategory1=cat)
         n = len(prod)
         nslides = n//3 + ceil(n/3 - n//3)
         nslides1 = n//5 + ceil(n/5 - n//5)
@@ -69,11 +73,38 @@ def index(request):
     ratingInstance = Product.objects.all()
     ratings = []
     categoriesNeed = []
+    subcategoriesNeed = []
+    subcategoriesNeed1 = []
     for i in ratingInstance:
         ratings.append([i.product_id, max(1, min(5, round(i.rating)))])
     for i in ratingInstance:
         if i.category not in categoriesNeed:
             categoriesNeed.append(i.category)
+
+    for z in categoriesNeed:
+        print(z)
+        ratingInstance = Product.objects.filter(category = z)
+        for i in ratingInstance:
+            # print(i.subcategory)
+            if i.subcategory not in subcategoriesNeed:
+                subcategoriesNeed.append(i.subcategory)
+        
+        subcategoriesDict = []
+        subcategoriesDictreal = {}
+        for i in subcategoriesNeed:
+            # print(i)
+            aa = Product.objects.filter(subcategory = i)
+            for j in aa:
+                # print('sub1 : ', j.subcategory1)
+                if j.subcategory1 not in subcategoriesNeed1:
+                    subcategoriesNeed1.append(j.subcategory1)
+            subcategoriesDict.append([i, subcategoriesNeed1])
+            subcategoriesNeed1 = []
+        subcategoriesDictreal[z] = subcategoriesDict
+        subcategoriesDict = []
+
+    print(subcategoriesDictreal)
+    subcategoriesDict5 = subcategoriesDictreal['Electronics']
     param = {
         'allprods': allprods,
         'items' : len(Product.objects.all()),
@@ -84,6 +115,9 @@ def index(request):
         'ratingProduct':ratings,
         'category':categoriesNeed,
         'products': Product.objects.all(),
+        'subcategoriesNeed' : subcategoriesNeed,
+        'subcategoriesNeed1' : subcategoriesNeed1,
+        'subcategoriesDict5': subcategoriesDict5,
     }
     
     return render(request, 'shop/index.html', param)
@@ -205,7 +239,7 @@ def showCart(request):
     cnt = 0
     for i in allprods:
         cnt += 1
-        print(i)
+        # print(i)
         p.append([i['product_id'], i, (i['price'] + i['price'] * (i['discount'] / 100)), daysRequiredInCart, sellersList[random.randint(0,4)]])
     # print(p)
     param = {
@@ -301,36 +335,104 @@ def search(request):
         a = request.POST.get('search','no')
         aReal = a
         a = a.lower()
+        # nlp = spacy.load('en_core_web_sm')
+        # doc1 = nlp(a.strip())
+        # objectsInstance = Product.objects.all()
+        # #[id, iphone]
+        # productNames  = []
+        # for i in objectsInstance:
+        #     productNames.append([i.product_id, i.product_name])
+        # # df = pd.read_csv('iphones.csv')
+        # # print(df)
+        # #print (doc1.similarity(nlp('{}'.format(df.loc[1,"name"].value[0]))))
+        # #print (doc1.similarity(doc3)) 
+        # #print (doc3.similarity(doc4))
+        # a =[]
+        # b ={}
+        # r = []
+        # for i in range(len(productNames)):
+        #     zx = productNames[i][0]
+        #     b[zx] = doc1.similarity(nlp(productNames[i][1].lower()))   
+        # #sorted(a, key=float)
+        # a1 = list(sorted(b.items(), key=operator.itemgetter(1),reverse=True))
+        # d = []
+        # for i in a1[0:25]:
+        #     d.append(i[0])
+        # c = []
+        # for i in d:
+        #     c.append(Product.objects.filter(product_id = i))
+        # print(c[0][0])
+        # print(Product.objects.filter(product_id = c[0][0]))
+
+
+        #MyLogic
+        K = len(a) // 2
+        test_str = a
+        res = [test_str[i: j] for i in range(len(test_str)) for j in range(i + 1, len(test_str) + 1) if len(test_str[i:j]) == K]
+        print('hiii in ssearch')
         d = Product.objects.all()
         dd = []
+        b = []
         for i in d:
             dd.append(i)
-
-        b = []
+        print(res)
+        for a in res:
         # if not checkx:
-        for i in dd:
-            if a in i.product_name.lower():
-                b.append(Product.objects.filter(product_name = i.product_name))
+            iz = 0
+            for i in dd:
+                if a in i.product_name.lower():
+                    iz += 1
+                    if iz > 50:
+                        break
+                    b.append(Product.objects.filter(product_name = i.product_name))
 
-        for i in dd:
-            if a in i.category.lower():
-                for z in Product.objects.filter(category = i.category):
-                    b.append(Product.objects.filter(product_name = z))
-                    print(z)
-                print('here bois ', Product.objects.filter(category = i.category))
+            iz = 0
+            for i in dd:
+                if a in i.category.lower():
+                    for z in Product.objects.filter(category = i.category):
+                        iz += 1
+                        if iz > 50:
+                            break
+                        b.append(Product.objects.filter(product_name = z))
+                        # print(z)
+                    # print('here bois ', Product.objects.filter(category = i.category))
+
+            iz = 0
+            for i in dd:
+                if a in i.subcategory.lower():
+                    for z in Product.objects.filter(subcategory = i.subcategory):
+                        iz += 1
+                        if iz > 50:
+                            break
+                        b.append(Product.objects.filter(product_name = z))
+                        # print(z)
+                    # print('here bois ', Product.objects.filter(subcategory = i.subcategory))
+            
+            iz = 0
+            for i in dd:
+                if a in i.subcategory1.lower():
+                    for z in Product.objects.filter(subcategory1 = i.subcategory1):
+                        iz += 1
+                        if iz > 50:
+                            break
+                        b.append(Product.objects.filter(product_name = z))
+                        # print(z)
+                    # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
+
         c = []
+        print('The length is : ', len(b))
         zzz = []
         for i in b:
             if(i[0].product_name not in zzz):
                 zzz.append(i[0].product_name)
-        print(a)
+        # print(a)
         for i in zzz:
             c.append(Product.objects.filter(product_name = i))
 
         if not b: #and not checkx:
             return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
                 
-        return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal})
+        return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal, 'counter' : 1})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
 
 def getLogoutData(request):
@@ -615,6 +717,7 @@ def getAddress(request):
             ['Navi Mumbai', 73.14423088426301, 18.68300231807807]
         ]
         a = request.POST.get('text', "{'lat':18.98, 'lon':72.83}")
+        print('This is the address : ', a)
         b = json.loads(a)
         # print(b['lat'])
         c = ExtendedUser.objects.filter(usr = request.user)
@@ -629,8 +732,8 @@ def trendingProduct():
     print('Trending produt start')
     extendedUserInstance = ExtendedUser.objects.all()
     totalObjectsInstance = Product.objects.all()
-    print(totalObjectsInstance)
-    print(len(totalObjectsInstance))
+    # print(totalObjectsInstance)
+    # print(len(totalObjectsInstance))
     zx= len(totalObjectsInstance)
     finalDictProd = {}
     for i in Product.objects.all():
@@ -640,13 +743,13 @@ def trendingProduct():
         if not len(zz):
             zx += 1
             continue
-        print(zz[0].product_id)
-        print(zz[0].product_name)
-        # zz.update(num = 1)
-        print(zz[0].rating)
+        # print(zz[0].product_id)
+        # print(zz[0].product_name)
+        # # zz.update(num = 1)
+        # print(zz[0].rating)
         finalDictProd['pr' + str(i.product_id)] = 0
     for i in extendedUserInstance:
-        print(i.usr.username)
+        # print(i.usr.username)
         totCartsString = i.totcarts
         totCartsArr = totCartsString.split('}')
         for i in range(len(totCartsArr)):
@@ -661,19 +764,20 @@ def trendingProduct():
                     finalDictProd[i] += cartToJson[i]
                 except Exception:
                     continue
-                print(finalDictProd[i])
-                print(cartToJson[i])
+                # print(finalDictProd[i])
+                # print(cartToJson[i])
             # print(finalDictProd)
         # print(totCartsArr)
     # print(extendedUserInstance)
+    # print(finalDictProd)
     sorted_values = sorted(finalDictProd.values()) # Sort the values
     sorted_dict = {}
 
+    # print(sorted_values)
     for i in sorted_values:
         for k in finalDictProd.keys():
             if finalDictProd[k] == i:
                 sorted_dict[k] = finalDictProd[k]
-                break
 
     max_ = []
     maxProduct = []
@@ -681,7 +785,7 @@ def trendingProduct():
         max_.append([i, sorted_dict[i]])
         maxProduct.append(i)
 
-    print(maxProduct, max_)
+    # print(maxProduct, max_)
     print('Trending produt END')
     return (maxProduct[-5:], max_[-5:])
 
@@ -772,3 +876,40 @@ def changeUname(request):
                 print(errors)
                 return render(request, 'shop/changeUname.html', {'username' : a, 'errors': errors})
     return render(request, 'shop/changeUname.html', {'username' : username})
+
+
+
+@login_required(login_url='/auth/')
+def search1(request, myStr):
+    username = request.user.username
+    a = myStr
+    aReal = a
+    a = a.lower()
+    d = Product.objects.all()
+    dd = []
+    for i in d:
+        dd.append(i)
+
+    b = []
+    # if not checkx:
+    for i in dd:
+        if a in i.subcategory1.lower():
+            for z in Product.objects.filter(subcategory1 = i.subcategory1):
+                b.append(Product.objects.filter(product_name = z))
+                print(z)
+            print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1))    
+    c = []
+    zzz = []
+    for i in b:
+        if(i[0].product_name not in zzz):
+            zzz.append(i[0].product_name)
+    print(a)
+    for i in zzz:
+        c.append(Product.objects.filter(product_name = i))
+
+    if not b: #and not checkx:
+        return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
+            
+    return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal})
+
+

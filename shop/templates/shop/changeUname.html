@@ -13,8 +13,7 @@
 {% endblock %}
 
 {% block body %}
-<div style="width: 100%; height: 100%;"></div>
-<div style="position: absolute; top: 30%; left: 40%;" id=startDiv>
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" id=startDiv>
     <h1>Hello!! <span class="badge bg-secondary">{{username}}</span></h1>
     <button class="btn btn-primary " onclick="changeUname();">Change Username</button><br>
     <button class="btn btn-primary mt-4" onclick="changePass();">Change Password</button>
@@ -27,7 +26,7 @@
 </div>
 {% endfor %}
 
-<div id='changeUname' style="position: absolute; top: 30%; left: 40%;">
+<div id='changeUname' style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
 
     <form id="changeUnameForm" action="/shop/changeUname/" class="text-center" method="POST">
         {% csrf_token %}
@@ -44,7 +43,7 @@
       </form>
 </div>
 
-<div id='changePass' style="position: absolute; top: 30%; left: 40%;">
+<div id='changePass'  style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
     <form id="changePassForm" action="/shop/changeUname/" class="text-center"  method="POST">
         {% csrf_token %}
         <div class="mb-3">

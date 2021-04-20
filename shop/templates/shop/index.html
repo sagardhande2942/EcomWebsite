@@ -89,6 +89,25 @@
     height: 200px;
     float: none;
   }
+  .CatDropDown:hover .CatInnerDrop {
+    display: block;
+    margin-top: 0; 
+ }
+
+ @media only screen and (max-width: 767px) {
+  .myDivCat{
+  overflow-x: scroll;
+  white-space: nowrap;
+  height: 200px;
+  position: relative;
+ }
+ .item {
+  display: inline-block;
+  height: auto;
+  z-index: 999999;
+}
+ }
+
 
   @media only screen and (max-width: 1000px) {
     #outerdiv{
@@ -108,6 +127,7 @@
     
   }
   @media only screen and (max-width: 600px) {
+
     #outerdiv{
       display: none;
     }
@@ -123,72 +143,252 @@
       float: none;
     }
   }
+  .dropdown {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            color: black;
+            z-index: 99999;
+        }
+
+        .dropdown li {
+            position: relative;
+        }
+
+        .dropdown li a {
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+
+        .dropdown li ul {
+            position: absolute;
+            top: 100%;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: none;
+            line-height: normal;
+            background-color: white;
+        }
+
+        .dropdown li ul li a {
+            text-align: left;
+            color: black;
+            font-size: 14px;
+            padding: 10px;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .dropdown li ul li a:hover {
+            background-color: bisque;
+            color: black;
+        }
+
+        .dropdown li ul li ul {
+            left: 100%;
+            top: 0;
+        }
+        ul li:hover>ul {
+            display: block;
+            color: black;
+        }        
+        
+        ul li:hover>a {
+            background-color: white;
+            color: black !important;
+        }
+        .show {display:block;}
+
 </style>
 {% endblock %}
 <!-- Carousel Start -->
 {%block body%}
 {% load static %}
-<div class="container-fluid mb-2">
-  <div class="row">
-    <div class="col-1">
+<div class="container-fluid mb-2 ">
+  <div id="myDivCat" class="row myDivCat">
+    <div class="col-1 item">
 
     </div>
     
-    <div class="col-1">
+    <div class="col-1 item">
     </div>
-    <div class="col-1">
+    <div class="col-1 item">
       <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/GroceryCat.png' style="height: 64px; width:64px;">
       <p class="d-inline">
-        <span>Grocery</span><i class="mx-1 fas fa-angle-down"></i>
-      </p>
+        <!-- <span></span><i class="mx-1 fas fa-angle-down"></i> -->
+        <ul class="dropdown">
+          <li><a href="#" style="color:black;padding: 0px;">Grocery<i class="mx-1 fas fa-angle-down"></i></a>
+            <ul>
+              {% for i in subcategoriesDict1 %}
+              <li><a href="#">{{i.0}}</a>
+                <ul>
+                  {% for j in i.1 %}
+                  <li><a href="#">{{j}}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+      </ul>
+        </p>
     </div>
-    <div class="col-1">
+    <div class="col-1 item" >
       <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/FashionCat.jpg' style="height: 64px; width:64px;">
       <p class="d-inline">
-        <span>Fashion</span><i class="mx-1 fas fa-angle-down"></i>
+        <!-- <span>Fashion</span><i class="mx-1 fas fa-angle-down"></i> -->
+        <ul class="dropdown">
+          <li><a href="#" style="color:black;padding: 0px;">Fashion<i class="mx-1 fas fa-angle-down"></i></a>
+            <ul>
+              {% for i in subcategoriesDict2 %}
+              <li><a href="#">{{i.0}}</a>
+                <ul>
+                  {% for j in i.1 %}
+                  <li><a href="#">{{j}}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+      </ul>
       </p>
     </div>
-    <div class="col-1">
+    <div class="col-1 item">
       <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/MobileCat.png' style="height: 64px; width:64px;">
       <p class="d-inline">
-        <span>Mobiles</span><i class="mx-1 fas fa-angle-down"></i>
+        <!-- <span>Mobiles</span><i class="mx-1 fas fa-angle-down"></i> -->
+        <ul class="dropdown">
+          <li><a href="#" style="color:black;padding: 0px;">Mobiles<i class="mx-1 fas fa-angle-down"></i></a>
+            <ul>
+              {% for i in subcategoriesDict3 %}
+              <li><a href="#">{{i.0}}</a>
+                <ul>
+                  {% for j in i.1 %}
+                  <li><a href="#">{{j}}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+      </ul>
+        
       </p>
     </div>
-    <div class="col-1">
+    <div class="col-1 item">
       <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/tvCat.png' style="height: 64px; width:64px;">
       <p class="d-inline">
-        <span>Appliances</span><i class="mx-1 fas fa-angle-down"></i>
+        <!-- <span>Appliances</span><i class="mx-1 fas fa-angle-down"></i> -->
+        <ul class="dropdown">
+          <li><a href="#" style="color:black; padding: 0px;">Appliances<i class="mx-1 fas fa-angle-down"></i></a>
+            <ul>
+              {% for i in subcategoriesDict4 %}
+              <li><a href="#">{{i.0}}</a>
+                <ul>
+                  {% for j in i.1 %}
+                  <li><a href="#">{{j}}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+      </ul>
+        
       </p>
     </div>
-    <div class="col-1">
+    <!-- {{subcategoriesDict}} -->
+    <div class="col-1 item">
       <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/ElectronicsCat.png' style="height: 64px; width:64px;">
       <p class="d-inline">
-        <span>Electronics</span><i class="mx-1 fas fa-angle-down"></i>
+        <!-- <span>Electronics</span><i class="mx-1 fas fa-angle-down"></i> -->
+        <ul class="dropdown" id = 'myDropdown'>
+          <li><a href="#" style="color:black;padding: 0px;">Electronics<i class="mx-1 fas fa-angle-down"></i></a>
+              <ul>
+                {% for i in subcategoriesDict5 %}
+                <li><a href="#">{{i.0}}</a>
+                  <ul>
+                    {% for j in i.1 %}
+                    <li><a href="/shop/search1/{{j}}">{{j}}</a></li>
+                    {% endfor %}
+                  </ul>
+                </li>
+                {% endfor %}
+              </ul>
+          </li>
+      </ul>
       </p>
     </div>
-    <div class="col-1">
+    <div class="col-1 item">
       <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HomeCat.png' style="height: 64px; width:64px;">
       <p class="d-inline">
-        <span>Home</span><i class="mx-1 fas fa-angle-down"></i>
+        <!-- <span>Home</span><i class="mx-1 fas fa-angle-down"></i> -->
+        <ul class="dropdown">
+          <li><a href="#" style="color:black;padding: 0px;">Home<i class="mx-1 fas fa-angle-down"></i></a>
+              <ul>
+                {% for i in subcategoriesDict6 %}
+                <li><a href="#">{{i.0}}</a>
+                  <ul>
+                    {% for j in i.1 %}
+                    <li><a href="#">{{j}}</a></li>
+                    {% endfor %}
+                  </ul>
+                </li>
+                {% endfor %}
+              </ul>
+          </li>
+        </ul>
       </p>
     </div>
-    <div class="col-1">
+    <div class="col-1 item">
       <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HeadphoneCat.png' style="height: 64px; width:64px;">
       <p class="d-inline">
-        <span>Music</span><i class="mx-1 fas fa-angle-down"></i>
+        <!-- <span>Music</span><i class="mx-1 fas fa-angle-down"></i> -->
+        <ul class="dropdown">
+          <li><a href="#" style="color:black;padding: 0px;">Music<i class="mx-1 fas fa-angle-down"></i></a>
+            <ul>
+              {% for i in subcategoriesDict7 %}
+              <li><a href="#">{{i.0}}</a>
+                <ul>
+                  {% for j in i.1 %}
+                  <li><a href="#">{{j}}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
       </p>
     </div>
-    <div class="col-1">
+    <div class="col-1 item">
       <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/OtherCat.png' style="height: 64px; width:64px;">
       <p class="d-inline">
-        <span>Others</span><i class="mx-1 fas fa-angle-down"></i>
+        <!-- <span>Others</span><i class="mx-1 fas fa-angle-down"></i> -->
+        <ul class="dropdown">
+          <li><a href="#" style="color:black;padding: 0px;">Others<i class="mx-1 fas fa-angle-down"></i></a>
+            <ul>
+              {% for i in subcategoriesDict8 %}
+              <li><a href="#">{{i.0}}</a>
+                <ul>
+                  {% for j in i.1 %}
+                  <li><a href="#">{{j}}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
       </p>
     </div>
 
-    <div class="col-1">
+    <div class="col-1 item">
     </div>
   </div>
 </div>
+
 <h4 class="text-center"><span class="badge bg-secondary">Great Deals</span></h4>
 <div class="container-fluid my-3 text-white p-3" style="background-color:#464a82; width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
   <div id="trendCarousel" class="carousel  slide" data-bs-ride="carousel">
@@ -200,7 +400,7 @@
             
           </div>
           <div class="col-lg-4">
-            <a href="/shop/products/{{i.0.product_id}}">
+            <a  onclick="NewTab('{{i.0.product_id}}');" href ='#'>
               <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}'>
             </a>
           </div>
@@ -228,7 +428,7 @@
         
             </div>
             <div class="col-lg-4">
-              <a href="/shop/products/{{i.0.product_id}}">
+              <a  onclick="NewTab('{{i.0.product_id}}');" href ='#'>
                 <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}'>
               </a>
             </div>
@@ -318,7 +518,7 @@
 <div id='outerdiv' style="margin-top:10px;">
   {% for products, range1, nslides1, range, nslides, range2, nslides2 in allprods %}
   <div class="mt-2 container-fluid" id = "{{products.0.category}}1">
-    <h3 class="mb-2">{{products.0.category}}</h3>
+    <h3 class="mb-2">{{products.0.subcategory}}</h3>
     <div id="carouselExampleDark{{forloop.counter}}1" style="background-color: white;"
       class="carousel carousel-dark  slide" data-bs-ride="carousel">
       <div class="carousel-indicators" style="width: 60px; margin: auto;">
@@ -336,20 +536,20 @@
             <div class="col-lg-4 col-sm-4 col-md-4 p-2">
               {% if products.0.category == 'SmartPhone' %}
               <div class="card mycard" style="width: 18rem; height: 500px;">
-                <a href = '/shop/products/{{products.0.product_id}}'>
+                <a onclick="NewTab('{{products.0.product_id}}');" href = '#'>
                   <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                   alt="...">
                 </a>
                   {% else %}
                   <div class="card mycard" style="width: 18rem;">
-                    <a href = '/shop/products/{{products.0.product_id}}'>
+                    <a onclick="NewTab('{{products.0.product_id}}');" href = '#'>
                     <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
                       alt="...">
                     </a>
                     {% endif %}
                 <div class="card-body" style="height: 200px;">
 
-                  <h5 class="card-title">{{ products.0.product_name }}</h5> 
+                  <h5 class="card-title">{{ products.0.product_name|slice:"0:15" }}</h5> 
                   <fieldset class="mx-4 rating">
                     <input type="radio" id="star5{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
                     <input type="radio" id="star4{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
@@ -372,19 +572,19 @@
             <div class="col-lg-4 col-sm-4 col-md-4 p-2">
               {% if i.category == 'SmartPhone' %}
               <div class="card mycard" style="width: 18rem; height: 500px;">
-                <a href = '/shop/products/{{i.product_id}}'>
+                <a  onclick="NewTab('{{i.product_id}}');" href ='#'>
                   <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                   alt="...">
                 </a>
                   {% else %}
                   <div class="card mycard" style="width: 18rem;">
-                    <a href = '/shop/products/{{i.product_id}}'>
+                    <a onclick="NewTab('{{i.product_id}}');" href ='#'>
                     <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
                       alt="...">
                     </a>
                     {% endif %}
                 <div class="card-body" style="height: 200px;">
-                  <h5 class="card-title">{{i.product_name}}</h5> 
+                  <h5 class="card-title">{{i.product_name|slice:"0:15"}}</h5> 
                   <fieldset class="mx-4 rating" >
                     <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
                     <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
@@ -440,8 +640,8 @@
 <div id='outerdiv2' style="margin-top: 10px; background-color:  white;">
 {% for products, range, nslides, range1, nslides1, range2, nslides2 in allprods %}
 <div class="mt-2 container-fluid" >
-  <p class="d-inline mb-3" id='categoryP|{{products.0.category}}'>
-  <span class="mb-2" style="font-weight: 500; font-size: x-large;" >{{products.0.category}}</span>
+  <p class="d-inline mb-3" id='categoryP|{{products.0.subcategory1}}'>
+  <span class="mb-2" style="font-weight: 500; font-size: x-large;" >{{products.0.subcategory1}}</span>
   <button type="button" class="btn btn-primary mb-3" style="float: right;" onclick="viewAll(this);">View All</button>
 </p>
   <div id="carouselExampleDark{{forloop.counter}}" style="background-color:white;" class="carousel carousel-dark  slide" data-bs-ride="carousel">
@@ -460,13 +660,13 @@
           <div class="col-lg-2 col-sm-6 col-md-4 p-2">
             {% if products.0.category == 'SmartPhone' %}
             <div class="card mycard" style="width: 16rem; height: 500px;">
-              <a href = '/shop/products/{{products.0.product_id}}'>
+              <a onclick="NewTab('{{products.0.product_id}}');"  href = '#'>
                 <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                 alt="...">
               </a>
                 {% else %}
                 <div class="card mycard" style="width: 16rem;">
-                  <a href = '/shop/products/{{products.0.product_id}}'>
+                  <a  onclick="NewTab('{{products.0.product_id}}');" href = '#'>
                   <img src='../../../media/{{products.0.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
                     alt="...">
                   </a>
@@ -474,7 +674,7 @@
               </a>
               <div class="card-body text-dark" style="height: 200px; background-color:  white;">
 
-                <h5 class="card-title">{{ products.0.product_name }}</h5> 
+                <h5 class="card-title">{{ products.0.product_name|slice:"0:15" }}</h5> 
                 <fieldset class="mx-4 rating">
                   <input type="radio" id="star5{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
                   <input type="radio" id="star4{{products.0.product_id}}" name="rating{{products.0.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
@@ -497,19 +697,19 @@
           <div class="col-lg-2 col-sm-6 col-md-4">
             {% if i.category == 'SmartPhone' %}
             <div class="card mycard" style="width: 16rem; height: 500px;">
-              <a href = '/shop/products/{{i.product_id}}'>
+              <a onclick="NewTab('{{i.product_id}}');" href ='#'>
                 <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 300px;"
                 alt="...">
               </a>
                 {% else %}
                 <div class="card mycard" style="width: 16rem;">
-                  <a href = '/shop/products/{{i.product_id}}'>
+                  <a  onclick="NewTab('{{i.product_id}}');" href ='#'>
                   <img src='../../../media/{{i.image}}' class="card-img-top myimg" style="width: 100%; height: 200px;"
                     alt="...">
                   </a>
                   {% endif %}
               <div class="card-body text-dark" style="height: 200px; background-color: white;">
-                <h5 class="card-title">{{i.product_name}}</h5> 
+                <h5 class="card-title">{{i.product_name|slice:"0:15"}}</h5> 
                 <fieldset class="mx-4 rating" >
                   <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
                   <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
@@ -566,9 +766,9 @@
 <div class="outerdiv3 my-2" id='outerdiv3'>
   {% for products, range1, nslides1, range2, nslides2, range, nslides in allprods %}
   <hr>
-  <h3 class="mb-2">{{products.0.category}}</h3>
+  <h3 class="mb-2">{{products.0.subcategory}}</h3>
   {% for i in products|slice:"0:5"%}
-  <div class="card mycard mt-1" style="height: 230px;position: relative;">
+  <div class="card mycard mt-3" style="height: 230px;position: relative;">
     <div class="row">
       <div class="col-3">
         <a href = '/shop/products/{{i.product_id}}'>
@@ -582,7 +782,7 @@
       </div>
       <div class="col-9">
         <div class="card-body">
-          <h5 class="card-title">{{i.product_name}}</h5>
+          <h5 class="card-title">{{i.product_name|slice:"0:15"}}</h5>
         <fieldset class="rating" >
               <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
               <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
@@ -591,17 +791,22 @@
               <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
           </fieldset><br><br>
           <p style="display: inline-block;">
-            <b style="font-size:xx-large;">₹{{i.price}}</b>
+            <b style="font-size:large;">₹{{i.price}}</b>
           <span style="color: grey; font-size: medium;"><strike id="mobileIncPrice{{i.product_id}}">₹</strike></span>
           <span style="color: green;">{{i.discount}}% Off</span>
         </p>
           <!-- <span><b>₹{{i.price}}</b></span> -->
-          <p class="card-text">{{i.product_desc|slice:"0:50"}}</p>
+          <p class="card-text">{{i.product_desc|slice:"0:23"}}</p>
           <small>No Cost EMI</small>
         </div>
       </div>
     </div>
   </div>
+  {% if forloop.last %}
+  <p id="categoryP|{{i.subcategory1}}">
+  <button type="button" class="mx-2 mt-3 btn btn-primary" onclick="viewAll1(this);">View All</button>
+</p>
+{% endif %}
   {% endfor %}
   {% endfor %}
 </div>
@@ -765,7 +970,7 @@
     }
     
   }
-window.addEventListener("resize", myFunction);
+// window.addEventListener("resize", myFunction);
   
   
   //Update cart function
@@ -900,9 +1105,10 @@ window.addEventListener("resize", myFunction);
       try{
       let x = item.parentNode.id;
       x = x.split('|');
+      window.location.href = '/shop/search1/' + x[1];
       // console.log(x);
-      document.getElementById('searchValue').value = x[1];
-      document.getElementById('searchBtn').click();
+      // document.getElementById('searchValue').value = x[1];
+      // document.getElementById('searchBtn').click();
       // console.log(item.value);
       }catch(err){
         console.log('In catch '  + err);
@@ -911,6 +1117,41 @@ window.addEventListener("resize", myFunction);
       // console.log(item.value);
       }
     }
+
+    function viewAll1(item){
+      try{
+      let x = item.parentNode.id;
+      x = x.split('|');
+      // console.log(x);
+      window.location.href = '/shop/search1/' + x[1];
+      // document.getElementById('searchValue1').value = x[1];
+      // document.getElementById('searchForm1').submit();
+      // console.log(item.value);
+      }catch(err){
+        console.log('In catch '  + err);
+      //   document.getElementById('searchValue1').value = item.value
+      // document.getElementById('searchForm1').submit();
+      // console.log(item.value);
+      }
+    }
+
+
+    function categoriesSearch(item){
+      try{
+      let x = item;
+      console.log(x);
+      document.getElementById('searchValue').value = x;
+      // document.getElementById('searchBtn').click();
+      // console.log(item.value);
+      }catch(err){
+        console.log('In catch '  + err);
+      //   document.getElementById('searchValue1').value = item.value
+      // document.getElementById('searchForm1').submit();
+      // console.log(item.value);
+      }
+    }
+
+
 
 
     {% for i in trendingNum %}
@@ -930,6 +1171,29 @@ window.addEventListener("resize", myFunction);
     {% for i in trendingProduct|slice:"0:6" %}
     document.getElementById('trendingIncPrice{{i.0.product_id}}').innerHTML = '₹' + (({{i.0.price}} * ({{i.0.discount}} / 100)) + {{i.0.price}})
     {% endfor %}
+
+  function NewTab(x) {
+            window.open(
+              "/shop/products/" + x, "_blank");
+        }
+
+
+  if(width < 1000){
+    var b = document.getElementById('myDivCat').className = 'myDivCat';
+    var a = document.querySelectorAll('.item');
+    var c = document.getElementsByClassName('item');
+    console.log(a);
+    for(let x in a){
+      console.log(a[x].className = 'item')
+    }
+    for(var i = 0; i < c.length; i++){
+      c[i].addEventListener('click', myyF, false)
+    }
+  }
+
+function myyF(this1){
+  document.getElementById("myDropdown").classList.toggle("show");
+}
 
   </script>
 

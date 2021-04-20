@@ -768,7 +768,7 @@
   <hr>
   <h3 class="mb-2">{{products.0.subcategory}}</h3>
   {% for i in products|slice:"0:5"%}
-  <div class="card mycard mt-1" style="height: 230px;position: relative;">
+  <div class="card mycard mt-3" style="height: 230px;position: relative;">
     <div class="row">
       <div class="col-3">
         <a href = '/shop/products/{{i.product_id}}'>
@@ -791,17 +791,22 @@
               <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
           </fieldset><br><br>
           <p style="display: inline-block;">
-            <b style="font-size:xx-large;">₹{{i.price}}</b>
+            <b style="font-size:large;">₹{{i.price}}</b>
           <span style="color: grey; font-size: medium;"><strike id="mobileIncPrice{{i.product_id}}">₹</strike></span>
           <span style="color: green;">{{i.discount}}% Off</span>
         </p>
           <!-- <span><b>₹{{i.price}}</b></span> -->
-          <p class="card-text">{{i.product_desc|slice:"0:50"}}</p>
+          <p class="card-text">{{i.product_desc|slice:"0:23"}}</p>
           <small>No Cost EMI</small>
         </div>
       </div>
     </div>
   </div>
+  {% if forloop.last %}
+  <p id="categoryP|{{i.subcategory1}}">
+  <button type="button" class="mx-2 mt-3 btn btn-primary" onclick="viewAll1(this);">View All</button>
+</p>
+{% endif %}
   {% endfor %}
   {% endfor %}
 </div>
@@ -1100,9 +1105,10 @@
       try{
       let x = item.parentNode.id;
       x = x.split('|');
+      window.location.href = '/shop/search1/' + x[1];
       // console.log(x);
-      document.getElementById('searchValue').value = x[1];
-      document.getElementById('searchBtn').click();
+      // document.getElementById('searchValue').value = x[1];
+      // document.getElementById('searchBtn').click();
       // console.log(item.value);
       }catch(err){
         console.log('In catch '  + err);
@@ -1111,6 +1117,24 @@
       // console.log(item.value);
       }
     }
+
+    function viewAll1(item){
+      try{
+      let x = item.parentNode.id;
+      x = x.split('|');
+      // console.log(x);
+      window.location.href = '/shop/search1/' + x[1];
+      // document.getElementById('searchValue1').value = x[1];
+      // document.getElementById('searchForm1').submit();
+      // console.log(item.value);
+      }catch(err){
+        console.log('In catch '  + err);
+      //   document.getElementById('searchValue1').value = item.value
+      // document.getElementById('searchForm1').submit();
+      // console.log(item.value);
+      }
+    }
+
 
     function categoriesSearch(item){
       try{

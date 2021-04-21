@@ -1,0 +1,66 @@
+{% extends 'shop/basic.html'%}
+
+{%block title %} SearchResult {% endblock %}
+
+{% block style %}
+<style>
+    .mycard{
+    transition: 1s;
+  }
+
+  .mycard:hover{
+    
+    transition: transform 0.6s ease;
+    transform: scale(0.9)  skew(0deg, 1deg);
+    background-color:#defcff;
+    box-shadow: 10px 10px 8px 10px #888888;
+    z-index: 9999;
+  }
+  @media (max-width:600px)
+    {
+        .myDiv{
+          margin-left: auto;
+          margin-right: auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class = "conatiner mx-3 my-3">
+  <span style="color: #888888; font-size: x-large;">Showing results for : </span><span style="font-size: larger;">"{{value}}"</span>
+</div> 
+<div class="container-fluid my-3">
+<div class="row">
+{% for i in c %}
+  <div class="col-sm-12 col-md-6 col-lg-3">
+    <div class="card mx-auto mycard mb-2" style="height: 300px; width: 16rem;">
+      <a href='/shop/products/{{i.0.product_id}}'>
+        <img class="card-img-top" src="/media/{{i.0.image}}" height="120px" alt="Card image cap">
+      </a>
+        <div class="card-body position-relative" style="text-align: center;">
+          <h5 class="card-title">{{i.0.product_name}}</h5>
+          <p class="card-text">{{i.0.product_desc|slice:"0:50"}}</p>
+          <a href="/shop/products/{{i.0.product_id}}"  class="btn btn-primary position-absolute my-1" style="bottom: 2%; left: 40%;">View</a>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+</div>
+<!-- <a class="btn btn-primary" onclick="ViewAll();">View All</a> -->
+  <p class="text-center" style="font-size: large; color: gray; font-weight: 400;">Did not get what you need? Try searching something more specific</p>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+  // function ViewAll(){
+  //   var counter = parseInt('{{counter}}');
+  //   console.log('{{counter}}');
+  //   window.location.href = '/shop/search2/{{value}}/' + counter;
+  // }
+</script>
+
+{% endblock %}

@@ -591,7 +591,7 @@ def search(request):
                 for i in zzz:
                     c.append(Product.objects.filter(product_id = i))
                 
-                return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal, 'counter' : 1})
+                return render(request, 'shop/search1.html', {'c':c, 'username' : username, 'value':fl, 'counter' : 1})
 
                         # print(z)
             c = []
@@ -611,7 +611,7 @@ def search(request):
             print('In Except')
             return HttpResponse("<h1>Not Found</h1><br><a href='/shop/1'>Home</a>")
             
-        return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal, 'counter' : 1})
+        return render(request, 'shop/search1.html', {'c':c, 'username' : username, 'value':fl, 'counter' : 1})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
 
 def getLogoutData(request):

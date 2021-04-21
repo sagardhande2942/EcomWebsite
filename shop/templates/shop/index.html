@@ -515,7 +515,7 @@
   </div> -->
 </div>
 
-<div class="container input-group">
+<div class="container input-group" style="display: none;">
   <span class="input-group-text" style="color: orangered; font-weight: 500;">Select Category </span>
   <select class="form-select" type="text" list = 'cat' placeholder="category" onchange="category(this)">
       {% for i in category %}
@@ -795,7 +795,8 @@
         </a>
       </div>
       <div class="col-9">
-        <div class="card-body">
+        <a href = '/shop/products/{{i.product_id}}'>
+          <div class="card-body">
           <h5 class="card-title">{{i.product_name|slice:"0:15"}}</h5>
         <fieldset class="rating" >
               <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
@@ -813,6 +814,7 @@
           <p class="card-text">{{i.product_desc|slice:"0:23"}}</p>
           <small>No Cost EMI</small>
         </div>
+        </a>
       </div>
     </div>
   </div>

@@ -201,6 +201,7 @@
             background-color: white;
             color: black !important;
         }
+
         .show {display:block;}
 
 </style>
@@ -217,17 +218,18 @@
     <div class="col-1 item">
     </div>
     <div class="col-1 item">
-      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/GroceryCat.png' style="height: 64px; width:64px;">
-      <p class="d-inline">
-        <!-- <span></span><i class="mx-1 fas fa-angle-down"></i> -->
-        <ul class="dropdown">
-          <li><a href="#" style="color:black;padding: 0px;">Grocery<i class="mx-1 fas fa-angle-down"></i></a>
+      <!-- <span></span><i class="mx-1 fas fa-angle-down"></i> -->
+      <ul class="dropdown">
+          <p class="d-inline">
+          <li><a href="#" style="color:black;padding: 0px;">
+          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/GroceryCat.png' style="height: 64px; width:64px;">
+            Grocery<i class="mx-1 fas fa-angle-down"></i></a>
             <ul>
               {% for i in subcategoriesDict1 %}
               <li><a href="#">{{i.0}}</a>
                 <ul>
                   {% for j in i.1 %}
-                  <li><a href="#">{{j}}</a></li>
+                  <li><a href="/shop/search1/{{j}}">{{j}}</a></li>
                   {% endfor %}
                 </ul>
               </li>
@@ -238,17 +240,18 @@
         </p>
     </div>
     <div class="col-1 item" >
-      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/FashionCat.jpg' style="height: 64px; width:64px;">
-      <p class="d-inline">
-        <!-- <span>Fashion</span><i class="mx-1 fas fa-angle-down"></i> -->
-        <ul class="dropdown">
-          <li><a href="#" style="color:black;padding: 0px;">Fashion<i class="mx-1 fas fa-angle-down"></i></a>
+      <!-- <span>Fashion</span><i class="mx-1 fas fa-angle-down"></i> -->
+      <ul class="dropdown">
+          <p class="d-inline">
+          <li><a href="#" style="color:black;padding: 0px;">
+          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/FashionCat.jpg' style="height: 64px; width:64px;">
+            Fashion<i class="mx-1 fas fa-angle-down"></i></a>
             <ul>
               {% for i in subcategoriesDict2 %}
               <li><a href="#">{{i.0}}</a>
                 <ul>
                   {% for j in i.1 %}
-                  <li><a href="#">{{j}}</a></li>
+                  <li><a href="/shop/search1/{{j}}">{{j}}</a></li>
                   {% endfor %}
                 </ul>
               </li>
@@ -259,17 +262,18 @@
       </p>
     </div>
     <div class="col-1 item">
-      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/MobileCat.png' style="height: 64px; width:64px;">
-      <p class="d-inline">
-        <!-- <span>Mobiles</span><i class="mx-1 fas fa-angle-down"></i> -->
-        <ul class="dropdown">
-          <li><a href="#" style="color:black;padding: 0px;">Mobiles<i class="mx-1 fas fa-angle-down"></i></a>
+      <!-- <span>Mobiles</span><i class="mx-1 fas fa-angle-down"></i> -->
+      <ul class="dropdown">
+          <p class="d-inline">
+          <li><a href="#" style="color:black;padding: 0px;">
+          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/MobileCat.png' style="height: 64px; width:64px;">
+              Mobiles<i class="mx-1 fas fa-angle-down"></i></a>
             <ul>
               {% for i in subcategoriesDict3 %}
               <li><a href="#">{{i.0}}</a>
                 <ul>
                   {% for j in i.1 %}
-                  <li><a href="#">{{j}}</a></li>
+                  <li><a href="/shop/search1/{{j}}">{{j}}</a></li>
                   {% endfor %}
                 </ul>
               </li>
@@ -281,17 +285,18 @@
       </p>
     </div>
     <div class="col-1 item">
-      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/tvCat.png' style="height: 64px; width:64px;">
-      <p class="d-inline">
-        <!-- <span>Appliances</span><i class="mx-1 fas fa-angle-down"></i> -->
-        <ul class="dropdown">
-          <li><a href="#" style="color:black; padding: 0px;">Appliances<i class="mx-1 fas fa-angle-down"></i></a>
+      <!-- <span>Appliances</span><i class="mx-1 fas fa-angle-down"></i> -->
+      <ul class="dropdown">
+          <p class="d-inline">
+          <li><a href="#" style="color:black; padding: 0px;">
+          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/tvCat.png' style="height: 64px; width:64px;">
+            Appliances<i class="mx-1 fas fa-angle-down"></i></a>
             <ul>
               {% for i in subcategoriesDict4 %}
               <li><a href="#">{{i.0}}</a>
                 <ul>
                   {% for j in i.1 %}
-                  <li><a href="#">{{j}}</a></li>
+                  <li><a href="/shop/search1/{{j}}">{{j}}</a></li>
                   {% endfor %}
                 </ul>
               </li>
@@ -304,11 +309,12 @@
     </div>
     <!-- {{subcategoriesDict}} -->
     <div class="col-1 item">
-      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/ElectronicsCat.png' style="height: 64px; width:64px;">
-      <p class="d-inline">
-        <!-- <span>Electronics</span><i class="mx-1 fas fa-angle-down"></i> -->
-        <ul class="dropdown" id = 'myDropdown'>
-          <li><a href="#" style="color:black;padding: 0px;">Electronics<i class="mx-1 fas fa-angle-down"></i></a>
+      <!-- <span>Electronics</span><i class="mx-1 fas fa-angle-down"></i> -->
+      <ul class="dropdown" id = 'myDropdown'>
+          <p class="d-inline">
+          <li><a href="#" style="color:black;padding: 0px;">
+          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/ElectronicsCat.png' style="height: 64px; width:64px;">
+            Electronics<i class="mx-1 fas fa-angle-down"></i></a>
               <ul>
                 {% for i in subcategoriesDict5 %}
                 <li><a href="#">{{i.0}}</a>
@@ -325,17 +331,18 @@
       </p>
     </div>
     <div class="col-1 item">
-      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HomeCat.png' style="height: 64px; width:64px;">
-      <p class="d-inline">
-        <!-- <span>Home</span><i class="mx-1 fas fa-angle-down"></i> -->
-        <ul class="dropdown">
-          <li><a href="#" style="color:black;padding: 0px;">Home<i class="mx-1 fas fa-angle-down"></i></a>
+      <!-- <span>Home</span><i class="mx-1 fas fa-angle-down"></i> -->
+      <ul class="dropdown">
+        <li><a href="#" style="color:black;padding: 0px;">
+          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HomeCat.png' style="height: 64px; width:64px;">
+          Home<i class="mx-1 fas fa-angle-down"></i></a>
+          <p class="d-inline">
               <ul>
                 {% for i in subcategoriesDict6 %}
                 <li><a href="#">{{i.0}}</a>
                   <ul>
                     {% for j in i.1 %}
-                    <li><a href="#">{{j}}</a></li>
+                    <li><a href="/shop/search1/{{j}}">{{j}}</a></li>
                     {% endfor %}
                   </ul>
                 </li>
@@ -346,17 +353,18 @@
       </p>
     </div>
     <div class="col-1 item">
-      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HeadphoneCat.png' style="height: 64px; width:64px;">
-      <p class="d-inline">
-        <!-- <span>Music</span><i class="mx-1 fas fa-angle-down"></i> -->
-        <ul class="dropdown">
-          <li><a href="#" style="color:black;padding: 0px;">Music<i class="mx-1 fas fa-angle-down"></i></a>
+      <!-- <span>Music</span><i class="mx-1 fas fa-angle-down"></i> -->
+      <ul class="dropdown">
+          <p class="d-inline">
+          <li><a href="#" style="color:black;padding: 0px;">
+          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HeadphoneCat.png' style="height: 64px; width:64px;">
+            Music<i class="mx-1 fas fa-angle-down"></i></a>
             <ul>
               {% for i in subcategoriesDict7 %}
               <li><a href="#">{{i.0}}</a>
                 <ul>
                   {% for j in i.1 %}
-                  <li><a href="#">{{j}}</a></li>
+                  <li><a href="/shop/search1/{{j}}">{{j}}</a></li>
                   {% endfor %}
                 </ul>
               </li>
@@ -365,17 +373,18 @@
       </p>
     </div>
     <div class="col-1 item">
-      <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/OtherCat.png' style="height: 64px; width:64px;">
-      <p class="d-inline">
-        <!-- <span>Others</span><i class="mx-1 fas fa-angle-down"></i> -->
-        <ul class="dropdown">
-          <li><a href="#" style="color:black;padding: 0px;">Others<i class="mx-1 fas fa-angle-down"></i></a>
+      <!-- <span>Others</span><i class="mx-1 fas fa-angle-down"></i> -->
+      <ul class="dropdown">
+          <p class="d-inline">
+          <li><a href="#" style="color:black;padding: 0px;">
+          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/OtherCat.png' style="height: 64px; width:64px;">
+            Others<i class="mx-1 fas fa-angle-down"></i></a>
             <ul>
               {% for i in subcategoriesDict8 %}
               <li><a href="#">{{i.0}}</a>
                 <ul>
                   {% for j in i.1 %}
-                  <li><a href="#">{{j}}</a></li>
+                  <li><a href="/shop/search1/{{j}}">{{j}}</a></li>
                   {% endfor %}
                 </ul>
               </li>
@@ -880,7 +889,7 @@
       // Mobile code
     }else if(width > 600){
       if(ScreenDestroyCounter > 1){
-        window.location.href = '/shop/'
+        window.location.href = '/shop/1'
       }
       ScreenDestroyCounter++;
       var text = localStorage.getItem('cart'); 
@@ -898,7 +907,7 @@
       document.getElementById('outerdiv3').innerHTML = "";
     }else{
       if(ScreenDestroyCounter > 1){
-        window.location.href = '/shop/'
+        window.location.href = '/shop/1'
       }
       ScreenDestroyCounter++;
       var text = localStorage.getItem('cart'); 
@@ -940,7 +949,7 @@
       // Mobile code
     } else if(width > 600){
       if(ScreenDestroyCounter > 1){
-        window.location.href = '/shop/'
+        window.location.href = '/shop/1'
       }
       ScreenDestroyCounter++;
       var text = localStorage.getItem('cart'); 
@@ -958,7 +967,7 @@
       document.getElementById('outerdiv3').innerHTML = "";
     }else {
       if(ScreenDestroyCounter > 1){
-        window.location.href = '/shop/'
+        window.location.href = '/shop/1'
       }
       ScreenDestroyCounter++;
       var text = localStorage.getItem('cart'); 
@@ -989,7 +998,7 @@
           document.getElementById('div' + item).innerHTML = "<button id = 'minus" + item + "' class = 'btn btn-primary minus'> - </button> <span id = 'val" + item + "'>" + cart[item] + "</span> <button id = 'plus" + item + "' class = 'btn btn-primary plus'> + </button>"
         }catch(err){
           localStorage.setItem('cart', '{}');
-          window.location.href = '/shop/'
+          window.location.href = '/shop/1'
         }
       }
       cart = JSON.parse(localStorage.getItem('cart'));

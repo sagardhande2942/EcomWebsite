@@ -296,6 +296,31 @@
   margin-left: 50px;
 }
 
+#logoText{
+  animation: effect 2s linear infinite;
+  color: transparent;
+}
+
+@keyframes effect {
+            0% {
+                background: linear-gradient(
+                        red, black);
+                -webkit-background-clip: text;
+            }
+  
+            50% {
+                background: linear-gradient(
+                        black, red );
+                -webkit-background-clip: text;
+            }
+            100%{
+              background: linear-gradient(
+                        rgb(255, 0, 0), black );
+                -webkit-background-clip: text;
+            }
+  }
+
+
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
@@ -350,7 +375,7 @@
   <div id='mainNav' class="sticky-top" style="z-index: 999999;">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top"  style="z-index: 999999;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/shop/1">Get That Now</a>
+      <a class="navbar-brand" href="/shop/1" style = "font-family:courier,arial,helvetica;" ><b id="logoText">ByTapBuy</b></a>
       <!-- <img src = '../../../media/Logo.png' style="height: 50px; width: 70px; border-radius: 3px;"> -->
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"

@@ -515,7 +515,7 @@
   </div> -->
 </div>
 
-<div class="container input-group">
+<div class="container input-group" style="display: none;">
   <span class="input-group-text" style="color: orangered; font-weight: 500;">Select Category </span>
   <select class="form-select" type="text" list = 'cat' placeholder="category" onchange="category(this)">
       {% for i in category %}
@@ -795,26 +795,28 @@
         </a>
       </div>
       <div class="col-9">
-        <div class="card-body">
-          <h5 class="card-title">{{i.product_name|slice:"0:15"}}</h5>
-        <fieldset class="rating" >
+        <a href = '/shop/products/{{i.product_id}}' style="text-decoration: none; color: black;">
+          <div class="card-body">
+            <h5 class="card-title">{{i.product_name|slice:"0:15"}}</h5>
+            <fieldset class="rating" >
               <input type="radio" id="star5{{i.product_id}}" name="rating{{i.product_id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
               <input type="radio" id="star4{{i.product_id}}" name="rating{{i.product_id}}" value="4" disabled/><label for="star4" title="Pretty good">4 stars</label>
               <input type="radio" id="star3{{i.product_id}}" name="rating{{i.product_id}}" value="3" disabled/><label for="star3" title="Meh">3 stars</label>
               <input type="radio" id="star2{{i.product_id}}" name="rating{{i.product_id}}" value="2" disabled/><label for="star2" title="Kinda bad">2 stars</label>
               <input type="radio" id="star1{{i.product_id}}" name="rating{{i.product_id}}" value="1" disabled/><label for="star1" title="Sucks big time">1 star</label>
-          </fieldset><br><br>
-          <p style="display: inline-block;">
-            <b style="font-size:large;">₹{{i.price}}</b>
-          <span style="color: grey; font-size: medium;"><strike id="mobileIncPrice{{i.product_id}}">₹</strike></span>
-          <span style="color: green;">{{i.discount}}% Off</span>
-        </p>
-          <!-- <span><b>₹{{i.price}}</b></span> -->
-          <p class="card-text">{{i.product_desc|slice:"0:23"}}</p>
-          <small>No Cost EMI</small>
+            </fieldset><br><br>
+            <p style="display: inline-block;">
+              <b style="font-size:large;">₹{{i.price}}</b>
+              <span style="color: grey; font-size: medium;"><strike id="mobileIncPrice{{i.product_id}}">₹</strike></span>
+              <span style="color: green;">{{i.discount}}% Off</span>
+            </p>
+            <!-- <span><b>₹{{i.price}}</b></span> -->
+            <p class="card-text">{{i.product_desc|slice:"0:23"}}</p>
+            <small>No Cost EMI</small>
+          </div>
+        </a>
         </div>
       </div>
-    </div>
   </div>
   {% if forloop.last %}
   <p id="categoryP|{{i.subcategory1}}">

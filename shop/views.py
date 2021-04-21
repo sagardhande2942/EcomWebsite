@@ -33,8 +33,12 @@ User = get_user_model()
 
 import simplejson
 @login_required(login_url='/auth/')
-def index(request):
+def index(request, num):
     #Calling trending product
+    if num <= 0:
+        num = 1
+    if not num:
+        num = 1
     maxProduct, maxNum = trendingProduct()
     print(maxProduct, maxNum)
     maxProductInstance = []
@@ -67,7 +71,13 @@ def index(request):
     #     [products, range(1, nslides), nslides],
     #     [products, range(1, nslides), nslides]
     # ]
-
+    random.shuffle(allprods)
+    allprodsReal = allprods
+    toIncrease = num * 2
+    msgToShow  = ""
+    if  toIncrease > len(allprods):
+        msgToShow = 'You are viewing all products'
+    allprods = allprods[0:toIncrease]
     ratingInstance = Product.objects.all()
     ratings = []
     categoriesNeed = []
@@ -104,6 +114,12 @@ def index(request):
     print(subcategoriesDictreal)
     subcategoriesDict5 = subcategoriesDictreal['Electronics']
     subcategoriesDict4 = subcategoriesDictreal['Appliances']
+    subcategoriesDict2 = subcategoriesDictreal['Fashion']
+    subcategoriesDict1 = subcategoriesDictreal['Grocery']
+    subcategoriesDict3 = subcategoriesDictreal['Mobile']
+    subcategoriesDict6 = subcategoriesDictreal['Home']
+    subcategoriesDict7 = subcategoriesDictreal['Music']
+    subcategoriesDict8 = subcategoriesDictreal['Others']
     # subcategoriesDict5= {}
     param = {
         'allprods': allprods,
@@ -115,10 +131,18 @@ def index(request):
         'ratingProduct':ratings,
         'category':categoriesNeed,
         'products': Product.objects.all(),
+        'msgToShow':msgToShow,
+        'winNo' : num,
         'subcategoriesNeed' : subcategoriesNeed,
         'subcategoriesNeed1' : subcategoriesNeed1,
-        'subcategoriesDict5': subcategoriesDict5,
+        'subcategoriesDict1': subcategoriesDict1,
+        'subcategoriesDict2': subcategoriesDict2,
+        'subcategoriesDict3': subcategoriesDict3,
         'subcategoriesDict4': subcategoriesDict4,
+        'subcategoriesDict5': subcategoriesDict5,
+        'subcategoriesDict6': subcategoriesDict6,
+        'subcategoriesDict7': subcategoriesDict7,
+        'subcategoriesDict8': subcategoriesDict8,
     }
     
     return render(request, 'shop/index.html', param)

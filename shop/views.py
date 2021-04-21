@@ -73,7 +73,7 @@ def index(request, num):
     # ]
     random.shuffle(allprods)
     allprodsReal = allprods
-    toIncrease = num * 2
+    toIncrease = num * 5
     msgToShow  = ""
     if  toIncrease > len(allprods):
         msgToShow = 'You are viewing all products'
@@ -576,7 +576,7 @@ def search(request):
 
                 print(b)
                 if not len(b):
-                    return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
+                    return HttpResponse("<h1>Not Found</h1><br><a href='/shop/1'>Home</a>")
                                 # print(z)
                             # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
 
@@ -609,7 +609,7 @@ def search(request):
                     # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
         except :
             print('In Except')
-            return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
+            return HttpResponse("<h1>Not Found</h1><br><a href='/shop/1'>Home</a>")
             
         return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal, 'counter' : 1})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
@@ -1023,7 +1023,7 @@ def changeUname(request):
             if not len(errors):
                 errors.append('Username Succesfully Changed')
                 print(errors)
-                return HttpResponse('<h1> DONE </h1><script> window.location.href = "/shop/";</script>')
+                return HttpResponse('<h1> DONE </h1><script> window.location.href = "/shop/1";</script>')
             else:
                 print(errors)
                 return render(request, 'shop/changeUname.html', {'username' : username, 'errors': errors})
@@ -1050,7 +1050,7 @@ def changeUname(request):
             if not len(errors):
                 errors.append('Password Succesfully Changed')
                 print(errors)
-                return HttpResponse('<h1> DONE </h1><script> window.location.href = "/shop/";</script>')
+                return HttpResponse('<h1> DONE </h1><script> window.location.href = "/shop/1";</script>')
             else:
                 print(errors)
                 return render(request, 'shop/changeUname.html', {'username' : a, 'errors': errors})
@@ -1087,7 +1087,7 @@ def search1(request, myStr):
         c.append(Product.objects.filter(product_name = i))
 
     if not b: #and not checkx:
-        return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
+        return HttpResponse("<h1>Not Found</h1><br><a href='/shop/1'>Home</a>")
             
     return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal})
 

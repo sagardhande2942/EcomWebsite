@@ -22,7 +22,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 
-YOUR_DOMAIN = 'http://localhost:8000'
+YOUR_DOMAIN = 'http://3.143.242.177/'
 
 price = 0
 cart12 = ""
@@ -40,7 +40,7 @@ def index(request, num):
     if not num:
         num = 1
     maxProduct, maxNum = trendingProduct()
-    print(maxProduct, maxNum)
+    # print(maxProduct, maxNum)
     maxProductInstance = []
     maxProduct.reverse()
     for i in maxProduct:
@@ -48,9 +48,9 @@ def index(request, num):
     username = request.user.username
     a = ExtendedUser.objects.filter(usr=request.user)
     cart = "{}"
-    print('hiiii This is')
+    # print('hiiii This is')
     for i in a:
-        print('THe cart is : ' + i.cart)
+        # print('THe cart is : ' + i.cart)
         cart = i.cart
     # products = Product.objects.all()
     # print(products)
@@ -111,7 +111,7 @@ def index(request, num):
         subcategoriesDictreal[z] = subcategoriesDict
         subcategoriesDict = []
 
-    print(subcategoriesDictreal)
+    # print(subcategoriesDictreal)
     subcategoriesDict5 = subcategoriesDictreal['Electronics']
     subcategoriesDict4 = subcategoriesDictreal['Appliances']
     subcategoriesDict2 = subcategoriesDictreal['Fashion']
@@ -167,14 +167,14 @@ def getCart(request):
     global cart12
     if request.method == "POST":
         cart12 = request.POST.get('text', '{}')
-        print(cart12)
+        # print(cart12)
         return JsonResponse({'hii' : 'bye'})
 
 @login_required(login_url='/auth/')
 def create_checkout_session(request):
     if request.method == 'GET':
-        print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://127.0.0.1:8000/'
+        # print('Here bois ', request.GET.get('data1', '1'))
+        domain_url = 'http://3.143.242.177/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -213,7 +213,7 @@ def successPay(request):
     a = ExtendedUser.objects.filter(usr = request.user)
 
     c = cart12
-    print('Succes pay cart ',c)
+    # print('Succes pay cart ',c)
 
     a1 = json.loads(c)
     for i in a1:
@@ -236,7 +236,7 @@ def successPay(request):
                 continue
         # if i == len(c) - 1: continue
         b += c[i]
-    print(b)
+    # print(b)
     a.update(totcarts = b, cart = "hiii")
     context = {
         'username' : username
@@ -310,11 +310,12 @@ def contact(request):
 
 @login_required(login_url='/auth/')
 def productView(request, myid):
-    print('In Product View')
+    # print('In Product View')
     username = request.user.username
     cart = ExtendedUser.objects.filter(usr=request.user)
     for i in cart:
-        print(i.cart)
+        # print(i.cart)
+        pass
     product = Product.objects.filter(product_id = myid)
     z = Rating.objects.filter(product_id = myid)
     prodCount = Product.objects.filter(product_id = myid)
@@ -333,7 +334,7 @@ def productView(request, myid):
         if 'Flipkart' in offersUse[i]:
             offersUse[i] = offersUse[i].replace('Flipkart', 'BTB')
     cmtInstance = Comments.objects.filter(product_id = prodCount[0])
-    print(round(product[0].rating))
+    #print(round(product[0].rating))
     param = {
         'incPrice' : round(product[0].price / (1 - product[0].discount / 100), 3),
         'prod': product,
@@ -475,7 +476,7 @@ def search(request):
                     fl+=i
             productInst = Product.objects.all()
             iz = 0
-            print('this is fl ', fl)
+            #print('this is fl ', fl)
             if not len(fl):
                  raise Exception("Not found any search results")
             a = fl
@@ -525,13 +526,13 @@ def search(request):
                 K = len(a) // 2
                 test_str = fl
                 res = [test_str[i: j] for i in range(len(test_str)) for j in range(i + 1, len(test_str) + 1) if len(test_str[i:j]) == K]
-                print('hiii in ssearch')
+                #print('hiii in ssearch')
                 d = Product.objects.all()
                 dd = []
                 b = []
                 for i in d:
                     dd.append(i)
-                print(res)
+                #print(res)
         
                 for a in res:
                 # if not checkx:
@@ -574,41 +575,41 @@ def search(request):
                                     break
                                 b.append(Product.objects.filter(product_id = z.product_id))
 
-                print(b)
+                #print(b)
                 if not len(b):
                     return HttpResponse("<h1>Not Found</h1><br><a href='/shop/1'>Home</a>")
                                 # print(z)
-                            # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
+                            # #print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
 
                 c = []
-                print(b)
-                print('The length is : ', len(b))
+                #print(b)
+                #print('The length is : ', len(b))
                 zzz = []
                 for i in b:
                     if(i[0].product_id not in zzz):
                         zzz.append(i[0].product_id)
-                # print(a)
+                # #print(a)
                 for i in zzz:
                     c.append(Product.objects.filter(product_id = i))
                 
                 return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal, 'counter' : 1})
 
-                        # print(z)
+                        # #print(z)
             c = []
-            print(b)
-            print('The length is : ', len(b))
+            #print(b)
+            #print('The length is : ', len(b))
             zzz = []
             for i in b:
-                print(i[0].product_id)
+                #print(i[0].product_id)
                 if(i[0].product_id not in zzz):
                     zzz.append(i[0].product_id)
-            # print(a)
+            # #print(a)
             for i in zzz:
                 c.append(Product.objects.filter(product_id = i))
 
-                    # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
+                    # #print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
         except :
-            print('In Except')
+            #print('In Except')
             return HttpResponse("<h1>Not Found</h1><br><a href='/shop/1'>Home</a>")
             
         return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal, 'counter' : 1})
@@ -616,7 +617,7 @@ def search(request):
 
 def getLogoutData(request):
     if request.method == "POST":
-        print(request.POST.get('text', 'hii'))
+        #print(request.POST.get('text', 'hii'))
         a = request.POST.get('text', '{}')
         b = ExtendedUser.objects.filter(usr=request.user)
         b.update(cart=a)
@@ -628,19 +629,20 @@ def getLogoutData(request):
 
 @login_required(login_url='/auth/')
 def tracker(request):
-    # print('hiids')  
+    # #print('hiids')  
     username  = request.user.username
     a11 = ExtendedUser.objects.filter(usr=request.user)
     b11 = PurchaseDate.objects.filter(purdate = a11[0])
     for i in a11:
-        print(i)
+        #print(i)
+        pass
     avtime = []
     n10 = 0
     for i in b11:
         avtime.append([i.purd, i.lang, i.lat, i.days, i.state, i.lato, i.lango])
         n10 += 1
-    print(avtime)
-    print(n10, 'is n10')
+    #print(avtime)
+    #print(n10, 'is n10')
     states = [
         ['Nagpur', 78.893078, 21.1015184],
         ['Nashik', 73.90984434482529, 19.890527214221166],
@@ -656,10 +658,10 @@ def tracker(request):
     a = []
     b = []
     str1 = z[0].totcarts
-    print('printing this', str1)
+    #print('#printing this', str1)
     if(len(str1) == 2):
         return render(request, 'shop/maps.html')
-    print(str1)
+    #print(str1)
     str1 = str1.split('}')
     res = []
     for i in str1:
@@ -667,7 +669,7 @@ def tracker(request):
         i = i.replace('{', '[')
         i = i.replace('}', ']')
         res.append(i.strip('][').split(', '))
-    # print(res)
+    # #print(res)
     zerolen = []
     diffDict = {}
     for i in range(len(res)):
@@ -676,32 +678,32 @@ def tracker(request):
             continue
         res[i] = res[i][0].split(',')
         
-        #   print(res[i])
+        #   #print(res[i])
     check = False
-    print(res)
+    #print(res)
     for i in res:
-        print('this: ', i)
+        #print('this: ', i)
         if len(i[0]):
             pass
         else:
-            print('hereeeeeee')
+            #print('hereeeeeee')
             check = True
     if check:
         res.remove([''])  
-    print(res) 
+    #print(res) 
 
     check = False
-    print(res)
+    #print(res)
     for i in res:
-        print('this: ', i)
+        #print('this: ', i)
         if len(i[0]):
             pass
         else:
-            print('hereeeeeee')
+            #print('hereeeeeee')
             check = True
     if check:
         res.remove([''])  
-    print(res) 
+    #print(res) 
 
     for i in range(len(res)):
         diffDict[i] = []
@@ -711,28 +713,28 @@ def tracker(request):
             vb.append(j[0].split(':'))
         diffDict[i] = vb
 
-    print('\nDIff DICT', diffDict)
+    #print('\nDIff DICT', diffDict)
     finallist = []
     for i in diffDict:
         m = diffDict[i]
         z2 = []
         for j in m:#
-            print(j[0])
+            #print(j[0])
             num = ""
             for word in j[0]:
                 if word.isdigit():
                     num += word
-            print(num)
+            #print(num)
             mb = Product.objects.filter(product_id = int(num))
             zxcv = random.randint(0, 7)
-            print(n10 - i - 1)
+            #print(n10 - i - 1)
             if not len(mb):
                 continue
             z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
             # assert n10 - i - 1 >= 0
         # n10-=1
         finallist.append(z2)
-    print(finallist)
+    #print(finallist)
     param = {
         'username' : username,
         'final': finallist,
@@ -765,19 +767,20 @@ def trackCart(request):
             a.save()
         else:
             a.update(cmt_title = cmt_title, cmt_desc = cmt_desc, rating = z[0].rating, edited = True, edit_time = datetime.now())
-    # print('hiids')  
+    # #print('hiids')  
     username  = request.user.username
     a11 = ExtendedUser.objects.filter(usr=request.user)
     b11 = PurchaseDate.objects.filter(purdate = a11[0])
     for i in a11:
-        print(i)
+        #print(i)
+        pass
     avtime = []
     n10 = 0
     for i in b11:
         avtime.append([i.purd, i.lang, i.lat, i.days, i.state, i.lato, i.lango])
         n10 += 1
-    print(avtime)
-    print(n10, 'is n10')
+    #print(avtime)
+    #print(n10, 'is n10')
     states = [
         ['Nagpur', 78.893078, 21.1015184],
         ['Nashik', 73.90984434482529, 19.890527214221166],
@@ -793,10 +796,10 @@ def trackCart(request):
     a = []
     b = []
     str1 = z[0].totcarts
-    print('printing this', str1)
+    #print('#printing this', str1)
     if(len(str1) == 2):
         return render(request, 'shop/NoItem.html')
-    print(str1)
+    #print(str1)
     str1 = str1.split('}')
     res = []
     for i in str1:
@@ -804,7 +807,7 @@ def trackCart(request):
         i = i.replace('{', '[')
         i = i.replace('}', ']')
         res.append(i.strip('][').split(', '))
-    # print(res)
+    # #print(res)
     zerolen = []
     diffDict = {}
     for i in range(len(res)):
@@ -813,12 +816,12 @@ def trackCart(request):
             continue
         res[i] = res[i][0].split(',')
         
-        # print(res[i])       
+        # #print(res[i])       
     
     check1=  False
     for j in range(1, 5):
         for i in res:
-            print('this: ', i)
+            #print('this: ', i)
             if i != ['']:
                 check1 = True
                 pass
@@ -836,21 +839,21 @@ def trackCart(request):
             j = j.split(',')
             vb.append(j[0].split(':'))
         diffDict[i] = vb
-    print(diffDict)
+    #print(diffDict)
     finallist = []
     for i in diffDict:
         m = diffDict[i]
         z2 = []
         for j in m:#
-            print(j[0])
+            #print(j[0])
             num = ""
             for word in j[0]:
                 if word.isdigit():
                     num += word
-            print(num)
+            #print(num)
             mb = Product.objects.filter(product_id = int(num))
             zxcv = random.randint(0, 7)
-            print(n10 - i - 1)
+            #print(n10 - i - 1)
             if not len(mb):
                 continue
             z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
@@ -859,7 +862,7 @@ def trackCart(request):
         finallist.append(z2)
     useris = ExtendedUser.objects.filter(usr = request.user)
     z3 = Rating.objects.filter(rateusers = useris[0])
-    print(finallist)
+    #print(finallist)
     param = {
         'username' : username,
         'final': finallist,
@@ -871,12 +874,12 @@ def trackCart(request):
     return render(request, 'shop/trackCart.html', param)
 
 def beforeReload(request):
-    print('IN RELOAD')
+    #print('IN RELOAD')
     if request.method == "POST":
         a = request.POST.get('text', '{}')
         if(len(a) < 2):
             a = '{}'
-        print(a)
+        #print(a)
         b = ExtendedUser.objects.filter(usr = request.user)
         b.update(cart = a)
     return JsonResponse({"hii" : "byyw"})
@@ -896,9 +899,9 @@ def getAddress(request):
             ['Navi Mumbai', 73.14423088426301, 18.68300231807807]
         ]
         a = request.POST.get('text', "{'lat':18.98, 'lon':72.83}")
-        print('This is the address : ', a)
+        #print('This is the address : ', a)
         b = json.loads(a)
-        # print(b['lat'])
+        # #print(b['lat'])
         c = ExtendedUser.objects.filter(usr = request.user)
         d = datetime.now()
         f = random.randint(0, 7)
@@ -908,27 +911,27 @@ def getAddress(request):
 
 
 def trendingProduct():
-    print('Trending produt start')
+    #print('Trending produt start')
     extendedUserInstance = ExtendedUser.objects.all()
     totalObjectsInstance = Product.objects.all()
-    # print(totalObjectsInstance)
-    # print(len(totalObjectsInstance))
+    # #print(totalObjectsInstance)
+    # #print(len(totalObjectsInstance))
     zx= len(totalObjectsInstance)
     finalDictProd = {}
     for i in Product.objects.all():
         zz = Product.objects.filter(product_id = i.product_id)
-        # print(zz)
-        # print(len(zz))
+        # #print(zz)
+        # #print(len(zz))
         if not len(zz):
             zx += 1
             continue
-        # print(zz[0].product_id)
-        # print(zz[0].product_name)
+        # #print(zz[0].product_id)
+        # #print(zz[0].product_name)
         # # zz.update(num = 1)
-        # print(zz[0].rating)
+        # #print(zz[0].rating)
         finalDictProd['pr' + str(i.product_id)] = 0
     for i in extendedUserInstance:
-        # print(i.usr.username)
+        # #print(i.usr.username)
         totCartsString = i.totcarts
         totCartsArr = totCartsString.split('}')
         for i in range(len(totCartsArr)):
@@ -936,23 +939,23 @@ def trendingProduct():
             Stringa = totCartsArr[i]
             if len(Stringa) <= 2:
                 continue
-            # print(Stringa)
+            # ##print(Stringa)
             cartToJson = json.loads(Stringa)
             for i in cartToJson:
                 try:
                     finalDictProd[i] += cartToJson[i]
                 except Exception:
                     continue
-                # print(finalDictProd[i])
-                # print(cartToJson[i])
-            # print(finalDictProd)
-        # print(totCartsArr)
-    # print(extendedUserInstance)
-    # print(finalDictProd)
+                # ##print(finalDictProd[i])
+                # ##print(cartToJson[i])
+            # #print(finalDictProd)
+        # #print(totCartsArr)
+    # #print(extendedUserInstance)
+    # #print(finalDictProd)
     sorted_values = sorted(finalDictProd.values()) # Sort the values
     sorted_dict = {}
 
-    # print(sorted_values)
+    # #print(sorted_values)
     for i in sorted_values:
         for k in finalDictProd.keys():
             if finalDictProd[k] == i:
@@ -964,19 +967,19 @@ def trendingProduct():
         max_.append([i, sorted_dict[i]])
         maxProduct.append(i)
 
-    # print(maxProduct, max_)
-    print('Trending produt END')
+    # #print(maxProduct, max_)
+    #print('Trending produt END')
     return (maxProduct[-5:], max_[-5:])
 
 def rateProduct(request):
-    print('hiih in rateProducxt')
+    #print('hiih in rateProducxt')
     if request.method == "POST":
         i = request.POST.get('text', '0')
         i = i.split('|')
         uid = ExtendedUser.objects.filter(usr = request.user)
         rateid = Rating.objects.filter(rateusers = uid[0])
         rateid = rateid.filter(product_id = i[0])
-        print(rateid)
+        #print(rateid)
         if not rateid:
             saverate = Rating(rateusers = uid[0], product_id = i[0], rating = i[1])
             saverate.save()
@@ -985,12 +988,12 @@ def rateProduct(request):
         allRatings = Rating.objects.filter(product_id = i[0])
         ratecnt = 0
         for p in allRatings:
-            # print(p.rating)
+            # #print(p.rating)
             ratecnt += p.rating
         a = Product.objects.filter(product_id = i[0])
         num = a[0].num 
         ratingUpdate = ratecnt / num
-        print('Updated rating for ', a[0].product_name, ' ', ratingUpdate, ' ', i[1], ' ', num)
+        #print('Updated rating for ', a[0].product_name, ' ', ratingUpdate, ' ', i[1], ' ', num)
         a.update(rating = ratecnt / num)  
         return JsonResponse({'hi':'Bye'})
 
@@ -1022,21 +1025,21 @@ def changeUname(request):
                 errors.append('No user with current username found')
             if not len(errors):
                 errors.append('Username Succesfully Changed')
-                print(errors)
+                #print(errors)
                 return HttpResponse('<h1> DONE </h1><script> window.location.href = "/shop/1";</script>')
             else:
-                print(errors)
+                #print(errors)
                 return render(request, 'shop/changeUname.html', {'username' : username, 'errors': errors})
         else:
             usrInstance = User.objects.all()
             check = False
             for i in usrInstance:
                 if a == i.username:
-                    print(a)
+                    #print(a)
                     check = True
                     z = User.objects.get(username = a)
                     try:
-                        print(z.password, c)
+                        #print(z.password, c)
                         if request.user.check_password(c):
                             z.set_password(d)
                             z.save()
@@ -1049,10 +1052,10 @@ def changeUname(request):
                 errors.append('No user with current username found')
             if not len(errors):
                 errors.append('Password Succesfully Changed')
-                print(errors)
+                #print(errors)
                 return HttpResponse('<h1> DONE </h1><script> window.location.href = "/shop/1";</script>')
             else:
-                print(errors)
+                #print(errors)
                 return render(request, 'shop/changeUname.html', {'username' : a, 'errors': errors})
     return render(request, 'shop/changeUname.html', {'username' : username})
 
@@ -1075,14 +1078,14 @@ def search1(request, myStr):
         if a in i.subcategory1.lower():
             for z in Product.objects.filter(subcategory1 = i.subcategory1):
                 b.append(Product.objects.filter(product_name = z))
-                print(z)
-            print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1))    
+                #print(z)
+            #print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1))    
     c = []
     zzz = []
     for i in b:
         if(i[0].product_name not in zzz):
             zzz.append(i[0].product_name)
-    print(a)
+    #print(a)
     for i in zzz:
         c.append(Product.objects.filter(product_name = i))
 

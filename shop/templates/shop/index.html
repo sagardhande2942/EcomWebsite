@@ -203,6 +203,19 @@
         }
 
         .show {display:block;}
+        
+        div.scroll {
+                margin: 4px, 4px;
+                padding: 4px;
+                width: 100%;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                white-space: nowrap;
+            }
+        .mostSearched {
+            height:50px;
+            overflow: scroll;
+        }
 
 </style>
 {% endblock %}
@@ -397,7 +410,6 @@
     </div>
   </div>
 </div>
-
 <h4 class="text-center"><span class="badge bg-secondary">Great Deals</span></h4>
 <div class="container-fluid my-3 text-white p-3" style="background-color:#464a82; width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
   <div id="trendCarousel" class="carousel  slide" data-bs-ride="carousel">
@@ -410,10 +422,12 @@
           </div>
           <div class="col-lg-4">
             <a  onclick="NewTab('{{i.0.product_id}}');" href ='#'>
-              <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}'>
+              <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}' style="max-width: 400px;"> 
             </a>
           </div>
+          
           <div class="col-lg-4">
+            <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' style="text-decoration: none; color:white">
             <!-- <h2>{{i.0.product_name}}</h2>
             <h3>₹{{i.0.price}}</h3> -->
             <p style="display: inline-block;">
@@ -423,6 +437,7 @@
           </p>
             <pre style="font-size: large;">{{i.0.product_desc|slice:"0:30"}}...</pre>
             <h5 id="trendingNumber{{i.0.product_id}}"></h5>
+            </a>
           </div>
           <div class="col-lg-2">
       
@@ -438,10 +453,11 @@
             </div>
             <div class="col-lg-4">
               <a  onclick="NewTab('{{i.0.product_id}}');" href ='#'>
-                <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}'>
+                <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}' style="max-width: 400px;">
               </a>
             </div>
             <div class="col-lg-4">
+                <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' style="text-decoration: none; color:white">
             <!-- <h2>{{i.0.product_name}}</h2>
             <h3>₹{{i.0.price}}</h3> -->
             <p style="display: inline-block;">
@@ -451,6 +467,7 @@
           </p>
             <pre style="font-size: large;">{{i.0.product_desc|slice:"0:30"}}...</pre>
             <h5 id="trendingNumber{{i.0.product_id}}"></h5>
+            </a>
             </div>
             <div class="col-lg-2">
         
@@ -468,6 +485,87 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
+  </div>
+
+<br><br>
+  <h4 class="text-center"><span class="badge bg-secondary">Daily Deals &nbsp&nbsp&nbsp<i class='fas fa-clock' style='font-size:24px'></i>
+    <span id = 'hours'></span> : <span id = 'minutes'></span> : <span id="seconds"></span></span></h4>
+  <div class="container-fluid my-3 text-white p-3" style="background-color: rgb(255, 31, 68); width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
+    <div id="dailyDealsCarousel" class="carousel  slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          {% for i in dailyDeals|slice:"0:1" %}
+          <div class="row">
+            <div class="col-lg-2">
+              
+            </div>
+            <div class="col-lg-4">
+              <a  onclick="NewTab('{{i.0.product_id}}');" href ='#'>
+                <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}' style="max-width: 400px;">
+              </a>
+            </div>
+            <div class="col-lg-4">
+            <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' style="text-decoration: none; color:white">
+              <!-- <h2>{{i.0.product_name}}</h2>
+              <h3>₹{{i.0.price}}</h3> -->
+              <p style="display: inline-block;">
+                <b style="font-size:xx-large;">₹{{i.0.price}}</b>
+              <span style="color: lightgrey; font-size: medium;"><strike id="dailysDealsInc{{i.0.product_id}}">₹</strike></span>
+            </p>
+              <pre style="font-size: large;">{{i.0.product_desc|slice:"0:30"}}...</pre>
+              <h2 style="color: lightgreen;" id="dailyDealsNumber{{i.0.product_id}}">{{i.0.discount}}% Off</h2>
+              <h4><span >Limited time off, <span style="background-color: rgb(255, 82, 111);"><b>&nbspGrab this deal now&nbsp</b></span></span></h4>
+              </a>
+            </div>
+            <div class="col-lg-2">
+        
+            </div>
+          </div>
+          {% endfor %}
+          </div>
+          {% for i in dailyDeals|slice:"1:6" %}
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-lg-2">
+          
+              </div>
+              <div class="col-lg-4">
+                <a  onclick="NewTab('{{i.0.product_id}}');" href ='#'>
+                  <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}' style="max-width: 400px;">
+                </a>
+              </div>
+              <div class="col-lg-4">
+                <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' style="text-decoration: none; color:white">
+              <!-- <h2>{{i.0.product_name}}</h2>
+              <h3>₹{{i.0.price}}</h3> -->
+              <p style="display: inline-block;">
+                <b style="font-size:xx-large;">₹{{i.0.price}}</b>
+              <span style="color: lightgrey; font-size: medium;"><strike id="dailysDealsInc{{i.0.product_id}}">₹</strike></span>
+            </p>
+              <pre style="font-size: large;">{{i.0.product_desc|slice:"0:30"}}...</pre>
+              <h2 style="color: lightgreen;" id="dailyDealsNumber{{i.0.product_id}}">{{i.0.discount}}% Off</h2>
+              <h4><span >Limited time off, <span style="background-color: rgb(255, 82, 111);"><b>&nbspGrab this deal now&nbsp</b></span></span></h4>
+              </a>
+              </div>
+              <div class="col-lg-2">
+          
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#dailyDealsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#dailyDealsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    </div>
+  
+
 
 
   <!-- {{i}}
@@ -514,6 +612,23 @@
   </div>
   </div> -->
 </div>
+
+<div style="margin-top: 40px;">
+<h4 class="text-center"><span class="badge bg-secondary">Recommend For <b style="color: yellow;">{{username}}</b></span></h4>
+<div style="position: relative;">
+<div class="scroll" id='recommendedItemsScroll' >
+  {% for i in recommendedItems %}
+  <a href = '/shop/products/{{i.0.product_id}}'>
+  <img class="mx-4" style="width: 200px; height: 200px;" src = '../../../media/{{i.0.image}}'>
+</a>
+  {% endfor %}
+  <button class="btn btn-primary"  style="position: absolute; left: 10px; top: 50%;" id='slideLeft'> <i class="fa fa-angle-left" style="font-size:36px"></i> </button>
+  <button  class="btn btn-primary" style="position: absolute; right: 10px; top: 50%;" id="slideRight"> <i class="fa fa-angle-right" style="font-size:36px"></i> </button>
+</div>
+</div>
+</div>
+<br><br>
+<h1 class="text-center mt-4 float-left"><span class="badge bg-secondary">Explore</span></h1>
 
 <div class="container input-group" style="display: none;">
   <span class="input-group-text" style="color: orangered; font-weight: 500;">Select Category </span>
@@ -645,6 +760,13 @@
     </div>
     {% endfor %}
     <button type="button" onclick="windowChange();" class="btn btn-primary">View More</button>
+    <span style="font-size: large; color: #888888;">Checkout the most searched products : </span>
+    <select style="border: 2px solid blue;" class="mostSearched" name="mostSearched" onchange="category(this);">
+      <option value="1">Select</option>
+      {% for i in mostSearched %}
+      <option value="{{i}}">{{i}}</option>
+      {% endfor %}
+    </select>
   </div>
 
 <div id='outerdiv2' style="margin-top: 10px; margin-bottom: 50px ;background-color:  white;">
@@ -652,7 +774,7 @@
 <div class="mt-2 container-fluid" >
   <p class="d-inline mb-3" id='categoryP|{{products.0.subcategory1}}'>
   <span class="mb-2" style="font-weight: 500; font-size: x-large;" >{{products.0.subcategory1}}</span>
-  <button type="button" class="btn btn-primary mb-3" style="float: right;" onclick="viewAll(this);">View All</button>
+  <button type="button" class="btn btn-warning mr-2 mb-3" style="float: right;" onclick="viewAll(this);">View All</button>
 </p>
   <div id="carouselExampleDark{{forloop.counter}}" style="background-color:white;" class="carousel carousel-dark  slide" data-bs-ride="carousel">
     <div class="carousel-indicators" style="width: 60px; margin: auto;">
@@ -772,7 +894,15 @@
   </div>
   {% endfor %}
   <p style="width: 100%;" class="text-center mt-3">
-  <button type="button" onclick="windowChange();" class="btn btn-primary mb-4" style="width: 30%;">View More</button>
+    <button type="button" onclick="windowChange();" class="btn btn-primary mb-4" style="width: 30%;">View More</button>
+    <br>
+    <span style="font-size: large; color: #888888;">Checkout the most searched products : </span>
+    <select style="border: 2px solid blue;" class="mostSearched" name="mostSearched" onchange="category(this);">
+      <option value="1">Select</option>
+      {% for i in mostSearched %}
+      <option value="{{i}}">{{i}}</option>
+      {% endfor %}
+    </select>
 </p>
 
 </div>
@@ -826,7 +956,13 @@
   {% endfor %}
   {% endfor %}
   <button type="button" onclick="windowChange();" class="btn btn-primary" >View More</button>
-
+  <span style="font-size: large; color: #888888;">Checkout the most searched products : </span>
+  <select style="border: 2px solid blue;" class="mostSearched" name="mostSearched" onchange="category(this);">
+    <option value="1">Select</option>
+    {% for i in mostSearched %}
+    <option value="{{i}}">{{i}}</option>
+    {% endfor %}
+  </select>
 </div>
 
   {% endblock %}
@@ -1187,7 +1323,11 @@
     }
 
     {% for i in trendingProduct|slice:"0:6" %}
-    document.getElementById('trendingIncPrice{{i.0.product_id}}').innerHTML = '₹' + (({{i.0.price}} * ({{i.0.discount}} / 100)) + {{i.0.price}})
+      document.getElementById('trendingIncPrice{{i.0.product_id}}').innerHTML = '₹' + (({{i.0.price}} * ({{i.0.discount}} / 100)) + {{i.0.price}})
+    {% endfor %}
+
+    {% for i in dailyDeals %}
+      document.getElementById('dailysDealsInc{{i.0.product_id}}').innerHTML = '₹' + (({{i.0.price}} * ({{i.0.discount}} / 100)) + {{i.0.price}})
     {% endfor %}
 
   function NewTab(x) {
@@ -1223,6 +1363,74 @@ function myyF(this1){
     winNo++;
     window.location.href = '/shop/' + winNo;
   }
+
+  function makeTimer() {
+   var endTime=new Date({{ dateEnd|date:"U" }} * 1000);
+    endTime = (Date.parse(endTime) / 1000);
+    // console.log('{{ dateEnd|date:"U"}}')
+    var now = new Date();
+    var gmtRemove = 5 * 60 * 60 + 30 * 60  - 10
+    now = (Date.parse(now) / 1000);
+    // console.log(endTime + " " + ( gmtRemove - gmtRemove  +  now   ) )
+    var timeLeft = endTime - now - gmtRemove;
+
+    var days = Math.floor(timeLeft / 86400);
+    var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+    var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
+    var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+
+    if (hours < "10") { hours = "0" + hours; }
+    if (minutes < "10") { minutes = "0" + minutes; }
+    if (seconds < "10") { seconds = "0" + seconds; }
+
+    // console.log(days + ' ' + hours + ' ' + minutes + ' ' + seconds)
+    $("#days").html(days)       /*+ "<span>Days</span>");*/
+    $("#hours").html(hours)     /*+ "<span>Hours</span>");*/
+    $("#minutes").html(minutes) /*+ "<span>Minutes</span>");*/
+    $("#seconds").html(seconds) /*+ "<span>Seconds</span>");*/
+    
+    if(days == 0 && hours == 0 && minutes == 0 && seconds == 0){
+      clearInterval(dailyDealsinterval)
+      document.getElementById('dailyDealsCarousel').innerHTML = `<button class = 'btn btn-warning' type='button' onclick='viewNewDeals();'> View New Deals </button>`;
+      // window.location.href = '/shop/1';
+    }
+}
+
+dailyDealsinterval = setInterval(function() { makeTimer(); }, 1000);
+
+function viewNewDeals(){
+  window.location.href = '/shop/1'
+}
+
+const buttonRight = document.getElementById('slideRight');
+const buttonLeft = document.getElementById('slideLeft');
+
+buttonRight.onclick = function () {
+  var element = document.getElementById('recommendedItemsScroll')
+  sideScroll(element,'right',25,1000,40)
+};
+
+buttonLeft.onclick = function () {
+  var element = document.getElementById('recommendedItemsScroll')
+  sideScroll(element,'left',25,500,40)
+
+};
+
+function sideScroll(element,direction,speed,distance,step){
+    scrollAmount = 0;
+    var slideTimer = setInterval(function(){
+        if(direction == 'left'){
+            element.scrollLeft -= step;
+        } else {
+            element.scrollLeft += step;
+        }
+        scrollAmount += step;
+        if(scrollAmount >= distance){
+            window.clearInterval(slideTimer);
+        }
+    }, speed);
+}
+
 
   </script>
 

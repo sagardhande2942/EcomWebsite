@@ -16,11 +16,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import stripe
 import logging
-import threading
+from bs4 import BeautifulSoup
+import requests
 from datetime import datetime
-import spacy
-import operator
-import pandas as pd
 logger = logging.getLogger(__name__)
 
 
@@ -35,8 +33,12 @@ User = get_user_model()
 
 import simplejson
 @login_required(login_url='/auth/')
-def index(request):
+def index(request, num):
     #Calling trending product
+    if num <= 0:
+        num = 1
+    if not num:
+        num = 1
     maxProduct, maxNum = trendingProduct()
     print(maxProduct, maxNum)
     maxProductInstance = []
@@ -69,19 +71,26 @@ def index(request):
     #     [products, range(1, nslides), nslides],
     #     [products, range(1, nslides), nslides]
     # ]
-
+    random.shuffle(allprods)
+    allprodsReal = allprods
+    toIncrease = num * 2
+    msgToShow  = ""
+    if  toIncrease > len(allprods):
+        msgToShow = 'You are viewing all products'
+    allprods = allprods[0:toIncrease]
     ratingInstance = Product.objects.all()
     ratings = []
     categoriesNeed = []
-    subcategoriesNeed = []
-    subcategoriesNeed1 = []
     for i in ratingInstance:
         ratings.append([i.product_id, max(1, min(5, round(i.rating)))])
     for i in ratingInstance:
         if i.category not in categoriesNeed:
             categoriesNeed.append(i.category)
 
+    subcategoriesDictreal = {}
     for z in categoriesNeed:
+        subcategoriesNeed1 = []
+        subcategoriesNeed = []
         print(z)
         ratingInstance = Product.objects.filter(category = z)
         for i in ratingInstance:
@@ -90,7 +99,6 @@ def index(request):
                 subcategoriesNeed.append(i.subcategory)
         
         subcategoriesDict = []
-        subcategoriesDictreal = {}
         for i in subcategoriesNeed:
             # print(i)
             aa = Product.objects.filter(subcategory = i)
@@ -105,6 +113,14 @@ def index(request):
 
     print(subcategoriesDictreal)
     subcategoriesDict5 = subcategoriesDictreal['Electronics']
+    subcategoriesDict4 = subcategoriesDictreal['Appliances']
+    subcategoriesDict2 = subcategoriesDictreal['Fashion']
+    subcategoriesDict1 = subcategoriesDictreal['Grocery']
+    subcategoriesDict3 = subcategoriesDictreal['Mobile']
+    subcategoriesDict6 = subcategoriesDictreal['Home']
+    subcategoriesDict7 = subcategoriesDictreal['Music']
+    subcategoriesDict8 = subcategoriesDictreal['Others']
+    # subcategoriesDict5= {}
     param = {
         'allprods': allprods,
         'items' : len(Product.objects.all()),
@@ -115,9 +131,18 @@ def index(request):
         'ratingProduct':ratings,
         'category':categoriesNeed,
         'products': Product.objects.all(),
+        'msgToShow':msgToShow,
+        'winNo' : num,
         'subcategoriesNeed' : subcategoriesNeed,
         'subcategoriesNeed1' : subcategoriesNeed1,
+        'subcategoriesDict1': subcategoriesDict1,
+        'subcategoriesDict2': subcategoriesDict2,
+        'subcategoriesDict3': subcategoriesDict3,
+        'subcategoriesDict4': subcategoriesDict4,
         'subcategoriesDict5': subcategoriesDict5,
+        'subcategoriesDict6': subcategoriesDict6,
+        'subcategoriesDict7': subcategoriesDict7,
+        'subcategoriesDict8': subcategoriesDict8,
     }
     
     return render(request, 'shop/index.html', param)
@@ -310,7 +335,7 @@ def productView(request, myid):
     cmtInstance = Comments.objects.filter(product_id = prodCount[0])
     print(round(product[0].rating))
     param = {
-        'incPrice' : product[0].price + (product[0].discount / 100) * product[0].price,
+        'incPrice' : round(product[0].price / (1 - product[0].discount / 100), 3),
         'prod': product,
         'username': username,
         'items': len(Product.objects.all()),
@@ -366,34 +391,113 @@ def search(request):
 
 
         #MyLogic
-        K = len(a) // 2
-        test_str = a
-        res = [test_str[i: j] for i in range(len(test_str)) for j in range(i + 1, len(test_str) + 1) if len(test_str[i:j]) == K]
-        print('hiii in ssearch')
-        d = Product.objects.all()
-        dd = []
-        b = []
-        for i in d:
-            dd.append(i)
-        print(res)
-        for a in res:
-        # if not checkx:
+        # K = len(a) // 2
+        # test_str = a
+        # res = [test_str[i: j] for i in range(len(test_str)) for j in range(i + 1, len(test_str) + 1) if len(test_str[i:j]) == K]
+        # print('hiii in ssearch')
+        # d = Product.objects.all()
+        # dd = []
+        # b = []
+        # for i in d:
+        #     dd.append(i)
+        # print(res)
+        # for a in res:
+        # # if not checkx:
+        #     iz = 0
+        #     for i in dd:
+        #         if a in i.product_name.lower():
+        #             iz += 1
+        #             if iz > 50:
+        #                 break
+        #             b.append(Product.objects.filter(product_name = i.product_name))
+
+        #     iz = 0
+        #     for i in dd:
+        #         if a in i.category.lower():
+        #             for z in Product.objects.filter(category = i.category):
+        #                 iz += 1
+        #                 if iz > 50:
+        #                     break
+        #                 b.append(Product.objects.filter(product_name = z))
+        #                 # print(z)
+        #             # print('here bois ', Product.objects.filter(category = i.category))
+
+        #     iz = 0
+        #     for i in dd:
+        #         if a in i.subcategory.lower():
+        #             for z in Product.objects.filter(subcategory = i.subcategory):
+        #                 iz += 1
+        #                 if iz > 50:
+        #                     break
+        #                 b.append(Product.objects.filter(product_name = z))
+        #                 # print(z)
+        #             # print('here bois ', Product.objects.filter(subcategory = i.subcategory))
+            
+        #     iz = 0
+        #     for i in dd:
+        #         if a in i.subcategory1.lower():
+        #             for z in Product.objects.filter(subcategory1 = i.subcategory1):
+        #                 iz += 1
+        #                 if iz > 50:
+        #                     break
+        #                 b.append(Product.objects.filter(product_name = z))
+        #                 # print(z)
+        #             # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
+
+        # c = []
+        # print('The length is : ', len(b))
+        # zzz = []
+        # for i in b:
+        #     if(i[0].product_name not in zzz):
+        #         zzz.append(i[0].product_name)
+        # # print(a)
+        # for i in zzz:
+        #     c.append(Product.objects.filter(product_name = i))
+
+        # if not b: #and not checkx:
+        try:
+            url="https://www.flipkart.com/search?q="+ aReal.lower() +"&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
+            r=requests.get(url)
+            soup = BeautifulSoup(r.content, 'html5lib')
+            spans=soup.find_all('span',"_10Ermr")
+            fl = ''
+            k = 0
+
+            for span in spans:
+                a = span.text
+            #print(a)
+            for i in a:
+                #print(i)
+                if(i == '"'):
+                    k = 1
+                    continue
+                if(k ==1):
+                    fl+=i
+            productInst = Product.objects.all()
             iz = 0
+            print('this is fl ', fl)
+            if not len(fl):
+                 raise Exception("Not found any search results")
+            a = fl
+            d = Product.objects.all()
+            dd = []
+            b = []
+            for i in d:
+                dd.append(i)
             for i in dd:
                 if a in i.product_name.lower():
-                    iz += 1
-                    if iz > 50:
+                    if len(b)> 50:
                         break
-                    b.append(Product.objects.filter(product_name = i.product_name))
+                    b.append(Product.objects.filter(product_id = i.product_id))
 
             iz = 0
             for i in dd:
                 if a in i.category.lower():
                     for z in Product.objects.filter(category = i.category):
                         iz += 1
-                        if iz > 50:
+                        if len(b)> 50:
                             break
-                        b.append(Product.objects.filter(product_name = z))
+                        b.append(Product.objects.filter(product_id = z.product_id))
                         # print(z)
                     # print('here bois ', Product.objects.filter(category = i.category))
 
@@ -402,9 +506,9 @@ def search(request):
                 if a in i.subcategory.lower():
                     for z in Product.objects.filter(subcategory = i.subcategory):
                         iz += 1
-                        if iz > 50:
+                        if len(b)> 50:
                             break
-                        b.append(Product.objects.filter(product_name = z))
+                        b.append(Product.objects.filter(product_id = z.product_id))
                         # print(z)
                     # print('here bois ', Product.objects.filter(subcategory = i.subcategory))
             
@@ -413,25 +517,100 @@ def search(request):
                 if a in i.subcategory1.lower():
                     for z in Product.objects.filter(subcategory1 = i.subcategory1):
                         iz += 1
-                        if iz > 50:
+                        if len(b)> 50:
                             break
-                        b.append(Product.objects.filter(product_name = z))
-                        # print(z)
-                    # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
+                        b.append(Product.objects.filter(product_id = z.product_id))
 
-        c = []
-        print('The length is : ', len(b))
-        zzz = []
-        for i in b:
-            if(i[0].product_name not in zzz):
-                zzz.append(i[0].product_name)
-        # print(a)
-        for i in zzz:
-            c.append(Product.objects.filter(product_name = i))
+            if not len(b):
+                K = len(a) // 2
+                test_str = fl
+                res = [test_str[i: j] for i in range(len(test_str)) for j in range(i + 1, len(test_str) + 1) if len(test_str[i:j]) == K]
+                print('hiii in ssearch')
+                d = Product.objects.all()
+                dd = []
+                b = []
+                for i in d:
+                    dd.append(i)
+                print(res)
+        
+                for a in res:
+                # if not checkx:
+                    iz = 0
+                    for i in dd:
+                        if a in i.product_name.lower():
+                            iz += 1
+                            if len(b)> 50:
+                                break
+                            b.append(Product.objects.filter(product_id = i.product_id))
 
-        if not b: #and not checkx:
-            return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
+                    iz = 0
+                    for i in dd:
+                        if a in i.category.lower():
+                            for z in Product.objects.filter(category = i.category):
+                                iz += 1
+                                if len(b)> 50:
+                                    break
+                                b.append(Product.objects.filter(product_id = z.product_id))
+                                # print(z)
+                            # print('here bois ', Product.objects.filter(category = i.category))
+
+                    iz = 0
+                    for i in dd:
+                        if a in i.subcategory.lower():
+                            for z in Product.objects.filter(subcategory = i.subcategory):
+                                iz += 1
+                                if len(b)> 50:
+                                    break
+                                b.append(Product.objects.filter(product_id = z.product_id))
+                                # print(z)
+                            # print('here bois ', Product.objects.filter(subcategory = i.subcategory))
+                    
+                    iz = 0
+                    for i in dd:
+                        if a in i.subcategory1.lower():
+                            for z in Product.objects.filter(subcategory1 = i.subcategory1):
+                                iz += 1
+                                if len(b)> 50:
+                                    break
+                                b.append(Product.objects.filter(product_id = z.product_id))
+
+                print(b)
+                if not len(b):
+                    return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
+                                # print(z)
+                            # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
+
+                c = []
+                print(b)
+                print('The length is : ', len(b))
+                zzz = []
+                for i in b:
+                    if(i[0].product_id not in zzz):
+                        zzz.append(i[0].product_id)
+                # print(a)
+                for i in zzz:
+                    c.append(Product.objects.filter(product_id = i))
                 
+                return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal, 'counter' : 1})
+
+                        # print(z)
+            c = []
+            print(b)
+            print('The length is : ', len(b))
+            zzz = []
+            for i in b:
+                print(i[0].product_id)
+                if(i[0].product_id not in zzz):
+                    zzz.append(i[0].product_id)
+            # print(a)
+            for i in zzz:
+                c.append(Product.objects.filter(product_id = i))
+
+                    # print('here bois ', Product.objects.filter(subcategory1 = i.subcategory1)) 
+        except :
+            print('In Except')
+            return HttpResponse("<h1>Not Found</h1><br><a href='/shop/'>Home</a>")
+            
         return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal, 'counter' : 1})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
 

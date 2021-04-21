@@ -635,9 +635,10 @@
 
     </div>
     {% endfor %}
+    <button type="button" onclick="windowChange();" class="btn btn-primary">View More</button>
   </div>
 
-<div id='outerdiv2' style="margin-top: 10px; background-color:  white;">
+<div id='outerdiv2' style="margin-top: 10px; margin-bottom: 50px ;background-color:  white;">
 {% for products, range, nslides, range1, nslides1, range2, nslides2 in allprods %}
 <div class="mt-2 container-fluid" >
   <p class="d-inline mb-3" id='categoryP|{{products.0.subcategory1}}'>
@@ -761,6 +762,10 @@
 
   </div>
   {% endfor %}
+  <p style="width: 100%;" class="text-center mt-3">
+  <button type="button" onclick="windowChange();" class="btn btn-primary mb-4" style="width: 30%;">View More</button>
+</p>
+
 </div>
 
 <div class="outerdiv3 my-2" id='outerdiv3'>
@@ -809,6 +814,8 @@
 {% endif %}
   {% endfor %}
   {% endfor %}
+  <button type="button" onclick="windowChange();" class="btn btn-primary" >View More</button>
+
 </div>
 
   {% endblock %}
@@ -1194,6 +1201,17 @@
 function myyF(this1){
   document.getElementById("myDropdown").classList.toggle("show");
 }
+
+  var msgToShow = '{{msgToShow}}'
+  if(msgToShow.length > 0){
+    alert(msgToShow);
+  }
+
+  function windowChange(){
+    var winNo = parseInt('{{winNo}}');
+    winNo++;
+    window.location.href = '/shop/' + winNo;
+  }
 
   </script>
 

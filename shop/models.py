@@ -43,3 +43,11 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class DateCounter(models.Model):
+    dateNow = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+    dateEnd = models.DateTimeField(auto_now_add=False, blank=True, null=True)
+
+class SearchQ(models.Model):
+    search = models.CharField(max_length=100, blank=True, default='')

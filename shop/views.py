@@ -5,7 +5,7 @@ from stripe.api_resources import product
 from accounts.models import ExtendedUser, PurchaseDate, Rating
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Comments, Product, Contact
+from .models import Comments, Product, Contact, DateCounter, SearchQ
 from math import ceil, prod
 from django.conf import LazySettings, settings 
 from django.http.response import JsonResponse 
@@ -18,22 +18,93 @@ import stripe
 import logging
 from bs4 import BeautifulSoup
 import requests
-from datetime import datetime
+import simplejson
+import threading
+import time
+import pytz
+from datetime import date, datetime, timedelta
 logger = logging.getLogger(__name__)
 
-
-YOUR_DOMAIN = 'http://3.143.242.177/'
+dateCounter = DateCounter(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1))
+dateCounter.save()
+YOUR_DOMAIN = 'http://localhost:8000'
 
 price = 0
 cart12 = ""
 PDFromgetAddtoSuccessPay = PurchaseDate()
 daysRequiredInCart = 0
 
+def dailyDeals(a):
+    products = Product.objects.all()
+    allSubCatList = []
+    for i in products:
+        if i not in allSubCatList:
+            allSubCatList.append(i.subcategory1)
+        
+    random.shuffle(allSubCatList)
+    realSubCats = allSubCatList[0:a]
+    allRealProds = []
+    for i in realSubCats:
+        for j in Product.objects.filter(subcategory1 = i):
+            allRealProds.append(j.product_id)
+
+    random.shuffle(allRealProds)
+    realRealProds = allRealProds[0:a]
+    return realRealProds
+
+
+def recommended():
+    allUsersDict = {}
+    allUsers = User.objects.all()
+    for i in allUsers:
+        allUsersDict[i.id] = dailyDeals(10)
+    return allUsersDict
+
+
+
+
+globalDailyDeals = dailyDeals(5)
+recommendedItems = recommended()
+
+
+
 User = get_user_model()
 
-import simplejson
+def countdown():
+    global globalDailyDeals
+    dateCounter = DateCounter.objects.filter(id = 2) #DateCounter(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1))
+    dateCounter.update(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(seconds=10))
+    print('Hii here')
+    globalDailyDeals = dailyDeals(5)
+    print(globalDailyDeals)
+    initiateCountdown()
+
+def initiateCountdown():
+    time.sleep(1 * 10)
+    print('Hiii')
+    countdown()
+
+timer = threading.Thread(target=initiateCountdown)
+timer.daemon = True
+timer.start() 
+threading.Thread.__init__.daemon = True
+# initiateCountdown()
+
 @login_required(login_url='/auth/')
 def index(request, num):
+    global globalDailyDeals
+    global recommendedItems
+    recommendedUser = recommendedItems[request.user.id]
+    recommendedUser1 = []
+    dailyDeals = globalDailyDeals
+    dailyDeals1 = []
+    for i in dailyDeals:
+        dailyDeals1.append(Product.objects.filter(product_id = i))
+    for i in recommendedUser:
+        recommendedUser1.append(Product.objects.filter(product_id = i))
+    dateCounter1 = DateCounter.objects.filter(id = 2)
+    # print(dateCounter1)
+    print(dateCounter1[0].dateNow, dateCounter1[0].dateEnd)
     #Calling trending product
     if num <= 0:
         num = 1
@@ -121,6 +192,24 @@ def index(request, num):
     subcategoriesDict7 = subcategoriesDictreal['Music']
     subcategoriesDict8 = subcategoriesDictreal['Others']
     # subcategoriesDict5= {}
+    mostSearch = SearchQ.objects.all()
+    mostSearchd = {}
+    for i in mostSearch:
+        try:
+            if mostSearchd[str(i.search)]:
+                mostSearchd[str(i.search)] += 1
+            else:
+                mostSearchd[str(i.search)] = 1
+        except Exception as e:
+            print(e)
+            mostSearchd[str(i.search)] = 1
+    # mostSearchd.sort(reverse=True)
+    sorted(mostSearchd, reverse=True)
+    finalMostSearch = []
+    for i in mostSearchd:
+        finalMostSearch.append(i)
+    finalMostSearch = finalMostSearch[0:5]
+
     param = {
         'allprods': allprods,
         'items' : len(Product.objects.all()),
@@ -143,6 +232,11 @@ def index(request, num):
         'subcategoriesDict6': subcategoriesDict6,
         'subcategoriesDict7': subcategoriesDict7,
         'subcategoriesDict8': subcategoriesDict8,
+        'dateNow': dateCounter1[0].dateNow,
+        'dateEnd': dateCounter1[0].dateEnd,
+        'dailyDeals':dailyDeals1,
+        'recommendedItems': recommendedUser1,
+        'mostSearched':finalMostSearch,
     }
     
     return render(request, 'shop/index.html', param)
@@ -591,7 +685,7 @@ def search(request):
                 # #print(a)
                 for i in zzz:
                     c.append(Product.objects.filter(product_id = i))
-                
+                SearchQ(search = fl).save()
                 return render(request, 'shop/search1.html', {'c':c, 'username' : username, 'value':fl, 'counter' : 1})
 
                         # #print(z)
@@ -611,7 +705,7 @@ def search(request):
         except :
             #print('In Except')
             return HttpResponse("<h1>Not Found</h1><br><a href='/shop/1'>Home</a>")
-            
+        SearchQ(search = fl).save()
         return render(request, 'shop/search1.html', {'c':c, 'username' : username, 'value':fl, 'counter' : 1})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
 

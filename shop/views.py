@@ -1,5 +1,6 @@
 import json
 import random
+from django.db.models.expressions import Exists
 
 from stripe.api_resources import product
 from accounts.models import ExtendedUser, PurchaseDate, Rating
@@ -61,12 +62,8 @@ def recommended():
     return allUsersDict
 
 
-
-
 globalDailyDeals = dailyDeals(5)
 recommendedItems = recommended()
-
-
 
 User = get_user_model()
 
@@ -80,7 +77,7 @@ def countdown():
     initiateCountdown()
 
 def initiateCountdown():
-    time.sleep(1 * 10)
+    time.sleep(1 * 30)
     print('Hiii')
     countdown()
 
@@ -94,7 +91,11 @@ threading.Thread.__init__.daemon = True
 def index(request, num):
     global globalDailyDeals
     global recommendedItems
-    recommendedUser = recommendedItems[request.user.id]
+    try:
+        recommendedUser = recommendedItems[request.user.id]
+    except:
+        recommendedItems = recommended()
+        recommendedUser = recommendedItems[request.user.id]
     recommendedUser1 = []
     dailyDeals = globalDailyDeals
     dailyDeals1 = []
@@ -282,7 +283,7 @@ def create_checkout_session(request):
             # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
             checkout_session = stripe.checkout.Session.create(
                 success_url=domain_url + 'shop/success/',
-                cancel_url=domain_url + 'shop/cancelled/',
+                cancel_url=domain_url + 'shop/cancel/',
                 payment_method_types=['card'],
                 mode='payment',
                 line_items=[
@@ -348,25 +349,82 @@ def cancelPay(request):
 @login_required(login_url='/auth/')
 def showCart(request):
     global daysRequiredInCart
+    currUser = ExtendedUser.objects.filter(usr = request.user)
+    # print(currUser[0].cart)
+    str1 = currUser[0].cart.split('}')
+    res = []
+    for i in str1:
+        i += '}'
+        i = i.replace('{', '[')
+        i = i.replace('}', ']')
+        res.append(i.strip('][').split(', '))
+    print(res)
+    try:
+        res.remove([''])
+    except:
+        pass
+    zerolen = []
+    for i in range(len(res)):
+        if len(res[i][0]) == 0:
+            zerolen.append(i)
+            continue
+        res[i] = res[i][0].split(',')
+        
+        #   print(res[i])
+    print(res)
+    check123 = False
+    for i in res:
+        # print('this: ', i)
+        if len(i[0]):
+            pass
+        else:
+            # print('hereeeeeee')
+            check123 = True
+    if check123:
+        res.remove([''])  
+
+    diffDict = {}
+    for i in range(len(res)):
+        diffDict[i] = []
+        vb = []
+        for j in res[i]:
+            j = j.split(',')
+            vb.append(j[0].split(':'))
+        diffDict[i] = vb
+    print(diffDict)
+    productIds = []
+    try:
+        for i in diffDict[0]:
+            s1  = i[0]
+            s1 = s1[0:-1]
+            productIds.append(int(s1[3:]))
+    except:
+        pass
+        
+    print(productIds)
     daysRequiredInCart = random.randint(3, 7)
     sellersList = [
         'Ron International', 'Hari Om Shoppie', 'HT-International', 'SimpAlert','OpInChat'
     ]
+    xProds = []
+    for i in productIds:
+        xProds.append(Product.objects.filter(product_id = i))
     allprods = Product.objects.values("product_id", "product_desc", "price", "image", "product_pubs_date", "product_name", 'discount', 'offers')
     username = request.user.username
     p = []
     cnt = 0
-    for i in allprods:
+    for j in xProds:
         cnt += 1
         # print(i)
-        p.append([i['product_id'], i, (i['price'] + i['price'] * (i['discount'] / 100)), daysRequiredInCart, sellersList[random.randint(0,4)]])
+        for i in j:
+            p.append([i.product_id, i, (i.price + i.price * (i.discount / 100)), daysRequiredInCart, sellersList[random.randint(0,4)]])
     # print(p)
     param = {
         'p' : p,
         'range': range(1, len(Product.objects.all()) + 1),
         'items': len(Product.objects.all()),
         'username':  username,
-        'products':Product.objects.all()
+        'products': xProds,
     }
     return render(request, 'shop/cart.html', param)
 
@@ -852,6 +910,7 @@ def trackCart(request):
         else:
             rating1 = z[0].rating
         prodInstance = Product.objects.filter(product_id = product_id)
+        # print(pytz.all_timezones)
         if not a:
             a = Comments(product_id = prodInstance[0], usr_id = request.user.id, username = request.user.username,
             cmt_title = cmt_title, cmt_desc = cmt_desc, rating = rating1, cmt_time = datetime.now(), edited = False,
@@ -943,11 +1002,21 @@ def trackCart(request):
                     num += word
             print(num)
             mb = Product.objects.filter(product_id = int(num))
+            z4 = Comments.objects.filter(usr_id = request.user.id, product_id = mb[0])
+            try:
+                print('This is the comment ', z4[0].cmt_title, ' ', z4[0].cmt_desc)
+            except:
+                pass
             zxcv = random.randint(0, 7)
             print(n10 - i - 1)
             if not len(mb):
                 continue
-            z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] , avtime[n10 - i - 1][6], avtime[n10 - i - 1][5]])
+            try:
+                z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] ,
+                avtime[n10 - i - 1][6], avtime[n10 - i - 1][5], z4[0].cmt_title, z4[0].cmt_desc])
+            except:
+                 z2.append([mb, j[1], avtime[n10 - i - 1][4], avtime[n10 - i - 1][1], avtime[n10 - i - 1][2], avtime[n10 - i - 1][0], avtime[n10 - i - 1][3] ,
+                avtime[n10 - i - 1][6], avtime[n10 - i - 1][5], '', ''])
             # assert n10 - i - 1 >= 0
         # n10-=1
         finallist.append(z2)
@@ -961,6 +1030,7 @@ def trackCart(request):
         'city': states,
         'ratingProduct': Product.objects.all(),
         'ratingUsers':  z3,
+        'commentsUsers': z4,
     }
     return render(request, 'shop/trackCart.html', param)
 

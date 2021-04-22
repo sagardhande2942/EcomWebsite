@@ -96,22 +96,35 @@ alert('If you have already rated and reviewed a product then its review will be 
         </form>
         <div class="card-body"><h3>{{j.0.0.product_name}}</h3>
           <div class="d-grid gap-2 col-6 mx-auto">
+            {% if j.10|length == 0 %}
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cmt{{j.0.0.product_id}}">Comment</button>
+            {% else %}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cmt{{j.0.0.product_id}}">Edit Comment</button>
+            {% endif %}
           </div>
           <div class="modal fade" style="z-index: 999999;" id="cmt{{j.0.0.product_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{j.0.0.product_id}}" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel{{j.0.0.product_id}}">Modal title</h5>
+                  <h5 class="modal-title" id="exampleModalLabel{{j.0.0.product_id}}">Comment</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="/shop/trackCart/">
                   {% csrf_token %}
                 <div class="modal-body">
+                {% if j.10|length == 0 %}
                   <input class="form-control" type="text" placeholder="Comment Title" name="cmt_title">
+                {% else %}
+                <input class="form-control" type="text" placeholder="Comment Title" name="cmt_title" value="{{j.9}}">
+                {% endif %}
                   <br>
+                  {% if j.10|length == 0 %}
                     <textarea style="height: 198px;" class="form-control" type="text" placeholder="Enter your comment description" name="cmt_desc"></textarea>
+                  {% else %}
+                  <textarea style="height: 198px;" class="form-control" type="text" placeholder="Enter your comment description" name="cmt_desc">{{j.10}}</textarea>
+                  {% endif %}
                   </div>
+                  
                   <input type="text" style="display: none;" name="product_id" value="{{j.0.0.product_id}}">
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

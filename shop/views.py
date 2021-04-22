@@ -73,20 +73,21 @@ User = get_user_model()
 def countdown():
     global globalDailyDeals
     dateCounter = DateCounter.objects.filter(id = 2) #DateCounter(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1))
-    dateCounter.update(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1))
+    dateCounter.update(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(seconds=10))
     print('Hii here')
     globalDailyDeals = dailyDeals(5)
     print(globalDailyDeals)
     initiateCountdown()
 
 def initiateCountdown():
-    time.sleep(1 * 60)
+    time.sleep(1 * 10)
     print('Hiii')
     countdown()
 
 timer = threading.Thread(target=initiateCountdown)
+timer.daemon = True
 timer.start() 
-
+threading.Thread.__init__.daemon = True
 # initiateCountdown()
 
 @login_required(login_url='/auth/')

@@ -486,10 +486,9 @@
     </button>
   </div>
   </div>
-
-<br><br>
   <h4 class="text-center"><span class="badge bg-secondary">Daily Deals &nbsp&nbsp&nbsp<i class='fas fa-clock' style='font-size:24px'></i>
-    <span id = 'hours'></span> : <span id = 'minutes'></span> : <span id="seconds"></span></span></h4>
+    <span id = 'hours'></span> : <span id = 'minutes'></span> : <span id="seconds"></span></span><span id='dealsRefreshHref' style="display: none;">Deals Expired <a href="/shop/1">Refresh</a></span></h4>
+    <div id="dailyDealsDiv">
   <div class="container-fluid my-3 text-white p-3" style="background-color: rgb(255, 31, 68); width: 100%; height: 10%; text-align: center; margin-bottom: 10px;">
     <div id="dailyDealsCarousel" class="carousel  slide" data-bs-ride="carousel">
       <div class="carousel-inner">
@@ -500,12 +499,12 @@
               
             </div>
             <div class="col-lg-4">
-              <a  onclick="NewTab('{{i.0.product_id}}');" href ='#'>
+              <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' class="dailyDealshref">
                 <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}' style="max-width: 400px;">
               </a>
             </div>
             <div class="col-lg-4">
-            <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' style="text-decoration: none; color:white">
+            <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' class="dailyDealshref" style="text-decoration: none; color:white">
               <!-- <h2>{{i.0.product_name}}</h2>
               <h3>₹{{i.0.price}}</h3> -->
               <p style="display: inline-block;">
@@ -530,12 +529,12 @@
           
               </div>
               <div class="col-lg-4">
-                <a  onclick="NewTab('{{i.0.product_id}}');" href ='#'>
+                <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' class="dailyDealshref">
                   <img class="mx-auto myTrendingImage" src = '../../../media/{{i.0.image}}' style="max-width: 400px;">
                 </a>
               </div>
               <div class="col-lg-4">
-                <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' style="text-decoration: none; color:white">
+                <a  onclick="NewTab('{{i.0.product_id}}');" href ='#' style="text-decoration: none; color:white" class="dailyDealshref">
               <!-- <h2>{{i.0.product_name}}</h2>
               <h3>₹{{i.0.price}}</h3> -->
               <p style="display: inline-block;">
@@ -565,7 +564,7 @@
     </div>
     </div>
   
-
+  </div>
 
 
   <!-- {{i}}
@@ -618,7 +617,7 @@
 <div style="position: relative;">
 <div class="scroll" id='recommendedItemsScroll' >
   {% for i in recommendedItems %}
-  <a href = '/shop/products/{{i.0.product_id}}'>
+  <a onclick = 'NewTab("{{i.0.product_id}}")' style="cursor: pointer;"> 
   <img class="mx-4" style="width: 200px; height: 200px;" src = '../../../media/{{i.0.image}}'>
 </a>
   {% endfor %}
@@ -1391,7 +1390,16 @@ function myyF(this1){
     
     if(days == 0 && hours == 0 && minutes == 0 && seconds == 0){
       clearInterval(dailyDealsinterval)
-      document.getElementById('dailyDealsCarousel').innerHTML = `<button class = 'btn btn-warning' type='button' onclick='viewNewDeals();'> View New Deals </button>`;
+      document.getElementById('dealsRefreshHref').style.display = 'block';
+      var allHrefs = document.getElementById('dailyDealsDiv').querySelectorAll('.dailyDealshref');
+      for(let x in allHrefs){
+        for(let i in x){
+          console.log(allHrefs[i])
+          allHrefs[i].onclick = dailyDealsNewHref();
+        }
+      }
+      document.getElementById('dailyDealsDiv').style.opacity = 0.5;
+      // document.getElementById('dailyDealsCarousel').innerHTML = `<button class = 'btn btn-warning' type='button' onclick='viewNewDeals();'> View New Deals </button>`;
       // window.location.href = '/shop/1';
     }
 }
@@ -1401,18 +1409,23 @@ dailyDealsinterval = setInterval(function() { makeTimer(); }, 1000);
 function viewNewDeals(){
   window.location.href = '/shop/1'
 }
-
+function dailyDealsExpireAlert(){
+  alert('Daily deals expired please refresh the page for latest deals..')
+}
+function dailyDealsNewHref(){
+  window.location.href = '#';
+}
 const buttonRight = document.getElementById('slideRight');
 const buttonLeft = document.getElementById('slideLeft');
 
 buttonRight.onclick = function () {
   var element = document.getElementById('recommendedItemsScroll')
-  sideScroll(element,'right',25,1000,40)
+  sideScroll(element,'right',13,500,40)
 };
 
 buttonLeft.onclick = function () {
   var element = document.getElementById('recommendedItemsScroll')
-  sideScroll(element,'left',25,500,40)
+  sideScroll(element,'left',13,500,40)
 
 };
 

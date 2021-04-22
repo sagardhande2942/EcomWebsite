@@ -26,9 +26,9 @@ import pytz
 from datetime import date, datetime, timedelta
 logger = logging.getLogger(__name__)
 
-dateCounter = DateCounter(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1))
-dateCounter.save()
-YOUR_DOMAIN = 'http://localhost:8000'
+# dateCounter = DateCounter(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1))
+# dateCounter.save()
+YOUR_DOMAIN = 'http://52.172.129.109/'
 
 price = 0
 cart12 = ""
@@ -70,14 +70,14 @@ User = get_user_model()
 def countdown():
     global globalDailyDeals
     dateCounter = DateCounter.objects.filter(id = 2) #DateCounter(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1))
-    dateCounter.update(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(seconds=10))
+    dateCounter.update(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1))
     print('Hii here')
     globalDailyDeals = dailyDeals(5)
     print(globalDailyDeals)
     initiateCountdown()
 
 def initiateCountdown():
-    time.sleep(1 * 30)
+    time.sleep(1 * 60)
     print('Hiii')
     countdown()
 
@@ -105,7 +105,11 @@ def index(request, num):
         recommendedUser1.append(Product.objects.filter(product_id = i))
     dateCounter1 = DateCounter.objects.filter(id = 2)
     # print(dateCounter1)
-    print(dateCounter1[0].dateNow, dateCounter1[0].dateEnd)
+    try:
+        print(dateCounter1[0].dateNow, dateCounter1[0].dateEnd)
+    except:
+        DateCounter(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1)).save()
+        DateCounter(dateNow=datetime.now(), dateEnd= datetime.now() + timedelta(minutes=1)).save()
     #Calling trending product
     if num <= 0:
         num = 1
@@ -269,7 +273,7 @@ def getCart(request):
 def create_checkout_session(request):
     if request.method == 'GET':
         # print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://3.143.242.177/'
+        domain_url = 'http://52.172.129.109/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -1259,3 +1263,7 @@ def search1(request, myStr):
     return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal})
 
 
+def getCart(request):
+    if request.method == 'POST':
+        a = ExtendedUser.objects.filter(usr = request.user)
+        return JsonResponse({'cart':a[0].cart})

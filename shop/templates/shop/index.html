@@ -988,6 +988,7 @@
           //   // console.log(localStorage.getItem('cart'))
           //    updateCart(cart);
           // }
+    console.log('CartHere : {{cart}}')
     console.log('{{cart}}'.replaceAll("&quot;", '"'));
     var cart = JSON.parse('{{cart}}'.replaceAll("&quot;", '"'));
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -1135,8 +1136,7 @@
         try{
           document.getElementById('div' + item).innerHTML = "<button id = 'minus" + item + "' class = 'btn btn-primary minus'> - </button> <span id = 'val" + item + "'>" + cart[item] + "</span> <button id = 'plus" + item + "' class = 'btn btn-primary plus'> + </button>"
         }catch(err){
-          localStorage.setItem('cart', '{}');
-          window.location.href = '/shop/1'
+          // window.location.href = '/shop/1'
         }
       }
       cart = JSON.parse(localStorage.getItem('cart'));
@@ -1444,8 +1444,46 @@ function sideScroll(element,direction,speed,distance,step){
         }
     }, speed);
 }
+// let cart11 = ""
+// setInterval(() => {
+//   $.ajax({
+        
+//             type: "POST",
+//             url: '{{ "/shop/getCart/" }}',
+//             data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: 'text'},
+//             success: function callback(response){
+//               '{{cart}}'.replaceAll("&quot;", '"');
+//               cart11 = JSON.parse('{{cart}}'.replaceAll("&quot;", '"'));
+//               // localStorage.setItem('cart', JSON.stringify(cart11));
+//             }
+//           });
+// }, 2000);
 
+// $('body').click(function() {
+//     console.log('hii')
 
+//     localStorage.setItem('cart', JSON.stringify(cart11));
+//     let cart = JSON.parse(localStorage.getItem('cart'));
+//       let tocart = localStorage.getItem('cart');
+//       let finalcart = []
+//       // console.log("Hey this is the cart : " + cart["pr1"]);
+//       {% for i in products %}
+//         // console.log("The item no. " + i + " has units : " + cart["pr" + i]);
+//         if(cart["pr" + {{i.product_id}}]){
+//           // console.log("i is : " + i);
+//           finalcart.push([{{i.product_id}}, cart["pr" + {{i.product_id}}]])
+//         }
+//       {% endfor %}
+//       // console.log("Final cart here : ")
+//       // console.log(finalcart)
+//       var sumis = 0;
+//       for(let x in finalcart){
+//         // console.log(finalcart[x])
+//         sumis += finalcart[x][1];
+//       }
+//       document.getElementById('cart1').innerHTML = sumis;
+
+// });
   </script>
 
   {%endblock%}

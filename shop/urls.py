@@ -24,4 +24,5 @@ urlpatterns = [
     path('getAddress/', views.getAddress),
     path('rate/', views.rateProduct),
     path('changeUname/', views.changeUname),
+    path('getCart/', views.getCart),
 ]

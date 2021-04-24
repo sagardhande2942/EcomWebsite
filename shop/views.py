@@ -7,7 +7,7 @@ from stripe.api_resources import product
 from accounts.models import ExtendedUser, PurchaseDate, Rating
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Comments, Product, Contact, DateCounter, SearchQ
+from .models import Comments, Product, Contact, DateCounter, SearchQ, Sellers
 from math import ceil, prod
 from django.conf import LazySettings, settings 
 from django.http.response import JsonResponse 
@@ -1394,7 +1394,7 @@ def sellWithUs(request):
                         prodtype = 3
                         try:
                             if(prodtype == 3 and i<=4):
-                                continue
+                                driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[3]/div/div['+str(a)+']/div/div/a[1]').click()
                             if(prodtype == 3 and i>4 and i<=8):
                                 print(i)
                                 driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[3]/div/div['+str(a)+']/div/div/a[1]').click()
@@ -1663,7 +1663,7 @@ def sellWithUs(request):
             #     time.sleep(2)
             #     print('Added Product Successfully')
 
-            # driver.quit()
+            driver.quit()
             # print(Product.objects.all()[len(Product.objects.all()) - 1].product_name)
             return JsonResponse({
                     "name":my_dict['name'],
@@ -1730,7 +1730,7 @@ def saveProduct(request):
         # options.add_argument('--proxy-server=%s' % PROXY)
         driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver.exe")
 
-        driver.get("http://52.172.129.109/admin")
+        driver.get("http://127.0.0.1:8000/admin")
         email = driver.find_element_by_xpath('//*[@id="id_username"]')
         passw = driver.find_element_by_xpath('//*[@id="id_password"]')
 
@@ -1831,5 +1831,20 @@ def saveProduct(request):
 
         driver.quit()
 
-
+        prod = Product.objects.all()[len(Product.objects.all()) - 1]
+        usr = request.user.username
+        time1 = datetime.now()
+        Sellers(user = usr, product_id = prod, time = time1).save()
+        for i in Sellers.objects.all():
+            print(i.user)
+            print(i.product_id)
+            print(i.time)
         return JsonResponse({'hii':'bye'})
+
+def sellersList(request):
+    b = Sellers.objects.all()
+    a = []
+    for i in b:
+        a.append(i)
+    a.reverse()
+    return render(request, 'shop/sellersList.html', {'a':a})

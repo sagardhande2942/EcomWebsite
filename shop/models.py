@@ -1,3 +1,4 @@
+from os import truncate
 from django.db import models
 from django.db.models.deletion import CASCADE
 from datetime import datetime
@@ -51,3 +52,10 @@ class DateCounter(models.Model):
 
 class SearchQ(models.Model):
     search = models.CharField(max_length=100, blank=True, default='')
+
+
+class Sellers(models.Model):
+    user = models.CharField(default='1', null=True, blank=True, max_length=200)
+    product_id = models.ForeignKey(Product, on_delete=CASCADE, null=True, default=1)
+    time = models.DateTimeField(auto_now_add=False)
+

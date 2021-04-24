@@ -1,0 +1,54 @@
+{% extends 'shop/basic.html'%}
+
+{%block title %} Sellers {% endblock %}
+
+{% block style %}
+
+<style>
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+<div style="width: 100%" class="text-center my-3">
+    <h2 style="background-color: beige;"> OUR SELLERS </h2>
+</div>
+<div class="conatiner mx-3">
+    <div class="table table-striped table-hover">
+        <table style="width: 100%;">
+            <tr>
+                <th>#</th>
+                <th>Seller</th>
+                <th>Prodcut</th>
+                <th>Time</th>
+                <th>Verified</th>
+                <th>View</th>
+            </tr>
+            {% for i in a %}
+            <tr>
+                <td>{{i.user}}</td>
+                <td>{{i.product_id}}</td>
+                <td>{{i.time}}</td>
+                <td><img src="../../../media/verified.png" style="height: 30px; width: 30px;"></td>
+                <td class="p-2"><button class="btn btn-info" onclick="window.location.href = '/shop/products/{{i.product_id.product_id}}'"> View</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+var tables = document.getElementsByTagName('table');   
+var table = tables[tables.length -1];   
+var rows = table.rows;   
+for(var i = 1, td; i < rows.length; i++){           
+    td = document.createElement('td');       
+    td.appendChild(document.createTextNode(i));       
+    rows[i].insertBefore(td, rows[i].firstChild);   
+}
+</script>
+{% endblock %}

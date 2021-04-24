@@ -80,7 +80,7 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="card-body">
                         <h5 class="card-title" id="product_name_card"></h5>
-                        <p class="card-text" id="product_desc_card"></p>
+                        Description : <p class="card-text" id="product_desc_card"></p>
                         <span style="font-size: larger; color: gray;">Price : ₹</span><h3 id="product_price_card"></h3>
                         <button id="productSave" onclick="saveProduct()" class="btn btn-primary">
                         <span id="loadingSpinner1" style="display: none;" class="spinner-border spinner-border-sm mx-2" role="status" aria-hidden="true"></span>
@@ -92,6 +92,10 @@
         </div>
     </div>
 </div>
+
+<button id="sellersListButton" onclick="window.location.href='/shop/sellersList/'" class="btn btn-primary" style="display: none;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    See The Complete Sellers List
+</button>
 </div>
 {% endblock %}
 
@@ -176,8 +180,9 @@ function saveProduct(){
         'data' : { csrfmiddlewaretoken : '{{ csrf_token }}', 'text': text},
         'success' : function callback(response){
             console.log(response);
-            document.getElementById('loadingSpinner1').style.display = 'none'
-            document.getElementById('productSaveText').textContent = 'Saved'
+            document.getElementById('loadingSpinner1').style.display = 'none';
+            document.getElementById('productSaveText').textContent = 'Saved';
+            document.getElementById('sellersListButton').style.display = 'block';
         }
     });
 

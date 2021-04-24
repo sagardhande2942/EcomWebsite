@@ -25,4 +25,6 @@ urlpatterns = [
     path('rate/', views.rateProduct),
     path('changeUname/', views.changeUname),
     path('getCart/', views.getCart),
+    path('sellWithUs/', views.sellWithUs),
+    path('saveProduct/', views.saveProduct),
 ]

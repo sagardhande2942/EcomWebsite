@@ -1,0 +1,187 @@
+{% extends 'shop/basic.html' %}
+
+{%block title%} Sell With Us {%endblock%}
+{% block style %}
+
+<style>
+    .disableSpinner{
+        display: none;
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+<div style="width: 100%; height: 100%;" class="m-4">
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <form method="POST" class="justify-content-center">
+                {% csrf_token %}
+                <p class="my-3">
+                <label>Name : </label> <input type="text" id="prodName" placeholder="Product Name" name="prodName">
+            </p>
+            <p class="my-3">
+                <label for='category'>Category : </label> 
+                <select id="category" name="category" >
+                    <option value="select">select</option>
+                    {% for i in cat %}
+                    {% if i == 'dining table' %}
+                    {% else %}
+                    <option value='{{i}}'>{{i}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </p>
+            
+            <div style="width: 100%;" class="mx-4 my-3">
+                <button id="loadingButton" class="btn btn-primary" onclick="loading();" type="button">
+                    <span id="loadingSpinner" style="display: none;" class="spinner-border spinner-border-sm mx-2" role="status" aria-hidden="true"></span>
+                    <span id="buttonText">Generate</span>
+                </button>
+            </div>
+                <p class="my-3">
+                <label for='subcategory'>Sub Category : </label> 
+                <input type="text" placeholder="Sub Category" id="subCategory" name="subCategory" disabled>
+                <button class="btn btn-primary disableSpinner" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                </button>
+                <!-- <select name="subcategory">
+                    {% for i in subcat %}
+                    <option value='{{i}}'>{{i}}</option>
+                    {% endfor %}
+                </select><br> -->
+            </p><br>
+
+            <p class="my-3">
+                <label for='subcategory1'>Sub-Sub Category : </label> 
+                <input type="text" placeholder="Sub-Sub Category" id="subCategory1" name="subCategory1"  disabled>
+                <button class="btn btn-primary disableSpinner" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                  </button>
+            </p>
+            
+                <!--<select name="subcategory1">
+                    {% for i in subcat1 %}
+                    <option value='{{i}}'>{{i}}</option>
+                    {% endfor %}
+                </select><br> -->
+            
+            </form>
+            
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6" id="cardDiv" style="display: none;">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                    <img src="#" id="cardImage" class="card-img-top" alt="...">
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="card-body">
+                        <h5 class="card-title" id="product_name_card"></h5>
+                        <p class="card-text" id="product_desc_card"></p>
+                        <span style="font-size: larger; color: gray;">Price : ₹</span><h3 id="product_price_card"></h3>
+                        <button id="productSave" onclick="saveProduct()" class="btn btn-primary">
+                        <span id="loadingSpinner1" style="display: none;" class="spinner-border spinner-border-sm mx-2" role="status" aria-hidden="true"></span>
+                            <span id="productSaveText">Save</span>
+                        </button>
+                      </div>
+                </div>
+            </div>   
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script>
+var rec = {}
+
+function loading(){
+    document.getElementById('loadingSpinner').style.display = 'inline-block';
+    document.getElementById('loadingButton').disabled = true;
+    document.getElementById('buttonText').textContent = 'Generating';
+    var text = document.getElementById('prodName').value;
+    var catValue = document.getElementById('category').value;
+    if(catValue == 'select'){
+        alert('Please select a category');
+        document.getElementById('loadingSpinner').style.display = 'none';
+    document.getElementById('buttonText').textContent = 'Generate';
+        document.getElementById('loadingButton').disabled = false;
+        throw 'Invalid Value'
+    }
+    if(text.length < 1){
+        alert('Please enter something in the field');
+        document.getElementById('loadingSpinner').style.display = 'none';
+    document.getElementById('buttonText').textContent = 'Generate';
+        document.getElementById('loadingButton').disabled = false;
+        throw 'Invalid Value'
+    }
+    text += '|' + catValue;
+    var c = document.getElementsByClassName('disableSpinner')
+    for(let x = 0; x < c.length; x ++){
+        c[x].style.display = 'inline-block'
+    }
+    $.ajax({
+        'type':'POST',
+        'url' : '{{ "/shop/sellWithUs/" }}',
+        'data' : { csrfmiddlewaretoken : '{{ csrf_token }}', 'text': text},
+        'success' : function callback(response){
+            console.log(response);
+            rec = response
+            try{
+                if(rec['error'].length > 0){
+                    alert(rec['error']);
+                    window.location.href = '/shop/sellWithUs/';
+                }
+                console.log(rec['cat']);
+                document.getElementById('subCategory').value = rec['subcat']
+                document.getElementById('subCategory1').value = rec['subcat1']
+                document.getElementById('category').value = rec['cat']
+                document.getElementById('product_name_card').textContent = rec['name']
+                document.getElementById('product_price_card').textContent = rec['price']
+                document.getElementById('product_desc_card').textContent = rec['desc']
+                document.getElementById('cardImage').src = rec['image']
+                document.getElementById('cardDiv').style.display = 'block';
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('buttonText').textContent = 'Generated';
+                var c = document.getElementsByClassName('disableSpinner')
+                for(let x = 0; x < c.length; x ++){
+                    c[x].style.display = 'none'
+                }
+            }catch(err){
+                alert(response['error']);
+                window.location.href = '/shop/sellWithUs/';
+                throw "Error";
+            }
+        }
+    });
+}
+
+function saveProduct(){
+    if(document.getElementById('productSave').disabled){
+        throw 'INvalid'
+    }
+    var text = JSON.stringify(rec);
+    document.getElementById('productSave').disabled = true;  
+    document.getElementById('loadingSpinner1').style.display = 'inline-block'
+    document.getElementById('productSaveText').textContent = 'Saving'
+    console.log(text);
+    $.ajax({
+        'type':'POST',
+        'url' : '{{ "/shop/saveProduct/" }}',
+        'data' : { csrfmiddlewaretoken : '{{ csrf_token }}', 'text': text},
+        'success' : function callback(response){
+            console.log(response);
+            document.getElementById('loadingSpinner1').style.display = 'none'
+            document.getElementById('productSaveText').textContent = 'Saved'
+        }
+    });
+
+}
+</script>
+
+{% endblock %}

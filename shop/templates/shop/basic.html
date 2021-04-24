@@ -343,6 +343,7 @@
     <a href="/shop/1">Home</a>
     <a href="/shop/tracker/">Orders</a>
     <a href="#below">More</a>
+    <a href="/shop/sellWithUs/">sellWithUs</a>
     <a class="text-white" style="cursor: pointer;" onclick="closeNav(); searchVisible();">Search</a>
     <div class="dropdown mx-4">
       <button class="dropbtn" style="border-radius: 20px; background-color: black;">
@@ -392,6 +393,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href ='#below'>More</a>
+          </li>
+          <li class="nav-item" style="white-space: nowrap;">
+            <a class="nav-link" href ='/shop/sellWithUs/'>Sell-With-Us</a>
           </li>
         </ul>
         <form class="form-inline" id ='searchForm' name="searchForm" action="/shop/search/" style="width: 100%; display: inline-block;" method="POST" >{% csrf_token %}

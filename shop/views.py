@@ -1,6 +1,7 @@
 import json
 import random
 from django.db.models.expressions import Exists
+from selenium.webdriver.chrome.options import Options
 
 from stripe.api_resources import product
 from accounts.models import ExtendedUser, PurchaseDate, Rating
@@ -23,6 +24,23 @@ import simplejson
 import threading
 import time
 import pytz
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from fake_useragent import UserAgent
+from selenium import webdriver
+import argparse
+import pyperclip as pc
+import json
+from csv import DictWriter
+from uuid import uuid4
+from datetime import datetime
+import time
+import os
+import sys
+import requests
+
 from datetime import date, datetime, timedelta
 logger = logging.getLogger(__name__)
 
@@ -273,7 +291,7 @@ def getCart(request):
 def create_checkout_session(request):
     if request.method == 'GET':
         # print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://52.172.129.109/'
+        domain_url = 'http://127.0.0.1:8000/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -1263,7 +1281,555 @@ def search1(request, myStr):
     return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal})
 
 
-def getCart(request):
+def sellWithUs(request):
     if request.method == 'POST':
-        a = ExtendedUser.objects.filter(usr = request.user)
-        return JsonResponse({'cart':a[0].cart})
+        try:
+            # cat = request.POST.get('category', 'Others')
+            # sub = request.POST.get('subCategory', 'Other')
+            # sub1 = request.POST.get('subCategory1', 'Other1')
+            # prod_name = request.POST.get('prodName', 'Asus')
+            data1 = request.POST.get('text', '')
+            data = data1.split('|')[0]
+            print('Data recevied is : ', data)
+            category1 = data1.split('|')[1]
+
+            # print('prod name : ', prod_name, 'cat : ', cat, 'sub : ', sub, 'sub1 : ', sub1)
+
+            # args = parser.parse_args()
+            ua = UserAgent()
+            userAgent = ua.random
+            print(userAgent)
+            # se = input('Enter What to search\n').strip()
+            #prodtype = int(input('Enter product type\n'))
+            # file = input("Enter Csv File name\n").strip()
+            # df = pd.read_csv('./Csvfiles/'+file+'.csv')
+            # c = input("Enter catagory\n").strip()
+            # sb = input("Enter SUbcatagory\n").strip()
+            # sb1 = input("Enter SUbcatagory1\n").strip()
+            # print(len(df))
+
+
+
+            # bb = int(input("How Many Products U want(max:25)\n"))
+            a=0
+            # while(1):
+            #     if(bb<=25):            
+            #         break
+            #     else:
+            #         pass
+                    # bb = int(input("How Many Products U want(max:25)\n"))
+                    
+            bb = 1
+            # if args.firefox:
+            #     profile = webdriver.FirefoxProfile()
+            #     profile.set_preference("general.useragent.ovrride", userAgent)    
+            #     driver = webdriver.Firefox(firefox_profile=profile, executable_path=r"your gecko driver here")
+
+
+            # if args.chrome:
+            #     from selenium.webdriver.chrome.options import Options
+                
+                # PROXY = Config["proxy_server"]
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--incognito")
+            options.add_argument('window-size=1920x1080')
+            #options.add_experimental_option("prefs", {"profile.default_content_setting_values.cookies": 2})
+            #options.add_argument('--proxy-server=%s' % PROXY)
+            driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver.exe")
+
+            #a = ['Airpod','AirPods are wireless Bluetooth earbuds created by Apple. ... On March 20, 2019, Apple released the 2nd generation AirPods, which feature the H1 chip, longer talk time, and hands-free "Hey Siri" support'
+            #     ,'Earphones','Wireless']
+            #price1 = 1000
+
+            driver.get("https://flipkart.com")
+            driver.find_element_by_xpath('/html/body/div[2]/div/div/button').click()
+
+            se1 = driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[1]/div[2]/div[2]/form/div/div/input')
+
+            se1.send_keys(data)
+
+            driver.find_element_by_xpath('//*[@id="container"]/div/div[1]/div[1]/div[2]/div[2]/form/div/button').click()
+
+            time.sleep(3)
+            a = 1
+            b = 1
+            c2 =1
+            d2 = 1
+            d3 = 1
+            #try:
+            for i in range(1,2):
+                try:
+                    prodtype = 1
+                    if(prodtype == 1 and i<=4):
+                        driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[2]/div/div['+str(i)+']/div/a[2]').click()
+                    elif(prodtype == 1 and i>4 and i<=8):
+                        
+                        driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[3]/div/div['+str(a)+']/div/a[2]').click()
+                        a+=1
+                    elif(prodtype == 1 and i>8 and i<=12):
+
+                        driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[4]/div/div['+str(b)+']/div/a[2]').click()
+                        b+=1
+                    elif(prodtype == 1 and i>12 and i<=16):
+
+                        driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[5]/div/div['+str(c2)+']/div/a[2]').click()
+                        c2+=1
+                    elif(prodtype == 1 and i>16 and i<=20):
+                        driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[6]/div/div['+str(d2)+']/div/a[2]').click()
+                        d2+=1
+                    elif(prodtype == 1 and i>20 and i<=24):
+                        driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[7]/div/div['+str(d3)+']/div/a[2]').click()
+                        d3+=1
+                except:
+                    try:
+                        prodtype = 2
+                        if(prodtype == 2):
+                            if(i == 3 or i == 4):
+                                continue
+                            print('hii')
+                            print(i+1)
+                            driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div['+str(i+1)+']/div/div/div/a/div[2]/div[1]/div[1]').click()
+                    except:
+                        prodtype = 3
+                        try:
+                            if(prodtype == 3 and i<=4):
+                                continue
+                            if(prodtype == 3 and i>4 and i<=8):
+                                print(i)
+                                driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[3]/div/div['+str(a)+']/div/div/a[1]').click()
+                                a+=1
+                            elif(prodtype == 3 and i>8 and i<=12):
+
+                                driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[4]/div/div['+str(b)+']/div/div/a[1]').click()
+                                b+=1
+                            elif(prodtype == 3 and i>12 and i<=16):
+
+                                driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[5]/div/div['+str(c2)+']/div/div/a[1]').click()
+                                c2+=1
+                            elif(prodtype == 3 and i>16 and i<=20):
+                                driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[6]/div/div['+str(d2)+']/div/div/a[1]').click()
+                                d2+=1
+                            elif(prodtype == 3 and i>20 and i<=24):
+                                driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[7]/div/div['+str(d3)+']/div/div/a[1]').click()
+                                d3+=1
+                        except:
+                            print('Product not found')
+                time.sleep(3)
+                print("This",prodtype)
+                driver.switch_to.window(driver.window_handles[1])
+                if(prodtype==3):
+                    images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/div/img')
+                    for image in images:
+                        img = image.get_attribute('src')
+                if(prodtype == 1 or prodtype==2):
+                    images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/img')
+                    for image in images:
+                        img = image.get_attribute('src')
+                #print(img)
+
+                name = driver.find_element_by_class_name('B_NuCI').text
+                #print(name)
+                abb = 0
+                strs = ''
+                for k in name:
+                    if(k == " "):
+                        print("hi")
+                        name+=k
+                        abb+=1
+                    strs+=k
+                    if(abb == 3):
+                        print('dfdfdfdf')
+                        break
+                print(strs)   
+                price = driver.find_element_by_class_name('_25b18c').text
+                #price = driver.execute_script('document.getElementsByClassName("_30jeq3 _16Jk6d").value')
+                print(price)
+                pricee=''
+                kk=0
+                for g in price:
+                    if(g == '₹' or g == '%'):
+                        kk+=1
+                    if(kk == 1):
+                        pricee+=g
+                price = price.encode('ascii', 'ignore')
+                price = price.decode("utf-8")
+                pricee = pricee.encode('ascii', 'ignore')
+                pricee = pricee.decode("utf-8") 
+                print(price)
+                print(pricee)
+                print('\u20B9')
+
+                try:
+                    kk = 0
+                    diss1=''
+                    diss = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[2]/div/div[3]/div[1]/div/div[3]/span').text
+                    print("sd1")
+                    for di in diss:
+                        if(di == '%'):
+                            break
+                        diss1+=di
+                        pass
+                except:
+                    print("sd")
+                    try:
+                        diss1=''
+                        diss = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[2]/div/div[4]/div[1]/div/div[3]/span').text
+                        for di in diss:
+                            if(di == '%'):
+                                break
+                            diss1+=di
+                    except:
+                        diss1='30'
+                print(diss1)
+                        
+                try:
+                    avail = driver.find_element_by_class_name('_3TT44I').text
+                    avail = avail.encode('ascii', 'ignore')
+                    avail = avail.decode("utf-8")
+                
+                except:
+                    avail = """Bank Offer10% off on Citi Credit/Debit Cards, up to ₹1750. On orders of ₹4999 and aboveT&Bank Offer5%
+                    Unlimited Cashback on Flipkart Axis Bank Credit CardT&Bank OfferFlat ₹75 discount on UPI transaction above ₹10,000
+                    in a single cart valueT&CGet a Google Nest Hub (Chalk) at just ₹5,999 on purchase of select TVs laptops, ACs and mobileT&C"""
+                    
+                #print(avail)
+                try:
+                    desc = driver.find_element_by_class_name('_2o-xpa').text
+                    desc = desc.encode('ascii', 'ignore')
+                    desc = desc.decode("utf-8")
+                    if(desc == 'NA'):
+                        desc = 'Not Available'
+                except:
+                    desc = 'Not Available'
+                print(desc)
+
+                # try:
+                #     category1 = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[1]/div[1]/div/div[1]/a').text
+                #  #print(avail)
+                # except:
+                #     raise 'category not found'
+                # print('Category is : ', category1)
+                try:
+                    # subcat = driver.find_element_by_class_name('_2whKao').innerHtml
+                    # subcat = driver.execute_script(
+                    #     'document.getElementsByClassName("_2whKao")[0].textContent')
+                    subcategory = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[1]/div[1]/div/div[2]/a').text
+                    # subcat = subcat.encode('ascii', 'ignore')
+                    # subcat = subcat.decode("utf-8")
+                except:
+                    raise 'Sub Cat Not Avaliable'
+                print('Sub cat is : ',subcategory)
+
+                try:
+                    subcategory1 = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[1]/div[1]/div/div[3]/a').text
+                except:
+                    raise 'Sub Cat 1 not avaliable'
+                print('Sub cat1 is : ', subcategory1)
+
+                driver.close()
+                driver.switch_to.window(driver.window_handles[0])
+                data ={
+                    "name": strs,
+                    "price": pricee,
+                    "avail":avail,
+                    "desc":desc,
+                    "dis":diss1,
+                    "image_url":img
+                }
+                """with open(''+se+'.json', 'a') as outfile:
+                    outfile.write(json.dumps(data))
+                    outfile.write(",")
+                    outfile.close()
+                print("productdone",i)
+                print("\n\n")"""
+
+                my_dict = {}
+                my_dict = data
+                print(my_dict)
+                # with open('./Csvfiles/'+se+'.csv', 'a') as f:
+                #     w = DictWriter(f, my_dict.keys())
+                #     if f.tell() == 0:
+                #         w.writeheader()
+                #         w.writerow(my_dict)
+                #     else: 
+                #         w.writerow(my_dict)
+            # import pandas as pd
+
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--incognito")
+            options.add_argument('window-size=1920x1080')
+            #options.add_experimental_option("prefs", {"profile.default_content_setting_values.cookies": 2})
+            #options.add_argument('--proxy-server=%s' % PROXY)
+            # driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver.exe")
+
+            # driver.get("http://127.0.0.1:8000/admin")
+            # email = driver.find_element_by_xpath('//*[@id="id_username"]')
+            # passw = driver.find_element_by_xpath('//*[@id="id_password"]')
+
+            # email.send_keys('admin')
+            # passw.send_keys('admin')
+
+            # driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
+            # driver.find_element_by_xpath('//*[@id="content-main"]/div[2]/table/tbody/tr[3]/td[1]/a').click()
+            # time.sleep(3)
+            try:
+                os.mkdir(os.getcwd() + '/shop/images2/'+ category1+'')
+            except:
+                pass
+            for i in range(1):
+                cat = category1
+                sub_cat = subcategory
+                sub_cat1 = subcategory1
+                print('Adding product',i)
+                print(i)
+                config={
+                    "name":my_dict['name'],
+                    "desc":my_dict['desc'],
+                    "price":my_dict['price'],
+                    "cat":cat,
+                    "sub_cat":sub_cat,
+                    "sub_cat1":sub_cat1,
+                    "dis":my_dict['dis'],
+                    "avail":my_dict['avail'],
+                    "image":my_dict['image_url']
+                }
+                for i in config:
+                    print(config[i])
+                print("Loading Configurations.....")
+
+                rand_token = uuid4().hex[:8]
+                url = config["image"]
+                r = requests.get(url, allow_redirects=True)
+                open(os.getcwd() + '/shop/images2/' +cat+'/'+cat+''+str(rand_token)+'.png', 'wb').write(r.content)
+
+            #     print('image download done')
+            #     name = driver.find_element_by_xpath('//*[@id="id_product_name"]')
+            #     name.send_keys(config["name"])
+            #     print('Added name Successfully')
+
+            #     prdesc = driver.find_element_by_xpath('//*[@id="id_product_desc"]')
+            #     prdesc.send_keys(config["desc"])
+            #     print('Added description Successfully')
+
+            #     cat1 = driver.find_element_by_xpath('//*[@id="id_category"]')
+            #     cat1.send_keys(config["cat"])
+            #     print('Added Categary Successfully')
+                
+            #     #dis = driver.find_element_by_xpath('//*[@id="id_discount"]')
+            #     print(config['dis'])
+            #     driver.execute_script('document.getElementById("id_discount").value = '+str(config['dis'])+'')
+            #     #dis.send_keys(config["dis"])
+            #     print('Added Discount Successfully')
+
+            #     offer = driver.find_element_by_xpath('//*[@id="id_offers"]')
+            #     offer.send_keys(config["avail"])
+            #     print('Added Offer Successfully')
+                
+            #     subcat = driver.find_element_by_xpath('//*[@id="id_subcategory"]')
+            #     subcat.send_keys(config["sub_cat"])
+            #     print("hi",config['dis'])
+            #     print('Added SubCategary Successfully')
+
+            #     subcat1 = driver.find_element_by_xpath('//*[@id="id_subcategory1"]')
+            #     subcat1.send_keys(config["sub_cat1"])
+            #     print('Added SubCat1 Successfully')
+                
+            #     price = driver.find_element_by_id('id_price')
+            #     #price.send_keys(price1)
+            #     pri = ''
+            #     price1 = config["price"]
+            #     #print(price1)
+            #     for i in str(price1):
+            #         #print(i)
+            #         if(i == ','):
+            #             continue
+            #         pri+=i
+            #     print(pri)
+            #     driver.execute_script('document.getElementById("id_price").value = '+str(pri)+'')
+            #     print('Added price Successfully')
+
+            #     ratingRand = random.randint(1, 5)
+            #     driver.execute_script('document.getElementById("id_rating").value = '+str(ratingRand)+'')
+                
+            #     driver.find_element_by_id("id_image").send_keys(os.getcwd()+"/shop/images2/"+cat+"/"+config["cat"]+""+rand_token+".png")
+            #     driver.find_element_by_id("id_image1").send_keys(os.getcwd()+"/shop/images2/"+cat+"/"+config["cat"]+""+rand_token+".png")
+            #     print('Added Image Successfully')
+            # imageLink = config["cat"]+""+rand_token+".png"
+            #     # driver.find_element_by_xpath('//*[@id="product_form"]/div/div/input[2]').click()
+            #     #driver.find_element_by_xpath('//*[@id="product_form"]/div/div/input[1]').click()
+
+            #     time.sleep(2)
+            #     print('Added Product Successfully')
+
+            # driver.quit()
+            # print(Product.objects.all()[len(Product.objects.all()) - 1].product_name)
+            return JsonResponse({
+                    "name":my_dict['name'],
+                    "desc":my_dict['desc'],
+                    "price":my_dict['price'],
+                    "cat":category1,
+                    "dis":my_dict['dis'],
+                    "avail":my_dict['avail'],
+                    "image":my_dict['image_url'],
+                    'subcat':subcategory,
+                    'subcat1':subcategory1,
+                    'rand':rand_token,
+                    'error':'',
+                })
+        except:
+            return JsonResponse({'error' : "Sorry there was a error processing your request, try different product"})
+        # return render(request, 'shop/prodAdded.html', {'i' : Product.objects.all()[len(Product.objects.all()) - 1]})
+    a = Product.objects.all()
+    allCat = []
+    allSubCat = []
+    allSubCat1 = []
+    for i in a:
+        if i.category not in allCat:
+            allCat.append(i.category)
+    for i in a:
+        if i.subcategory not in allSubCat:
+            allSubCat.append(i.subcategory)
+
+    for i in a:
+        if i.subcategory1 not in allSubCat1:
+            allSubCat1.append(i.subcategory1)
+
+    param = {
+        'cat' : allCat,
+        'subcat' : allSubCat,
+        'subcat1': allSubCat1
+    }
+        
+    return render(request, 'shop/sellWithUs.html', param)
+    
+
+def saveProduct(request):
+    if request.method == 'POST':
+        a = request.POST.get('text', '')
+        # print('printing here : ', a)
+        my_dict = json.loads(a)
+        print(my_dict)
+        product_name = my_dict['name']
+        product_desc = my_dict['desc']
+        price = my_dict['price']
+        category1 = my_dict['cat']
+        subcategory = my_dict['subcat']
+        subcategory1 = my_dict['subcat1']
+
+        ua = UserAgent()
+        userAgent = ua.random
+
+
+        options = Options()
+        options.add_argument("--headless")
+        options.add_argument("--incognito")
+        options.add_argument('window-size=1920x1080')
+        # options.add_experimental_option("prefs", {"profile.default_content_setting_values.cookies": 2})
+        # options.add_argument('--proxy-server=%s' % PROXY)
+        driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver.exe")
+
+        driver.get("http://127.0.0.1:8000/admin")
+        email = driver.find_element_by_xpath('//*[@id="id_username"]')
+        passw = driver.find_element_by_xpath('//*[@id="id_password"]')
+
+        email.send_keys('admin')
+        passw.send_keys('admin')
+
+        driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
+        driver.find_element_by_xpath('//*[@id="content-main"]/div[2]/table/tbody/tr[3]/td[1]/a').click()
+        time.sleep(3)
+        try:
+            os.mkdir(os.getcwd() + '/shop/images2/'+ category1+'')
+        except:
+            pass
+        for i in range(1):
+            cat = category1
+            sub_cat = subcategory
+            sub_cat1 = subcategory1
+            print('Adding product',i)
+            print(i)
+            config={
+                "name":my_dict['name'],
+                "desc":my_dict['desc'],
+                "price":my_dict['price'],
+                "cat":cat,
+                "sub_cat":sub_cat,
+                "sub_cat1":sub_cat1,
+                "dis":my_dict['dis'],
+                "avail":my_dict['avail'],
+                "image":my_dict['image']
+            }
+            for i in config:
+                print(config[i])
+            print("Loading Configurations.....")
+
+            rand_token = uuid4().hex[:8]
+            url = config["image"]
+            r = requests.get(url, allow_redirects=True)
+            open(os.getcwd() + '/shop/images2/' +cat+'/'+cat+''+str(rand_token)+'.png', 'wb').write(r.content)
+
+            print('image download done')
+            name = driver.find_element_by_xpath('//*[@id="id_product_name"]')
+            name.send_keys(config["name"])
+            print('Added name Successfully')
+
+            prdesc = driver.find_element_by_xpath('//*[@id="id_product_desc"]')
+            prdesc.send_keys(config["desc"])
+            print('Added description Successfully')
+
+            cat1 = driver.find_element_by_xpath('//*[@id="id_category"]')
+            cat1.send_keys(config["cat"])
+            print('Added Categary Successfully')
+            
+            #dis = driver.find_element_by_xpath('//*[@id="id_discount"]')
+            print(config['dis'])
+            driver.execute_script('document.getElementById("id_discount").value = '+str(config['dis'])+'')
+            #dis.send_keys(config["dis"])
+            print('Added Discount Successfully')
+
+            offer = driver.find_element_by_xpath('//*[@id="id_offers"]')
+            offer.send_keys(config["avail"])
+            print('Added Offer Successfully')
+            
+            subcat = driver.find_element_by_xpath('//*[@id="id_subcategory"]')
+            subcat.send_keys(config["sub_cat"])
+            print("hi",config['dis'])
+            print('Added SubCategary Successfully')
+
+            subcat1 = driver.find_element_by_xpath('//*[@id="id_subcategory1"]')
+            subcat1.send_keys(config["sub_cat1"])
+            print('Added SubCat1 Successfully')
+            
+            price = driver.find_element_by_id('id_price')
+            #price.send_keys(price1)
+            pri = ''
+            price1 = config["price"]
+            #print(price1)
+            for i in str(price1):
+                #print(i)
+                if(i == ','):
+                    continue
+                pri+=i
+            print(pri)
+            driver.execute_script('document.getElementById("id_price").value = '+str(pri)+'')
+            print('Added price Successfully')
+
+            ratingRand = random.randint(1, 5)
+            driver.execute_script('document.getElementById("id_rating").value = '+str(ratingRand)+'')
+            
+            driver.find_element_by_id("id_image").send_keys(os.getcwd()+"/shop/images2/"+cat+"/"+config["cat"]+""+rand_token+".png")
+            driver.find_element_by_id("id_image1").send_keys(os.getcwd()+"/shop/images2/"+cat+"/"+config["cat"]+""+rand_token+".png")
+            print('Added Image Successfully')
+            imageLink = config["cat"]+""+rand_token+".png"
+            driver.find_element_by_xpath('//*[@id="product_form"]/div/div/input[2]').click()
+            #driver.find_element_by_xpath('//*[@id="product_form"]/div/div/input[1]').click()
+
+            time.sleep(2)
+            print('Added Product Successfully')
+
+        driver.quit()
+
+
+        return JsonResponse({'hii':'bye'})

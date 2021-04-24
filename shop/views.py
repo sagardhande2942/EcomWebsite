@@ -291,7 +291,7 @@ def getCart(request):
 def create_checkout_session(request):
     if request.method == 'GET':
         # print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://52.172.129.109/'
+        domain_url = 'http://127.0.0.1:8000/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -1730,7 +1730,7 @@ def saveProduct(request):
         # options.add_argument('--proxy-server=%s' % PROXY)
         driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver.exe")
 
-        driver.get("http://52.172.129.109/admin")
+        driver.get("http://127.0.0.1:8000/admin")
         email = driver.find_element_by_xpath('//*[@id="id_username"]')
         passw = driver.find_element_by_xpath('//*[@id="id_password"]')
 

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+from det import aluyhga
 from django.forms.formsets import BaseFormSet
 import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -148,3 +148,10 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 ALLOWED_HOSTS = ['herokudjangoapp.herokuapp.com']
 django_heroku.settings(locals())
+
+EMAIL_BACKENT = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = aluyhga['email']
+EMAIL_HOST_PASSWORD = aluyhga['pass1']

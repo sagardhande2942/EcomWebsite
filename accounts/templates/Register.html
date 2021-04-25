@@ -9,23 +9,53 @@
 	<link rel="stylesheet" type="text/css" href="../../media/colorlib-regform-32/css/nunito-font.css">
 	<!-- Main Style Css -->
     <link rel="stylesheet" href="../../media/colorlib-regform-32/css/style.css"/>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 <body class="form-v6">
-	<div style="color:white;position: absolute; top: 15%; left: 50%;" style="z-index: 2147483647;">
+
+	<div style="color:white;position: absolute; top: 10%; left: 50%;" style="z-index: 2147483647;">
+		{% if form.errors %}
+		<div class="alert alert-info">
 		{{ form.non_field_errors }}
 		  {{form.username.errors}}
 		  {{form.email.errors}}
 		  {{form.email2.errors}}
 		  {{form.password.errors}}
-
+		</div>
+		{% endif %}
+	</div>
+	<div style="color:black;position: absolute; top: 15%; left: 50%;" style="z-index: 2147483647;">
+		{% if messages %}
+	
+		{% for message in messages %}
+		<div class="alert alert-info">
+			{{ message }}
+		</div>
+		{% endfor %}
+		{% endif %}
 	</div>
 	<div class="page-content">
 		<div class="form-v6-content">
 			
 			<div class="form-left">
-				<img src="../../media/colorlib-regform-32/images/20210416_172959_0000.png" alt="form">
+				<img src="../../media/colorlib-regform-32/images/20210416_172959_0000.png" height="100%" alt="form">
 			</div>
-			<form class="form-detail" method="post">
+			<form id="myForm" class="form-detail" method="post" style="position: relative;">
+				<div class="nonediv" style="display: none;">
+					<div class="loader" style="
+					position: absolute;
+					left: 0px;
+					top: 0px;
+					width: 100%;
+					height: 100%;
+					z-index: 99999;
+					background: url('../../../media/Blocks-1s-200px.gif') 
+								50% 50% no-repeat rgba(249,249,249, 0.5);
+								transform: scale(0.6);"></div>
+				</div>
 				{% csrf_token %}
 				<h2>Register Form</h2>
 
@@ -49,13 +79,27 @@
 					{{form.password.errors}}
 					{{form.password}}
 				</div>
+				<div class="form-row">
+					<!-- <input type="password" name="comfirm-password" id="comfirm-password" class="input-text" placeholder="Comfirm Password" required> -->
+					{{form.password1.errors}}
+					{{form.password1}}
+				</div>
 				<div class="form-row-last">
-					<input type="submit" name="register" class="register" value="Register">
+					<input type="submit" name="register" id="myRegisterButton" onclick="myFunction();" class="register" value="Register">
 					<input type="button" style="margin-left: 20px;" onclick="window.location.href = '/auth/'" name="login" class="register" value="Login">
 				</div>
 			</div>
 			</form>
 		</div>
 	</div>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+	<script>
+		function myFunction(){
+			document.getElementById('myRegisterButton').disabled = true;
+			document.getElementsByClassName('nonediv')[0].style.display = 'block';
+			document.getElementById('myForm').style.opacity = 0.5
+			document.getElementById('myForm').submit();
+		}
+	</script>
+</body> 
 </html>

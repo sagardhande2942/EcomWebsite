@@ -175,11 +175,14 @@ def index(request, num):
     ratingInstance = Product.objects.all()
     ratings = []
     categoriesNeed = []
+    subcategoriesNeed = []
     for i in ratingInstance:
         ratings.append([i.product_id, max(1, min(5, round(i.rating)))])
     for i in ratingInstance:
         if i.category not in categoriesNeed:
             categoriesNeed.append(i.category)
+        for j in Product.objects.filter(category = i.category):
+            subcategoriesNeed.append(j.subcategory)
 
     subcategoriesDictreal = {}
     for z in categoriesNeed:
@@ -241,7 +244,7 @@ def index(request, num):
         'trendingProduct':maxProductInstance,
         'trendingNum':maxNum,
         'ratingProduct':ratings,
-        'category':categoriesNeed,
+        'category':subcategoriesNeed,
         'products': Product.objects.all(),
         'msgToShow':msgToShow,
         'winNo' : num,
@@ -491,7 +494,7 @@ def productView(request, myid):
         # print(i.cart)
         pass
     product = Product.objects.filter(product_id = myid)
-    z = Rating.objects.filter(product_id = myid)
+    z3 = Rating.objects.filter(product_id = myid)
     prodCount = Product.objects.filter(product_id = myid)
     z1 = ""
     offers = Product.objects.filter(product_id = myid)
@@ -508,18 +511,89 @@ def productView(request, myid):
         if 'Flipkart' in offersUse[i]:
             offersUse[i] = offersUse[i].replace('Flipkart', 'BTB')
     cmtInstance = Comments.objects.filter(product_id = prodCount[0])
+    isCommented = False
+    for i in cmtInstance:
+        if i.username == request.user.username:
+            isCommented = True
     #print(round(product[0].rating))
+
+    z = ExtendedUser.objects.filter(usr = request.user)
+    str1 = z[0].totcarts
+    #print('#printing this', str1)
+    if(len(str1) == 2):
+        return render(request, 'shop/maps.html')
+    #print(str1)
+    str1 = str1.split('}')
+    res = []
+    for i in str1:
+        i += '}'
+        i = i.replace('{', '[')
+        i = i.replace('}', ']')
+        res.append(i.strip('][').split(', '))
+    # #print(res)
+    zerolen = []
+    diffDict = {}
+    for i in range(len(res)):
+        if len(res[i][0]) == 0:
+            zerolen.append(i)
+            continue
+        res[i] = res[i][0].split(',')
+        
+        #   #print(res[i])
+    check = False
+    #print(res)
+    for i in res:
+        #print('this: ', i)
+        if len(i[0]):
+            pass
+        else:
+            #print('hereeeeeee')
+            check = True
+    if check:
+        res.remove([''])  
+    #print(res) 
+
+    check = False
+    #print(res)
+    for i in res:
+        #print('this: ', i)
+        if len(i[0]):
+            pass
+        else:
+            #print('hereeeeeee')
+            check = True
+    if check:
+        res.remove([''])  
+    #print(res) 
+
+    for i in range(len(res)):
+        diffDict[i] = []
+        vb = []
+        for j in res[i]:
+            j = j.split(',')
+            vb.append(j[0].split(':'))
+        diffDict[i] = vb
+
+    print(diffDict)
+
+    reqPurchase = False
+    for i in diffDict:
+        if str(diffDict[i][0][0])[3:-1] == str(myid):
+            reqPurchase = True
+
     param = {
         'incPrice' : round(product[0].price / (1 - product[0].discount / 100), 3),
         'prod': product,
         'username': username,
         'items': len(Product.objects.all()),
         'rating': max(1, min(5, round(product[0].rating))),
-        'totReviews':z.count,
+        'totReviews':z3.count,
         'comments':cmtInstance,
         'totComments':cmtInstance.count,
         'products': Product.objects.all(),
         'offerUse': offersUse,
+        'purchased': reqPurchase,
+        'commented':isCommented,
     }
     return render(request, 'shop/products.html', param)
 
@@ -789,6 +863,7 @@ def search(request):
         return render(request, 'shop/search1.html', {'c':c, 'username' : username, 'value':fl, 'counter' : 1})
     return render(request, 'shop/search.html', {'value':'Nothing Found'})
 
+@login_required(login_url='/auth/')
 def getLogoutData(request):
     if request.method == "POST":
         #print(request.POST.get('text', 'hii'))
@@ -1059,6 +1134,7 @@ def trackCart(request):
     }
     return render(request, 'shop/trackCart.html', param)
 
+@login_required(login_url='/auth/')
 def beforeReload(request):
     #print('IN RELOAD')
     if request.method == "POST":
@@ -1070,6 +1146,7 @@ def beforeReload(request):
         b.update(cart = a)
     return JsonResponse({"hii" : "byyw"})
 
+@login_required(login_url='/auth/')
 def getAddress(request):
     global PDFromgetAddtoSuccessPay
     global daysRequiredInCart
@@ -1157,6 +1234,7 @@ def trendingProduct():
     #print('Trending produt END')
     return (maxProduct[-5:], max_[-5:])
 
+@login_required(login_url='/auth/')
 def rateProduct(request):
     #print('hiih in rateProducxt')
     if request.method == "POST":
@@ -1184,6 +1262,7 @@ def rateProduct(request):
         return JsonResponse({'hi':'Bye'})
 
 
+@login_required(login_url='/auth/')
 def changeUname(request):
     username = request.user.username
     if request.method == 'POST':
@@ -1281,6 +1360,7 @@ def search1(request, myStr):
     return render(request, 'shop/search.html', {'c':c, 'username' : username, 'value':aReal})
 
 
+@login_required(login_url='/auth/')
 def sellWithUs(request):
     if request.method == 'POST':
         try:
@@ -1391,8 +1471,8 @@ def sellWithUs(request):
                             print(i+1)
                             driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div['+str(i+1)+']/div/div/div/a/div[2]/div[1]/div[1]').click()
                     except:
-                        prodtype = 3
                         try:
+                            prodtype = 3
                             if(prodtype == 3 and i<=4):
                                 driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[3]/div/div['+str(a)+']/div/div/a[1]').click()
                             if(prodtype == 3 and i>4 and i<=8):
@@ -1414,18 +1494,26 @@ def sellWithUs(request):
                                 driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[7]/div/div['+str(d3)+']/div/div/a[1]').click()
                                 d3+=1
                         except:
-                            print('Product not found')
+                            driver.find_element_by_css_selector('div._4ddWXP')[0].click
+                            print('clicked')
+                            #print('Product not found')
                 time.sleep(3)
-                print("This",prodtype)
+                # print("This",prodtype)
                 driver.switch_to.window(driver.window_handles[1])
-                if(prodtype==3):
-                    images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/div/img')
-                    for image in images:
-                        img = image.get_attribute('src')
-                if(prodtype == 1 or prodtype==2):
-                    images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/img')
-                    for image in images:
-                        img = image.get_attribute('src')
+                # if(prodtype==3):
+                #     print('in 3')
+                #     images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/div/img')
+                #     for image in images:
+                #         img = image.get_attribute('src')
+                # if(prodtype == 1 or prodtype==2):
+                #     images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/img')
+                #     if len(images) == 0:
+                images = driver.find_elements_by_css_selector('img._2amPTt')
+                img = images[0].get_attribute('src')
+                    # print('in 1 or 2 ',images)
+                    # for image in images:
+                    #     img = image.get_attribute('src')
+                            
                 #print(img)
 
                 name = driver.find_element_by_class_name('B_NuCI').text
@@ -1502,7 +1590,7 @@ def sellWithUs(request):
                         desc = 'Not Available'
                 except:
                     desc = 'Not Available'
-                print(desc)
+                print('The desc is : ', desc)
 
                 # try:
                 #     category1 = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[1]/div[1]/div/div[1]/a').text
@@ -1518,13 +1606,23 @@ def sellWithUs(request):
                     # subcat = subcat.encode('ascii', 'ignore')
                     # subcat = subcat.decode("utf-8")
                 except:
-                    raise 'Sub Cat Not Avaliable'
+                    try:
+                        print('hiii')
+                        subcategory = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[2]/div[1]/div/div[2]/a').text
+                    except:
+                        subcategory = driver.find_elements_by_css_selector('a._2whKao')
+                        subcategory = subcategory[2].text
                 print('Sub cat is : ',subcategory)
 
                 try:
                     subcategory1 = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[1]/div[1]/div/div[3]/a').text
                 except:
-                    raise 'Sub Cat 1 not avaliable'
+                    try:
+                        print('hiii')
+                        subcategory1 = driver.find_element_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[2]/div[1]/div/div[3]/a').text
+                    except:
+                        subcategory1 = driver.find_elements_by_css_selector('a._2whKao')
+                        subcategory1 = subcategory1[3].text
                 print('Sub cat1 is : ', subcategory1)
 
                 driver.close()
@@ -1678,7 +1776,8 @@ def sellWithUs(request):
                     'rand':rand_token,
                     'error':'',
                 })
-        except:
+        except Exception as e:
+            print('This is exception : ', e)
             return JsonResponse({'error' : "Sorry there was a error processing your request, try different product"})
         # return render(request, 'shop/prodAdded.html', {'i' : Product.objects.all()[len(Product.objects.all()) - 1]})
     a = Product.objects.all()
@@ -1699,12 +1798,13 @@ def sellWithUs(request):
     param = {
         'cat' : allCat,
         'subcat' : allSubCat,
-        'subcat1': allSubCat1
+        'subcat1': allSubCat1,
+        'username' : request.user.username,
     }
         
     return render(request, 'shop/sellWithUs.html', param)
     
-
+@login_required(login_url='/auth/')
 def saveProduct(request):
     if request.method == 'POST':
         a = request.POST.get('text', '')
@@ -1738,7 +1838,7 @@ def saveProduct(request):
         passw.send_keys('admin')
 
         driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
-        driver.find_element_by_xpath('//*[@id="content-main"]/div[2]/table/tbody/tr[3]/td[1]/a').click()
+        driver.find_element_by_xpath('//*[@id="content-main"]/div[3]/table/tbody/tr[3]/td[1]/a').click()
         time.sleep(3)
         try:
             os.mkdir(os.getcwd() + '/shop/images2/'+ category1+'')
@@ -1830,7 +1930,8 @@ def saveProduct(request):
             print('Added Product Successfully')
 
         driver.quit()
-
+        prodid = Product.objects.filter(product_id = Product.objects.all()[len(Product.objects.all()) - 1].product_id)
+        prodid.update(seller = request.user.username)
         prod = Product.objects.all()[len(Product.objects.all()) - 1]
         usr = request.user.username
         time1 = datetime.now()
@@ -1841,10 +1942,11 @@ def saveProduct(request):
             print(i.time)
         return JsonResponse({'hii':'bye'})
 
+@login_required(login_url='/auth/')
 def sellersList(request):
     b = Sellers.objects.all()
     a = []
     for i in b:
         a.append(i)
     a.reverse()
-    return render(request, 'shop/sellersList.html', {'a':a})
+    return render(request, 'shop/sellersList.html', {'a':a, 'username' : request.user.username})

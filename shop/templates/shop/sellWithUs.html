@@ -13,17 +13,18 @@
 
 {% block body %}
 <div style="width: 100%; height: 100%;" class="m-4">
-<div class="container">
+<div class="container" id='outerdiv'>
+    <h1 class="text-center">Sell Your Product</h1>
     <div class="row">
         <div class="col-12 col-sm-12 col-md-6 col-lg-6">
             <form method="POST" class="justify-content-center">
                 {% csrf_token %}
                 <p class="my-3">
-                <label>Name : </label> <input type="text" id="prodName" placeholder="Product Name" name="prodName">
+                <label>Name : </label> <input class="form-control" type="text" id="prodName" placeholder="Product Name" name="prodName">
             </p>
             <p class="my-3">
                 <label for='category'>Category : </label> 
-                <select id="category" name="category" >
+                <select class="form-select" id="category" name="category" >
                     <option value="select">select</option>
                     {% for i in cat %}
                     {% if i == 'dining table' %}
@@ -40,11 +41,11 @@
                     <span id="buttonText">Generate</span>
                 </button>
             </div>
-                <p class="my-3">
+                <p>
                 <label for='subcategory'>Sub Category : </label> 
                 <input type="text" placeholder="Sub Category" id="subCategory" name="subCategory" disabled>
-                <button class="btn btn-primary disableSpinner" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <button style="border: none;" class="btn btn-primary disableSpinner bg-white" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>
                     <span class="visually-hidden">Loading...</span>
                 </button>
                 <!-- <select name="subcategory">
@@ -57,10 +58,10 @@
             <p class="my-3">
                 <label for='subcategory1'>Sub-Sub Category : </label> 
                 <input type="text" placeholder="Sub-Sub Category" id="subCategory1" name="subCategory1"  disabled>
-                <button class="btn btn-primary disableSpinner" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <button style="border: none;" class="btn btn-primary disableSpinner bg-white" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>
                     <span class="visually-hidden">Loading...</span>
-                  </button>
+                </button>
             </p>
             
                 <!--<select name="subcategory1">
@@ -81,11 +82,14 @@
                     <div class="card-body">
                         <h5 class="card-title" id="product_name_card"></h5>
                         Description : <p class="card-text" id="product_desc_card"></p>
-                        <span style="font-size: larger; color: gray;">Price : ₹</span><h3 id="product_price_card"></h3>
+                        <span style="font-size: larger; color: gray;">Price : ₹</span><span style="font-size: x-large;" id="product_price_card"></span><br>
                         <button id="productSave" onclick="saveProduct()" class="btn btn-primary">
                         <span id="loadingSpinner1" style="display: none;" class="spinner-border spinner-border-sm mx-2" role="status" aria-hidden="true"></span>
                             <span id="productSaveText">Save</span>
                         </button>
+                        <button id="productDiscard" onclick="window.location.href = '/shop/sellWithUs/'" class="btn btn-danger">
+                                <span id="productSaveText">Discard</span>
+                            </button>
                       </div>
                 </div>
             </div>   
@@ -93,7 +97,7 @@
     </div>
 </div>
 
-<button id="sellersListButton" onclick="window.location.href='/shop/sellersList/'" class="btn btn-primary" style="display: none;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+<button id="sellersListButton"  onclick="window.location.href='/shop/sellersList/'" class="btn btn-primary" style="opacity: 1;display: none;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
     See The Complete Sellers List
 </button>
 </div>
@@ -183,6 +187,9 @@ function saveProduct(){
             document.getElementById('loadingSpinner1').style.display = 'none';
             document.getElementById('productSaveText').textContent = 'Saved';
             document.getElementById('sellersListButton').style.display = 'block';
+            document.getElementById('outerdiv').style.opacity = '0.5';
+            document.getElementById('sellersListButton').style.opacity = '1';
+
         }
     });
 

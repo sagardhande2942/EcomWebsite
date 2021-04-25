@@ -11,6 +11,11 @@ class ExtendedUser(models.Model):
     cart = models.CharField(default="{}", max_length=1000)
     usr = models.OneToOneField(User, on_delete=CASCADE)
     totcarts = models.CharField(default="{}", max_length=1000, null=True)
+    auth_token = models.SlugField(default='No auth' ,max_length= 100)
+    is_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.usr.username
 
 class PurchaseDate(models.Model):
     purdate = models.ForeignKey(ExtendedUser, on_delete=CASCADE, default=1, null=True)

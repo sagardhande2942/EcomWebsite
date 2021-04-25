@@ -33,15 +33,15 @@
 <div class="container-fluid my-3">
 <div class="row">
 {% for i in c %}
-  <div class="col-sm-12 col-md-6 col-lg-3">
-    <div class="card mx-auto mycard mb-2" style="height: 300px; width: 16rem;">
+  <div class="col-sm-12 col-md-6 col-lg-3 my-3">
+    <div class="card mx-auto mycard mb-2" style="width: 16rem; height: 100%;">
       <a href='/shop/products/{{i.0.product_id}}'>
-        <img class="card-img-top" src="/media/{{i.0.image}}" height="120px" alt="Card image cap">
+        <img class="card-img-top" src="/media/{{i.0.image}}" style="max-height: 300px;" alt="Card image cap">
       </a>
-        <div class="card-body position-relative" style="text-align: center;">
+        <div class="card-body position-relative" style="text-align: center; height: 200px;">
           <h5 class="card-title">{{i.0.product_name}}</h5>
           <p class="card-text">{{i.0.product_desc|slice:"0:50"}}</p>
-          <a href="/shop/products/{{i.0.product_id}}"  class="btn btn-primary position-absolute my-1" style="bottom: 2%; left: 40%;">View</a>
+          <a href="/shop/products/{{i.0.product_id}}"  class="btn btn-primary position-absolute my-2" style="bottom: 2%; left: 40%;">View</a>
         </div>
       </div>
     </div>

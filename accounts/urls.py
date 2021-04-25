@@ -10,4 +10,7 @@ urlpatterns = [
     path('', views.login_view, name='home'),
     path('register/', views.register_view, name = 'home'),
     path('logout/', views.logout_view, name='logout'),
+    path('token/', views.token, name='token'),
+    path('error/', views.error_page),
+    path('verify/<str:auth_token>', views.verify),
 ]

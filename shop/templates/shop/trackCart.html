@@ -81,9 +81,9 @@ alert('If you have already rated and reviewed a product then its review will be 
   {% for j in i %}
   <div class="col-sm-6 col-md-6 col-lg-4 justify-content-center">
     <!-- <a href = "/shop/products/{{j.0.0.product_id}}" style="text-decoration:none;"> -->
-    <div class="card text-center" style="width: 18rem;">
+    <div id="prod{{j.0.0.product_id}}" class="card text-center" style="width: 18rem; height: 100%;">
       <a href = '/shop/products/{{j.0.0.product_id}}'>
-        <img class="card-img-top" src="../../../media/{{j.0.0.image}}" style="height: 200px;" alt="Card image cap">
+        <img class="card-img-top" src="../../../media/{{j.0.0.image}}" style="max-height: 300px;" alt="Card image cap">
       </a>
         <form id='formA{{j.0.0.product_id}}' name = 'formA{{j.0.0.product_id}}' style="display: inline-block; text-align: center;">
           <fieldset class="mx-4 rating">
@@ -94,7 +94,7 @@ alert('If you have already rated and reviewed a product then its review will be 
             <input type="radio" id="star1{{j.0.0.product_id}}" name="rating{{j.0.0.product_id}}" value="1" /><label for="star1{{j.0.0.product_id}}" title="Sucks big time">1 star</label>
         </fieldset>
         </form>
-        <div class="card-body"><h3>{{j.0.0.product_name}}</h3>
+        <div class="card-body" ><h3>{{j.0.0.product_name}}</h3>
           <div class="d-grid gap-2 col-6 mx-auto">
             {% if j.10|length == 0 %}
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cmt{{j.0.0.product_id}}">Comment</button>

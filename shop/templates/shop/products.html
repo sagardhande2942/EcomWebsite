@@ -60,7 +60,7 @@
     left:2px;
 }
   body{
-    background-color: #defcff;
+    background-color: white;
   }
   #outerdiv{
     display: none;
@@ -89,7 +89,11 @@
     margin-top: 10px;
   }
   }
+  .big_img{width: 350px; height: 400px;
+  float: left; margin-top: 20px; margin-left: 10px;}
 </style>
+<script src="../../../media/zoomsl.js"></script>
+
 {% endblock %}
 
 {%block body%} 
@@ -97,7 +101,9 @@
 <div class = "container my-4">
     <div class = "row">
         <div class = "col-sm-6 col-md-6 col-lg-6 text-center">
-            <img src = "../../../media/{{prod.0.image}}" width="286px" height="200px">
+          
+            <img src = "../../../media/{{prod.0.image}}"
+             style="max-width: 500px; max-height: 400px;" id='zoom' data-zoom-image="../../../media/{{prod.0.image}}">
             <div class = "my-3 justify-content-center">
               <!-- <button class = "btn btn-primary">Add to cart</button> -->
               <span id="divpr{{prod.0.product_id}}" class = "divpr">
@@ -124,6 +130,7 @@
             <br>
             <h6>Description : </h6>
             <p>{{prod.0.product_desc}}</p>
+            <h3>Seller : {{prod.0.seller}} </h3>
             <h2>Rating : </h2>
             <fieldset class="mx-4 rating" >
               <input type="radio" id="star5{{prod.0.product_id}}" name="rating{{prod.0.id}}" value="5" disabled/><label for="star5" title="Rocks!">5 stars</label>
@@ -138,6 +145,14 @@
             <small>Reviews</small>
             <hr>
             <h3><span class="badge bg-secondary my-4">Comments : </span></h3>
+            {% if commented %}
+            <button id="commentIt1" class="btn btn-primary" style="display: none;">Edit Comment</button>
+            {% endif %}
+
+            {% if purchased %}
+            <button id="commentIt"  style="display: none;" onclick="window.location.href='/shop/trackCart/#prod{{prod.0.product_id}}'" class="btn btn-primary my-3">Comment</button>
+            {% endif %}
+
             <div style="width: 100%; background-color: aliceblue; position: relative;">
               {% for i in comments %}
               <div style="border: 1px solid #cccccc;width: 100%;">
@@ -151,6 +166,9 @@
               {% endif %}
               <p class="mx-4">{{i.cmt_desc}}</p>
               <small style="font-style: italic;  letter-spacing: 1px;" class="mx-4 badge rounded-pill  bg-primary">{{i.username}}</small><br><br>
+              {% if i.username == username %}
+              <a style="position: absolute; right: 2%; bottom: 2%;"  class="btn btn-primary" href="/shop/trackCart/#prod{{i.product_id.product_id}}"> Edit </a>
+              {% endif %}
               {% if i.edited %}
               <span class="mx-4 text-dark " style="font-style: italic;">Edit time : </span><small style="font-style: italic;" class="mx-4 badge rounded-pill  bg-secondary">{{i.edit_time}}</small><br><br>
               {% endif %}
@@ -166,6 +184,38 @@
 {% block js %}
 <script>
 
+try{
+  document.getElementById('commentIt1').innerHTML;
+}catch(err){
+  try{
+
+    document.getElementById('commentIt').style.display = 'block';
+  }catch(err){
+    ;
+  }
+}
+
+var width = window.innerWidth;
+    var height = window.innerHeight;
+if(width > 768){
+$('#zoom').imagezoomsl({
+  zoomstart: 2,
+  loadbackground:'#878787',
+  zoomrange : [2, 2],
+  loadopacity: 0.1,
+  disablewheel:true,
+  showstatus:true,
+  showstatustime: 2000,
+  statusdivborder:'1px solid black',
+  statusdivbackground:'#C0C0C0',
+  statusdivpadding:'4px',
+  statusdivfont:'bold 13px Arial',
+  statusdivopacity: 0.8,
+  textdnbackground:'#fff',
+  textdnpadding:'10px',
+  textdnfont:'13px/20px cursive'
+})
+}
   {% for i in comments %}
   if(parseInt('{{i.rating}}') <= 2)
       document.getElementById('rate{{i.usr_id}}').className = "bg-danger mx-1 badge rounded-pill";
@@ -302,6 +352,5 @@
       });
         // return '>>>>>Before You Go<<<<<<<< \n Your custom message go here';
 });
-
 </script>
 {% endblock %}

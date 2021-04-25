@@ -18,6 +18,10 @@
 	<link rel="stylesheet" type="text/css" href="../../media/Login_v1/vendor/select2/select2.min.css">
 <!--============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../../media/Login_v1/css/util.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="../../media/Login_v1/css/main.css">
 <!--===============================================================================================-->
 </head>
@@ -30,6 +34,17 @@
 		  {{form.password.errors}}
 
 	</div>
+	<div style="color:black;position: absolute; top: 15%; left: 50%;" style="z-index: 2147483647;">
+	{% if messages %}
+
+	{% for message in messages %}
+	<div class="alert alert-info">
+		{{ message }}
+	</div>
+	{% endfor %}
+	{% endif %}
+</div>
+
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">

@@ -11,6 +11,7 @@
     integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
+    <!-- CSS -->
   <title>{%block title%} {%endblock%}</title>
   {%block style%} {% endblock %}
   <style>
@@ -376,7 +377,7 @@
   <div id='mainNav' class="sticky-top" style="z-index: 999999;">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top"  style="z-index: 999999;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/shop/1" style = "font-family:courier,arial,helvetica;" ><b id="logoText">ByTapBuy</b></a>
+      <a class="navbar-brand" href="/shop/1" style = "font-family:courier,arial,helvetica;" ><b class="text-white" id="logoText">BuyTapBye</b></a>
       <!-- <img src = '../../../media/Logo.png' style="height: 50px; width: 70px; border-radius: 3px;"> -->
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -389,13 +390,13 @@
             <a class="nav-link active" aria-current="page" href="/shop/1">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/shop/tracker" >Orders</a>
+            <a class="nav-link active" href="/shop/tracker" >Orders</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href ='#below'>More</a>
+            <a class="nav-link active" href ='#below'>More</a>
           </li>
           <li class="nav-item" style="white-space: nowrap;">
-            <a class="nav-link" href ='/shop/sellWithUs/'>Sell-With-Us</a>
+            <a class="nav-link active" href ='/shop/sellWithUs/'>Sell-With-Us</a>
           </li>
         </ul>
         <form class="form-inline" id ='searchForm' name="searchForm" action="/shop/search/" style="width: 100%; display: inline-block;" method="POST" >{% csrf_token %}
@@ -414,13 +415,13 @@
           </button>
           <div class="dropdown-content" style="border-radius: 20px;" >
             <a href="/shop/changeUname/" style="border-radius: 20px;">Change Details</a>
-            <a href="#" style="border-radius: 20px;">Link 2</a>
+            <a href="/shop/tracker/" style="border-radius: 20px;">Orders</a>
             <button  onclick="loggingout();"style="border-radius: 20px; height:100%; width:100%" class="bg-danger">Log Out</button>
           </div>
         </div>
         <!-- <button style="" onclick="window.location.href = '/shop/cart';" href="/shop/cart" type="button" class="btn btn-secondary mx-2 " data-container="body" data-toggle="popover" data-placement="bottom" data-content="Right popover" id = "cartpop"> -->
         <a href="/shop/cart" style="color: white;">
-          <i class="fas fa-shopping-cart" style="margin-right: 20px;transform: scale(1.7);"></i><b<span id="cart1">0</span></b>
+          <i class="fas fa-shopping-cart" style="margin-right: 20px;transform: scale(1.7);"></i><b<span style="color: red;" id="cart1">0</span></b>
         </a>
         <span style="transform: translate(-10px,0px);color: white; margin-top: 10px;"><span class="badge rounded-pill bg-warning text-dark">Cart</span></span>
         <!-- </button> -->

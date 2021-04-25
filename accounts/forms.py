@@ -38,6 +38,7 @@ class UserRegisterForm(forms.ModelForm):
         attrs={'id' : 'your-email', 'class' : 'input-text', 'placeholder' : "Confirm Email Address" }
     ))
     password = forms.CharField(widget=PasswordInput(attrs={'id' : "password", 'class' : 'input-text' , 'placeholder' : "Password"}))
+    password1 = forms.CharField(widget=PasswordInput(attrs={'id' : "password1", 'class' : 'input-text' , 'placeholder' : "Confirm Password"}))
     username = forms.CharField(label = 'Username', help_text="", widget= forms.TextInput
                            (attrs={'id' : "full-name", 'class' : "input-text" , 'placeholder' : "Username"}))
     class Meta:
@@ -69,4 +70,10 @@ class UserRegisterForm(forms.ModelForm):
         if email_qs.exists():
             raise forms.ValidationError(
                 "This email has already been registered")
+        password = self.cleaned_data.get('password')
+        password1 = self.cleaned_data.get('password1')
+        if password != password1:
+            raise forms.ValidationError('Passwords must match')
+        if len(password) > 15:
+            raise forms.ValidationError('Password must be less than 15 chars')
         return super(UserRegisterForm, self).clean(*args, **kwargs)

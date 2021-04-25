@@ -19,6 +19,7 @@ class Product(models.Model):
     image1 = models.ImageField(upload_to="shop/images1", default="")
     rating = models.FloatField(default=1, null=True)
     num = models.IntegerField(default=1)
+    seller = models.CharField(default='BTB', null=True, max_length=300, blank=True)
     def __str__(self):
         return self.product_name
 

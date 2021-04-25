@@ -8,7 +8,7 @@ from accounts.models import ExtendedUser, PurchaseDate, Rating
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Comments, Product, Contact, DateCounter, SearchQ, Sellers
-from math import ceil, prod
+from math import ceil
 from django.conf import LazySettings, settings 
 from django.http.response import JsonResponse 
 from django.views.decorators.csrf import csrf_exempt

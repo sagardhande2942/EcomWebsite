@@ -181,7 +181,8 @@ def index(request, num):
     for i in ratingInstance:
         if i.category not in categoriesNeed:
             categoriesNeed.append(i.category)
-        for j in Product.objects.filter(category = i.category):
+    for j in Product.objects.all():
+        if j.subcategory not in subcategoriesNeed:
             subcategoriesNeed.append(j.subcategory)
 
     subcategoriesDictreal = {}
@@ -294,7 +295,7 @@ def getCart(request):
 def create_checkout_session(request):
     if request.method == 'GET':
         # print('Here bois ', request.GET.get('data1', '1'))
-        domain_url = 'http://52.172.129.109/'
+        domain_url = 'http://www.buytapbye.codes/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -520,8 +521,8 @@ def productView(request, myid):
     z = ExtendedUser.objects.filter(usr = request.user)
     str1 = z[0].totcarts
     #print('#printing this', str1)
-    if(len(str1) == 2):
-        return render(request, 'shop/maps.html')
+    #if(len(str1) == 2):
+        #return render(request, 'shop/maps.html')
     #print(str1)
     str1 = str1.split('}')
     res = []
@@ -578,8 +579,9 @@ def productView(request, myid):
 
     reqPurchase = False
     for i in diffDict:
-        if str(diffDict[i][0][0])[3:-1] == str(myid):
-            reqPurchase = True
+        for j in diffDict[i]:
+            if str(j[0])[3:-1] == str(myid):
+                reqPurchase = True
 
     param = {
         'incPrice' : round(product[0].price / (1 - product[0].discount / 100), 3),
@@ -1012,11 +1014,11 @@ def trackCart(request):
         # print(pytz.all_timezones)
         if not a:
             a = Comments(product_id = prodInstance[0], usr_id = request.user.id, username = request.user.username,
-            cmt_title = cmt_title, cmt_desc = cmt_desc, rating = rating1, cmt_time = datetime.now(), edited = False,
-            edit_time = datetime.now())
+            cmt_title = cmt_title, cmt_desc = cmt_desc, rating = rating1, cmt_time = datetime.now() + timedelta(hours=5, minutes=30), edited = False,
+            edit_time = datetime.now() + timedelta(hours=5, minutes=30))
             a.save()
         else:
-            a.update(cmt_title = cmt_title, cmt_desc = cmt_desc, rating = z[0].rating, edited = True, edit_time = datetime.now())
+            a.update(cmt_title = cmt_title, cmt_desc = cmt_desc, rating = z[0].rating, edited = True, edit_time = datetime.now() + timedelta(hours=5) + timedelta(minutes=30) )
     # #print('hiids')  
     username  = request.user.username
     a11 = ExtendedUser.objects.filter(usr=request.user)
@@ -1102,7 +1104,10 @@ def trackCart(request):
                     num += word
             #print(num)
             mb = Product.objects.filter(product_id = int(num))
-            z4 = Comments.objects.filter(usr_id = request.user.id, product_id = mb[0])
+            try:
+                z4 = Comments.objects.filter(usr_id = request.user.id, product_id = mb[0])
+            except:
+                pass
             try:
                 print('This is the comment ', z4[0].cmt_title, ' ', z4[0].cmt_desc)
             except:
@@ -1166,7 +1171,7 @@ def getAddress(request):
         b = json.loads(a)
         # #print(b['lat'])
         c = ExtendedUser.objects.filter(usr = request.user)
-        d = datetime.now()
+        d = datetime.now()  + timedelta(hours=5) + timedelta(minutes=30) 
         f = random.randint(0, 7)
         PDFromgetAddtoSuccessPay = PurchaseDate(purdate = c[0], purd = d, state = states[f][0], lato = states[f][2], lango = states[f][1], lat = str(b['lat']), lang = str(b['lon']), days = daysRequiredInCart)
         # PDFromgetAddtoSuccessPay.save()
@@ -1262,9 +1267,13 @@ def rateProduct(request):
         return JsonResponse({'hi':'Bye'})
 
 
-@login_required(login_url='/auth/')
+#@login_required(login_url='/auth/')
 def changeUname(request):
-    username = request.user.username
+    try:
+        username = request.user.username
+    except:
+        username = ''
+        pass
     if request.method == 'POST':
         a = request.POST.get('curuname', '')
         b = request.POST.get('newuname', '')
@@ -1416,7 +1425,7 @@ def sellWithUs(request):
             options.add_argument('window-size=1920x1080')
             #options.add_experimental_option("prefs", {"profile.default_content_setting_values.cookies": 2})
             #options.add_argument('--proxy-server=%s' % PROXY)
-            driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver.exe")
+            driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver")
 
             #a = ['Airpod','AirPods are wireless Bluetooth earbuds created by Apple. ... On March 20, 2019, Apple released the 2nd generation AirPods, which feature the H1 chip, longer talk time, and hands-free "Hey Siri" support'
             #     ,'Earphones','Wireless']
@@ -1500,19 +1509,19 @@ def sellWithUs(request):
                 time.sleep(3)
                 # print("This",prodtype)
                 driver.switch_to.window(driver.window_handles[1])
-                # if(prodtype==3):
-                #     print('in 3')
-                #     images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/div/img')
-                #     for image in images:
-                #         img = image.get_attribute('src')
-                # if(prodtype == 1 or prodtype==2):
-                #     images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/img')
-                #     if len(images) == 0:
-                images = driver.find_elements_by_css_selector('img._2amPTt')
-                img = images[0].get_attribute('src')
-                    # print('in 1 or 2 ',images)
-                    # for image in images:
-                    #     img = image.get_attribute('src')
+                if(prodtype==3):
+                    print('in 3')
+                    images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/div/img')
+                    for image in images:
+                        img = image.get_attribute('src')
+                if(prodtype == 1 or prodtype==2):
+                    images = driver.find_elements_by_xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/img')
+                    print('in 1 or 2 ',images)
+                    for image in images:
+                        img = image.get_attribute('src')
+                    if len(images) == 0:
+                        images = driver.find_elements_by_css_selector('img._2amPTt')
+                        img = images[0].get_attribute('src')
                             
                 #print(img)
 
@@ -1828,7 +1837,7 @@ def saveProduct(request):
         options.add_argument('window-size=1920x1080')
         # options.add_experimental_option("prefs", {"profile.default_content_setting_values.cookies": 2})
         # options.add_argument('--proxy-server=%s' % PROXY)
-        driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver.exe")
+        driver= webdriver.Chrome(options=options, executable_path=r"./chromedriver")
 
         driver.get("http://127.0.0.1:8000/admin")
         email = driver.find_element_by_xpath('//*[@id="id_username"]')
@@ -1934,7 +1943,7 @@ def saveProduct(request):
         prodid.update(seller = request.user.username)
         prod = Product.objects.all()[len(Product.objects.all()) - 1]
         usr = request.user.username
-        time1 = datetime.now()
+        time1 = datetime.now() + timedelta(hours=5, minutes=30)
         Sellers(user = usr, product_id = prod, time = time1).save()
         for i in Sellers.objects.all():
             print(i.user)

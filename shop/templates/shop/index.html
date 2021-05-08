@@ -261,7 +261,7 @@
       <ul class="dropdown">
           <p class="d-inline">
           <li><a href="#" style="color:black;padding: 0px;">
-          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/FashionCat.jpg' style="height: 64px; width:64px;">
+          <img class="mx-auto myTrendingImage" src = 'https://st3.depositphotos.com/1003713/19564/i/1600/depositphotos_195648670-stock-photo-young-man-in-smart-wear.jpg' style="height: 64px; width:64px;">
             Fashion<i class="mx-1 fas fa-angle-down"></i></a>
             <ul>
               {% for i in subcategoriesDict2 %}
@@ -330,7 +330,7 @@
       <ul class="dropdown" id = 'myDropdown'>
           <p class="d-inline">
           <li><a href="#" style="color:black;padding: 0px;">
-          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/ElectronicsCat.png' style="height: 64px; width:64px;">
+          <img class="mx-auto myTrendingImage" src = 'https://www.cnet.com/a/img/-sNr2pQJz-YweXd_lWx-VbC6kgk=/940x0/2017/03/03/41d51c5e-097a-463d-8173-d7e5db9048b5/hp-17-x061nr-white-background.jpg' style="height: 64px; width:64px;">
             Electronics<i class="mx-1 fas fa-angle-down"></i></a>
               <ul>
                 {% for i in subcategoriesDict5 %}
@@ -374,7 +374,7 @@
       <ul class="dropdown">
           <p class="d-inline">
           <li><a href="#" style="color:black;padding: 0px;">
-          <img class="mx-auto myTrendingImage" src = '../../../media/CatBack/HeadphoneCat.png' style="height: 64px; width:64px;">
+          <img class="mx-auto myTrendingImage" src = 'https://ak.picdn.net/shutterstock/videos/9410657/thumb/1.jpg' style="height: 64px; width:64px;">
             Music<i class="mx-1 fas fa-angle-down"></i></a>
             <ul>
               {% for i in subcategoriesDict7 %}
@@ -1382,7 +1382,7 @@ function myyF(this1){
     var gmtRemove = 5 * 60 * 60 + 30 * 60  - 10
     now = (Date.parse(now) / 1000);
     // console.log(endTime + " " + ( gmtRemove - gmtRemove  +  now   ) )
-    var timeLeft = endTime - now - gmtRemove;
+    var timeLeft = endTime - now;// - gmtRemove;
 
     var days = Math.floor(timeLeft / 86400);
     var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
